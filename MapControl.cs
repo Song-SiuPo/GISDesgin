@@ -129,6 +129,71 @@ namespace simpleGIS
 
         }
 
+        /// <summary>
+        /// 开始选择几何体
+        /// </summary>
+        /// <param name="x">鼠标x坐标</param>
+        /// <param name="y">鼠标y坐标</param>
+        private void SelectFeature(int x, int y)
+        {
+            if (map.Layers.Count == 0)
+            {
+                return ;
+            }
+            Layer layer = map.Layers[map.SelectedLayer];
+            List<int> selectedItems = new List<int>();   // 本次选择的要素
+            // 从已选择图层中搜索
+            if (mouseDownLoc.X == x && mouseDownLoc.Y == y)
+            {
+                PointD p = map.ToMapPoint(new PointD(x, y));
+                double distance = map.ToMapDistance(AttractRadius);
+                foreach (Geometry geometry in layer.Features)
+                {
+                    if (geometry.IsPointOn(p, distance))
+                    {
+                        selectedItems.Add(geometry.ID);
+                    }
+                }
+            }
+            else
+            {
+                PointD startP = map.ToMapPoint(new PointD(mouseDownLoc.X, mouseDownLoc.Y)),
+                    endP = map.ToMapPoint(new PointD(x, y));
+                double minX = Math.Min(startP.X, endP.X),
+                    minY = Math.Min(startP.Y, endP.Y),
+                    maxX = Math.Max(startP.X, endP.X),
+                    maxY = Math.Max(startP.Y, endP.Y);
+                RectangleD rect = new RectangleD(minX, minY, maxX, maxY);
+                foreach (Geometry geometry in layer.Features)
+                {
+                    if (geometry.IsWithinBox(rect))
+                    {
+                        selectedItems.Add(geometry.ID);
+                    }
+                }
+            }
+            // 更改选择的对象
+            HashSet<int> set = new HashSet<int>(layer.SeletedItems);
+            switch (selectedmode)
+            {
+                case SelectedMode.New:
+                    layer.SeletedItems = selectedItems;
+                    break;
+                case SelectedMode.Add:
+                    set.UnionWith(selectedItems);
+                    layer.SeletedItems = new List<int>(set);
+                    break;
+                case SelectedMode.Delete:
+                    set.ExceptWith(selectedItems);
+                    layer.SeletedItems = new List<int>(set);
+                    break;
+                case SelectedMode.Intersect:
+                    set.IntersectWith(selectedItems);
+                    layer.SeletedItems = new List<int>(set);
+                    break;
+            }
+        }
+
         #endregion
 
         #region 响应事件处理
@@ -228,62 +293,7 @@ namespace simpleGIS
                 switch (mapOperation)
                 {
                     case OperationType.Select:
-                        if (map.Layers.Count == 0)
-                        {
-                            break;
-                        }
-                        Layer layer = map.Layers[map.SelectedLayer];
-                        List<int> selectedItems = new List<int>();   // 本次选择的要素
-                        // 从已选择图层中搜索
-                        if (mouseDownLoc.X == e.X && mouseDownLoc.Y == e.Y)
-                        {
-                            PointD p = map.ToMapPoint(new PointD(e.X, e.Y));
-                            double distance = map.ToMapDistance(AttractRadius);
-                            foreach (Geometry geometry in layer.Features)
-                            {
-                                if (geometry.IsPointOn(p, distance))
-                                {
-                                    selectedItems.Add(geometry.ID);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            PointD startP = map.ToMapPoint(new PointD(mouseDownLoc.X, mouseDownLoc.Y)),
-                                endP = map.ToMapPoint(new PointD(e.X, e.Y));
-                            double minX = Math.Min(startP.X, endP.X),
-                                minY = Math.Min(startP.Y, endP.Y),
-                                maxX = Math.Max(startP.X, endP.X),
-                                maxY = Math.Max(startP.Y, endP.Y);
-                            RectangleD rect = new RectangleD(minX, minY, maxX, maxY);
-                            foreach (Geometry geometry in layer.Features)
-                            {
-                                if (geometry.IsWithinBox(rect))
-                                {
-                                    selectedItems.Add(geometry.ID);
-                                }
-                            }
-                        }
-                        // 更改选择的对象
-                        HashSet<int> set = new HashSet<int>(layer.SeletedItems);
-                        switch (selectedmode)
-                        {
-                            case SelectedMode.New:
-                                layer.SeletedItems = selectedItems;
-                                break;
-                            case SelectedMode.Add:
-                                set.UnionWith(selectedItems);
-                                layer.SeletedItems = new List<int>(set);
-                                break;
-                            case SelectedMode.Delete:
-                                set.ExceptWith(selectedItems);
-                                layer.SeletedItems = new List<int>(set);
-                                break;
-                            case SelectedMode.Intersect:
-                                set.IntersectWith(selectedItems);
-                                layer.SeletedItems = new List<int>(set);
-                                break;
-                        }
+                        SelectFeature(e.X, e.Y);
                         Refresh();
                         break;
                 }
