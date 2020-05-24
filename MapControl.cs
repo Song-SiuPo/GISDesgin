@@ -25,6 +25,8 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();             // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();         // 鼠标左键按下时的位置
         #endregion
+        private const double ZoomRatio = 1.2;   // 缩放系数
+        private const float AttractRadius = 4;   // 吸引区半径
 
         public MapControl()
         {
@@ -101,8 +103,10 @@ namespace simpleGIS
         /// <summary>
         /// 更新Cache对象，即缓冲图片层（地图的基础层）
         /// </summary>
-        private void RedrawMap(Graphics g)
+        private void RedrawMap()
         {
+            Graphics g = Graphics.FromImage(cache);
+            g.Clear(BackColor);
             map.Render(g);
             needRefresh = false;
         }
@@ -111,7 +115,16 @@ namespace simpleGIS
         /// 重新绘制跟踪层
         /// </summary>
         /// <param name="g">GDI绘图对象</param>
-        private void RedrawTrackingLayer(Graphics g)
+        private void DrawTrackingLayer(Graphics g)
+        {
+
+        }
+
+        /// <summary>
+        /// 绘制已选择的几何体
+        /// </summary>
+        /// <param name="g">GDI绘图对象</param>
+        private void DrawSelectedFeatures(Graphics g)
         {
 
         }
@@ -125,10 +138,10 @@ namespace simpleGIS
         {
             if (needRefresh)
             {
-                RedrawMap(e.Graphics);
+                RedrawMap();
             }
             e.Graphics.DrawImage(cache, 0, 0);
-            RedrawTrackingLayer(e.Graphics);
+            DrawTrackingLayer(e.Graphics);
         }
 
         // 控件大小改变
@@ -145,33 +158,169 @@ namespace simpleGIS
         // 鼠标按下
         private void MapControl_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (mapOperation)
+                {
+                    case OperationType.Edit:
+                        break;
+                    case OperationType.Track:
+                        if (e.Clicks == 1)
+                        {
 
+                        }
+                        break;
+                    case OperationType.ZoomIn:
+                        map.ZoomByCenter(map.ToMapPoint(new PointD(e.X, e.Y)), ZoomRatio);
+                        needRefresh = true;
+                        Refresh();
+                        break;
+                    case OperationType.ZoomOut:
+                        map.ZoomByCenter(map.ToMapPoint(new PointD(e.X, e.Y)), 1 / ZoomRatio);
+                        needRefresh = true;
+                        Refresh();
+                        break;
+                }
+                mouseDownLoc = e.Location;
+            }
         }
-        #endregion
 
         // 鼠标移动
         private void MapControl_MouseMove(object sender, MouseEventArgs e)
         {
-
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (mapOperation)
+                {
+                    case OperationType.Edit:
+                        break;
+                    case OperationType.Pan:
+                        PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
+                        PointD curPoint = map.ToMapPoint(new PointD(e.X, e.Y));
+                        map.OffsetX += prePoint.X - curPoint.X;
+                        map.OffsetY += prePoint.Y - curPoint.Y;
+                        needRefresh = true;
+                        Refresh();
+                        break;
+                    case OperationType.Select:
+                        Refresh();
+                        Graphics g = Graphics.FromHwnd(Handle);
+                        Pen boxPen = new Pen(Color.DarkGreen, 2);
+                        float minx = Math.Min(mouseDownLoc.X, e.X),
+                            miny = Math.Min(mouseDownLoc.Y, e.Y),
+                            maxx = Math.Max(mouseDownLoc.X, e.X),
+                            maxy = Math.Max(mouseDownLoc.Y, e.Y);
+                        g.DrawRectangle(boxPen, minx, miny, maxx - minx, maxy - miny);
+                        g.Dispose();
+                        break;
+                    case OperationType.Track:
+                        break;
+                }
+            }
+            mouseLoc = e.Location;
         }
 
         // 鼠标松开
         private void MapControl_MouseUp(object sender, MouseEventArgs e)
         {
-
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (mapOperation)
+                {
+                    case OperationType.Select:
+                        if (map.Layers.Count == 0)
+                        {
+                            break;
+                        }
+                        Layer layer = map.Layers[map.SelectedLayer];
+                        List<int> selectedItems = new List<int>();   // 本次选择的要素
+                        // 从已选择图层中搜索
+                        if (mouseDownLoc.X == e.X && mouseDownLoc.Y == e.Y)
+                        {
+                            PointD p = map.ToMapPoint(new PointD(e.X, e.Y));
+                            double distance = map.ToMapDistance(AttractRadius);
+                            foreach (Geometry geometry in layer.Features)
+                            {
+                                if (geometry.IsPointOn(p, distance))
+                                {
+                                    selectedItems.Add(geometry.ID);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            PointD startP = map.ToMapPoint(new PointD(mouseDownLoc.X, mouseDownLoc.Y)),
+                                endP = map.ToMapPoint(new PointD(e.X, e.Y));
+                            double minX = Math.Min(startP.X, endP.X),
+                                minY = Math.Min(startP.Y, endP.Y),
+                                maxX = Math.Max(startP.X, endP.X),
+                                maxY = Math.Max(startP.Y, endP.Y);
+                            RectangleD rect = new RectangleD(minX, minY, maxX, maxY);
+                            foreach (Geometry geometry in layer.Features)
+                            {
+                                if (geometry.IsWithinBox(rect))
+                                {
+                                    selectedItems.Add(geometry.ID);
+                                }
+                            }
+                        }
+                        // 更改选择的对象
+                        HashSet<int> set = new HashSet<int>(layer.SeletedItems);
+                        switch (selectedmode)
+                        {
+                            case SelectedMode.New:
+                                layer.SeletedItems = selectedItems;
+                                break;
+                            case SelectedMode.Add:
+                                set.UnionWith(selectedItems);
+                                layer.SeletedItems = new List<int>(set);
+                                break;
+                            case SelectedMode.Delete:
+                                set.ExceptWith(selectedItems);
+                                layer.SeletedItems = new List<int>(set);
+                                break;
+                            case SelectedMode.Intersect:
+                                set.IntersectWith(selectedItems);
+                                layer.SeletedItems = new List<int>(set);
+                                break;
+                        }
+                        Refresh();
+                        break;
+                }
+            }
         }
 
         // 鼠标双击
         private void MapControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (mapOperation)
+                {
+                    case OperationType.Track:
+                        break;
+                }
+            }
         }
 
         // 滑轮滚动
         private void MapControl_MouseWheel(object sender, MouseEventArgs e)
         {
-
+            PointD screenCenter = new PointD(e.X, e.Y);     // 控件中心点
+            if (e.Delta > 0)
+            {
+                map.ZoomByCenter(map.ToMapPoint(screenCenter), ZoomRatio);
+                needRefresh = true;
+                Refresh();
+            }
+            else
+            {
+                map.ZoomByCenter(map.ToMapPoint(screenCenter), 1 / ZoomRatio);
+                needRefresh = true;
+                Refresh();
+            }
         }
+        #endregion
     }
 
     /// <summary>
