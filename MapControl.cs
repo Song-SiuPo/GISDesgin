@@ -23,7 +23,7 @@ namespace simpleGIS
         private Bitmap cache;   // 当前地图显示范围的缓冲图片，不包括跟踪层和已选对象层
 
         // 编辑相关
-        private List<PointD> trackingPoints;    // Track模式新绘制的节点集合
+        private List<PointD> trackingPoints;    // Track模式新绘制的节点集合(地图坐标)
         private bool isHole;                    // 标记trackingPoints是否为多多边形的洞
         private Geometry[] editGeometries;      // Edit模式正在编辑的几何体，[0]为节点，[1]为线或面，[2]为多面
 
@@ -67,15 +67,7 @@ namespace simpleGIS
                 if (mapOperation != value)
                 {
                     mapOperation = value;
-                    // 编辑和跟踪时要清空原数据
-                    if (value == OperationType.Track)
-                    {
-                        trackingPoints.Clear();
-                    }
-                    else if (value == OperationType.Edit)
-                    {
-                        editGeometries[0] = editGeometries[1] = editGeometries[2] = null;
-                    }
+                    ClearEditTrack();
                     OperationTypeChanged?.Invoke(this);
                 }
             }
@@ -133,6 +125,15 @@ namespace simpleGIS
             cache.Save(path);
         }
 
+        /// <summary>
+        /// 清空当前编辑状态（跟踪几何体和编辑几何体）
+        /// </summary>
+        public void ClearEditTrack()
+        {
+            trackingPoints.Clear();
+            editGeometries[0] = editGeometries[1] = editGeometries[2] = null;
+        }
+
         #endregion
 
         #region 事件
@@ -170,7 +171,35 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawTrackingLayer(Graphics g)
         {
-
+            Layer layer = map.Layers[map.SelectedLayer];
+            PointF[] screenPs = new PointF[trackingPoints.Count + 1];
+            // 转换至屏幕坐标
+            for (int i = 0; i < trackingPoints.Count; i++)
+            {
+                PointD screenPD = map.FromMapPoint(trackingPoints[i]);
+                screenPs[i] = new PointF((float)screenPD.X, (float)screenPD.Y);
+            }
+            screenPs[trackingPoints.Count] = mouseLoc;
+            // 绘制轮廓
+            Pen linePen = new Pen(Color.Green, 2);
+            if (layer.FeatureType == typeof(Polyline) ||
+                layer.FeatureType == typeof(MultiPolyline))
+            {
+                g.DrawLines(linePen, screenPs);
+            }
+            else if (layer.FeatureType == typeof(Polyline) ||
+                layer.FeatureType == typeof(MultiPolyline))
+            {
+                g.DrawPolygon(linePen, screenPs);
+            }
+            // 绘制顶点
+            for (int i = 0; i < trackingPoints.Count - 1; i++)
+            {
+                g.FillRectangle(Brushes.Green, screenPs[i].X - 2, screenPs[i].Y - 2, 5, 5);
+            }
+            g.FillRectangle(Brushes.Red, screenPs[screenPs.Length - 2].X - 2,
+                screenPs[screenPs.Length - 2].Y - 2, 5, 5);
+            linePen.Dispose();
         }
 
         /// <summary>
@@ -188,7 +217,71 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawEditGeometry(Graphics g)
         {
-
+            // 绘制可能的正操作节点
+            if (editGeometries[0] != null)
+            {
+                PointD screenP = map.FromMapPoint((PointD)editGeometries[0]);
+                g.FillRectangle(Brushes.Red, (float)screenP.X - 2, (float)screenP.Y - 2, 5, 5);
+            }
+            // 绘制可能的其他节点
+            if (editGeometries[1] != null)
+            {
+                IList<PointD> mapPoints;
+                if (editGeometries[1].GetType() == typeof(Polyline))
+                { mapPoints = ((Polyline)editGeometries[1]).Data; }
+                else { mapPoints = ((Polygon)editGeometries[1]).Data; }
+                PointF[] screenPs = new PointF[mapPoints.Count];
+                for (int i = 0; i < screenPs.Length; i++)
+                {
+                    PointD screenP = map.FromMapPoint(mapPoints[i]);
+                    screenPs[i] = new PointF((float)screenP.X, (float)screenP.Y);
+                    if (!object.ReferenceEquals(mapPoints[i], editGeometries[0]))
+                    {
+                        g.FillRectangle(Brushes.Green, screenPs[i].X - 2, screenPs[i].Y - 2, 5, 5);
+                    }
+                }
+                Pen linePen = new Pen(Color.Green, 2);
+                if (editGeometries[1].GetType() == typeof(Polyline))
+                { g.DrawLines(linePen, screenPs); }
+                else { g.DrawPolygon(linePen, screenPs); }
+                linePen.Dispose();
+            }
+            // 复合折线、多边形，绘制其他部分
+            if (editGeometries[2] != null)
+            {
+                if (editGeometries[2].GetType() == typeof(MultiPolyline))
+                {
+                    foreach (Polyline polyline in ((MultiPolyline)editGeometries[2]).Data)
+                    {
+                        if (object.ReferenceEquals(polyline, editGeometries[1]))
+                        { continue; }
+                        IList<PointD> mapPoints = polyline.Data;
+                        PointF[] screenPs = new PointF[mapPoints.Count];
+                        for (int i = 0; i < screenPs.Length; i++)
+                        {
+                            PointD screenP = map.FromMapPoint(mapPoints[i]);
+                            screenPs[i] = new PointF((float)screenP.X, (float)screenP.Y);
+                        }
+                        g.DrawLines(Pens.DarkGreen, screenPs);
+                    }
+                }
+                else
+                {
+                    foreach (Polygon polygon in ((MultiPolygon)editGeometries[2]).Data)
+                    {
+                        if (object.ReferenceEquals(polygon, editGeometries[1]))
+                        { continue; }
+                        IList<PointD> mapPoints = polygon.Data;
+                        PointF[] screenPs = new PointF[mapPoints.Count];
+                        for (int i = 0; i < screenPs.Length; i++)
+                        {
+                            PointD screenP = map.FromMapPoint(mapPoints[i]);
+                            screenPs[i] = new PointF((float)screenP.X, (float)screenP.Y);
+                        }
+                        g.DrawLines(Pens.DarkGreen, screenPs);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -257,7 +350,7 @@ namespace simpleGIS
         }
 
         /// <summary>
-        /// 开始编辑几何体，选择要编辑的对象
+        /// 开始编辑几何体，左键点击选择要编辑的对象
         /// </summary>
         /// <param name="x">鼠标x坐标</param>
         /// <param name="y">鼠标y坐标</param>
@@ -266,15 +359,104 @@ namespace simpleGIS
             Layer layer = map.Layers[map.SelectedLayer];
             PointD mouseMapP = map.ToMapPoint(new PointD(x, y));
             double buffer = map.ToMapDistance(AttractRadius);
-            foreach (Geometry geometry in layer.Features)
-            {
-                if (geometry.IsPointOn(mouseMapP, buffer))
-                {
-                    if (layer.FeatureType == typeof(PointD))
-                    {
 
+            // 初始化3层几何体的搜索遍历范围
+            ICollection<Geometry>[] ienumList = new ICollection<Geometry>[3];   // 下标从0~2优先级下降
+            // 点：直接搜索图层
+            if (layer.FeatureType == typeof(PointD))
+            {
+                ienumList[0] = layer.Features;
+            }
+            // 线和面：若已选择线面，则找顶点，否则找线面
+            else if (layer.FeatureType == typeof(Polyline) ||
+                layer.FeatureType == typeof(Polygon))
+            {
+                ienumList[1] = layer.Features;
+                if (editGeometries[1] != null)
+                {
+                    if (editGeometries[1].GetType() == typeof(Polyline))
+                    {
+                        ienumList[0] = ((Polyline)editGeometries[1]).Data;
+                    }
+                    else
+                    {
+                        ienumList[0] = ((Polygon)editGeometries[1]).Data;
                     }
                 }
+            }
+            // 多线和多面：若已选择线面，则找顶点，否则找多线多面
+            else if (layer.FeatureType == typeof(MultiPolyline) ||
+                layer.FeatureType == typeof(MultiPolygon))
+            {
+                ienumList[2] = layer.Features;
+                if (editGeometries[1] != null)
+                {
+                    if (layer.FeatureType == typeof(MultiPolyline))
+                    {
+                        ienumList[0] = ((Polyline)editGeometries[1]).Data;
+                    }
+                    else
+                    {
+                        ienumList[0] = ((Polygon)editGeometries[1]).Data;
+                    }
+                }
+            }
+
+            // 根据优先级搜索需编辑的对象
+            for (int i = 0; i < 3; i++)
+            {
+                if (ienumList[i] == null) { continue; }
+                editGeometries[i] = null;
+                foreach (Geometry geo in ienumList[i])
+                {
+                    if (geo.IsPointOn(mouseMapP, buffer))
+                    {
+                        editGeometries[i] = geo;
+                        break;
+                    }
+                }
+                // 该层已经找到对象，结束
+                if (editGeometries[i] != null) { break; }
+            }
+            // 复合几何体要精确到Polyline或Polygon
+            if (editGeometries[2] != null)
+            {
+                if (editGeometries[2].GetType() == typeof(MultiPolyline))
+                {
+                    ienumList[1] = ((MultiPolyline)editGeometries[2]).Data;
+                }
+                else
+                {
+                    ienumList[1] = ((MultiPolygon)editGeometries[2]).Data;
+                }
+                editGeometries[1] = null;
+                foreach (Geometry geo in ienumList[1])
+                {
+                    if (geo.IsPointOn(mouseMapP, buffer))
+                    {
+                        editGeometries[1] = geo;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 移动编辑的几何体，用于move
+        /// </summary>
+        /// <param name="x">鼠标x坐标</param>
+        /// <param name="y">鼠标y坐标</param>
+        private void MoveEditGeometry(int x, int y)
+        {
+            // TODO:关于更新box的问题要再讨论
+            PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
+            PointD curPoint = map.ToMapPoint(new PointD(x, y));
+            for (int i = 0; i < 3; i++)
+            {
+                if (editGeometries[i] == null) { continue; }
+                editGeometries[i].Move(curPoint.X - prePoint.X, curPoint.Y - prePoint.Y);
+                // TODO:更新box
+                break;
             }
         }
 
@@ -290,8 +472,15 @@ namespace simpleGIS
                 RedrawMap();
             }
             e.Graphics.DrawImage(cache, 0, 0);
-            DrawTrackingLayer(e.Graphics);
-            DrawEditGeometry(e.Graphics);
+            DrawSelectedGeometries(e.Graphics);
+            if (mapOperation == OperationType.Edit)
+            {
+                DrawEditGeometry(e.Graphics);
+            }
+            else if (mapOperation == OperationType.Track)
+            {
+                DrawTrackingLayer(e.Graphics);
+            }
         }
 
         // 控件大小改变
@@ -354,6 +543,8 @@ namespace simpleGIS
                 switch (mapOperation)
                 {
                     case OperationType.Edit:
+                        MoveEditGeometry(e.X, e.Y);
+                        Refresh();
                         break;
                     case OperationType.Pan:
                         PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
@@ -367,12 +558,13 @@ namespace simpleGIS
                         // 绘制选择框
                         Refresh();
                         Graphics g = Graphics.FromHwnd(Handle);
-                        Pen boxPen = new Pen(Color.DarkGreen, 2);
+                        Pen boxPen = new Pen(Color.DarkBlue, 2);
                         float minx = Math.Min(mouseDownLoc.X, e.X),
                             miny = Math.Min(mouseDownLoc.Y, e.Y),
                             maxx = Math.Max(mouseDownLoc.X, e.X),
                             maxy = Math.Max(mouseDownLoc.Y, e.Y);
                         g.DrawRectangle(boxPen, minx, miny, maxx - minx, maxy - miny);
+                        boxPen.Dispose();
                         g.Dispose();
                         break;
                     case OperationType.Track:
@@ -402,9 +594,62 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
+                Layer layer = map.Layers[map.SelectedLayer];
                 if (mapOperation == OperationType.Track)
                 {
-
+                    // TODO：更新box
+                    // 生成的是线
+                    if ((layer.FeatureType == typeof(Polyline) ||
+                        layer.FeatureType == typeof(MultiPolyline)) &&
+                        trackingPoints.Count > 1)
+                    {
+                        Polyline line = new Polyline();
+                        line.Data = trackingPoints;
+                        if (layer.FeatureType == typeof(Polyline))
+                        {
+                            layer.AddFeature(line);
+                        }
+                        else if (editGeometries[2] != null)
+                        {
+                            ((MultiPolyline)editGeometries[2]).Data.Add(line);
+                            editGeometries[1] = line;
+                            mapOperation = OperationType.Edit;
+                        }
+                        else
+                        {
+                            MultiPolyline multiPolyline = new MultiPolyline();
+                            multiPolyline.Data.Add(line);
+                            layer.AddFeature(multiPolyline);
+                        }
+                    }
+                    // 生成的是面
+                    else if ((layer.FeatureType == typeof(Polygon) ||
+                        layer.FeatureType == typeof(MultiPolygon)) &&
+                        trackingPoints.Count > 2)
+                    {
+                        Polygon polygon = new Polygon();
+                        polygon.Data = trackingPoints;
+                        if (layer.FeatureType == typeof(Polygon))
+                        {
+                            layer.AddFeature(polygon);
+                        }
+                        else if (editGeometries[2] != null)
+                        {
+                            ((MultiPolygon)editGeometries[2]).Data.Add(polygon);
+                            editGeometries[1] = polygon;
+                            // TODO：标记是洞还是实体多边形
+                            mapOperation = OperationType.Edit;
+                        }
+                        else
+                        {
+                            MultiPolygon multiPolygon = new MultiPolygon();
+                            multiPolygon.Data.Add(polygon);
+                            layer.AddFeature(multiPolygon);
+                        }
+                    }
+                    if (mapOperation != OperationType.Edit) { mapOperation = OperationType.None; }
+                    trackingPoints.Clear();
+                    OperationTypeChanged.Invoke(this);
                 }
             }
         }
