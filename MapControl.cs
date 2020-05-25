@@ -22,17 +22,30 @@ namespace simpleGIS
         private bool needSave = false;          // 是否需要保存数据
         private Bitmap cache;   // 当前地图显示范围的缓冲图片，不包括跟踪层和已选对象层
 
-        private PointF mouseLoc = new PointF();             // 记录鼠标当前位置
-        private PointF mouseDownLoc = new PointF();         // 鼠标左键按下时的位置
-        #endregion
+        // 编辑相关
+        private List<PointD> trackingPoints;    // Track模式新绘制的节点集合
+        private bool isHole;                    // 标记trackingPoints是否为多多边形的洞
+        private Geometry[] editGeometries;      // Edit模式正在编辑的几何体，[0]为节点，[1]为线或面，[2]为多面
+
+        // 鼠标相关
+        private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
+        private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
+        private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
+
+        // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
-        private const float AttractRadius = 4;   // 吸引区半径
+        private const float AttractRadius = 4;  // 吸引区半径
+        #endregion
 
         public MapControl()
         {
+            InitializeComponent();
+
             cache = new Bitmap(Width, Height);
             selectedmode = SelectedMode.New;
             mapOperation = OperationType.None;
+            trackingPoints = new List<PointD>();
+            editGeometries = new Geometry[3];
             MouseWheel += MapControl_MouseWheel;
         }
 
@@ -46,12 +59,36 @@ namespace simpleGIS
         /// <summary>
         /// 获取或设置控件的当前工具（操作类型）
         /// </summary>
-        public OperationType OperationType { get => mapOperation; set => mapOperation = value; }
+        public OperationType OperationType
+        {
+            get => mapOperation;
+            set
+            {
+                if (mapOperation != value)
+                {
+                    mapOperation = value;
+                    // 编辑和跟踪时要清空原数据
+                    if (value == OperationType.Track)
+                    {
+                        trackingPoints.Clear();
+                    }
+                    else if (value == OperationType.Edit)
+                    {
+                        editGeometries[0] = editGeometries[1] = editGeometries[2] = null;
+                    }
+                    OperationTypeChanged?.Invoke(this);
+                }
+            }
+        }
 
         /// <summary>
         /// 获取或设置对象的选择模式
         /// </summary>
-        public SelectedMode SelectedMode { get => selectedmode; set => selectedmode = value; }
+        public SelectedMode SelectedMode
+        {
+            get => selectedmode;
+            set { selectedmode = value; SelectedModeChanged?.Invoke(this); }
+        }
 
         /// <summary>
         /// 获取或设置是否需要保存标识，用于关闭前弹窗提示
@@ -98,6 +135,22 @@ namespace simpleGIS
 
         #endregion
 
+        #region 事件
+
+        public delegate void SimpleHandler(object sender);
+
+        /// <summary>
+        /// 控件的工具（操作类型）发生变化之后
+        /// </summary>
+        public event SimpleHandler OperationTypeChanged;
+
+        /// <summary>
+        /// 控件的对象的选择模式发生变化之后
+        /// </summary>
+        public event SimpleHandler SelectedModeChanged;
+
+        #endregion
+
         #region 私有函数
 
         /// <summary>
@@ -124,7 +177,16 @@ namespace simpleGIS
         /// 绘制已选择的几何体
         /// </summary>
         /// <param name="g">GDI绘图对象</param>
-        private void DrawSelectedFeatures(Graphics g)
+        private void DrawSelectedGeometries(Graphics g)
+        {
+
+        }
+
+        /// <summary>
+        /// 绘制正在编辑的几何体
+        /// </summary>
+        /// <param name="g">GDI绘图对象</param>
+        private void DrawEditGeometry(Graphics g)
         {
 
         }
@@ -194,6 +256,28 @@ namespace simpleGIS
             }
         }
 
+        /// <summary>
+        /// 开始编辑几何体，选择要编辑的对象
+        /// </summary>
+        /// <param name="x">鼠标x坐标</param>
+        /// <param name="y">鼠标y坐标</param>
+        private void StartEditGeometry(int x, int y)
+        {
+            Layer layer = map.Layers[map.SelectedLayer];
+            PointD mouseMapP = map.ToMapPoint(new PointD(x, y));
+            double buffer = map.ToMapDistance(AttractRadius);
+            foreach (Geometry geometry in layer.Features)
+            {
+                if (geometry.IsPointOn(mouseMapP, buffer))
+                {
+                    if (layer.FeatureType == typeof(PointD))
+                    {
+
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region 响应事件处理
@@ -207,6 +291,7 @@ namespace simpleGIS
             }
             e.Graphics.DrawImage(cache, 0, 0);
             DrawTrackingLayer(e.Graphics);
+            DrawEditGeometry(e.Graphics);
         }
 
         // 控件大小改变
@@ -225,23 +310,34 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
+                PointD mapPoint = map.ToMapPoint(new PointD(e.X, e.Y));
                 switch (mapOperation)
                 {
                     case OperationType.Edit:
+                        StartEditGeometry(e.X, e.Y);
                         break;
                     case OperationType.Track:
                         if (e.Clicks == 1)
                         {
-
+                            // 添加点直接添加
+                            if (map.Layers[map.SelectedLayer].FeatureType == typeof(PointD))
+                            {
+                                map.Layers[map.SelectedLayer].AddFeature(mapPoint);
+                            }
+                            else
+                            {
+                                trackingPoints.Add(mapPoint);
+                            }
+                            Refresh();
                         }
                         break;
                     case OperationType.ZoomIn:
-                        map.ZoomByCenter(map.ToMapPoint(new PointD(e.X, e.Y)), ZoomRatio);
+                        map.ZoomByCenter(mapPoint, ZoomRatio);
                         needRefresh = true;
                         Refresh();
                         break;
                     case OperationType.ZoomOut:
-                        map.ZoomByCenter(map.ToMapPoint(new PointD(e.X, e.Y)), 1 / ZoomRatio);
+                        map.ZoomByCenter(mapPoint, 1 / ZoomRatio);
                         needRefresh = true;
                         Refresh();
                         break;
@@ -268,6 +364,7 @@ namespace simpleGIS
                         Refresh();
                         break;
                     case OperationType.Select:
+                        // 绘制选择框
                         Refresh();
                         Graphics g = Graphics.FromHwnd(Handle);
                         Pen boxPen = new Pen(Color.DarkGreen, 2);
@@ -305,10 +402,9 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
-                switch (mapOperation)
+                if (mapOperation == OperationType.Track)
                 {
-                    case OperationType.Track:
-                        break;
+
                 }
             }
         }
@@ -316,16 +412,16 @@ namespace simpleGIS
         // 滑轮滚动
         private void MapControl_MouseWheel(object sender, MouseEventArgs e)
         {
-            PointD screenCenter = new PointD(e.X, e.Y);     // 控件中心点
+            PointD zoomCenter = map.ToMapPoint(new PointD(e.X, e.Y));     // 控件中心点
             if (e.Delta > 0)
             {
-                map.ZoomByCenter(map.ToMapPoint(screenCenter), ZoomRatio);
+                map.ZoomByCenter(zoomCenter, ZoomRatio);
                 needRefresh = true;
                 Refresh();
             }
             else
             {
-                map.ZoomByCenter(map.ToMapPoint(screenCenter), 1 / ZoomRatio);
+                map.ZoomByCenter(zoomCenter, 1 / ZoomRatio);
                 needRefresh = true;
                 Refresh();
             }
