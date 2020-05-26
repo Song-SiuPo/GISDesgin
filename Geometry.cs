@@ -34,7 +34,7 @@ namespace simpleGIS
         #region 属性
         public int ID { get; set; }//唯一值-标明对象id
         public RectangleD Box { get { if (needRenewBox)
-                { RenewBox(); }
+                { RenewBox(); needRenewBox = false; }
                 return box; }
             set => box = value; }//记录外包矩形
         #endregion
@@ -60,6 +60,11 @@ namespace simpleGIS
         /// <param name="box">矩形</param>
         /// <returns></returns>
         public abstract bool IsWithinBox(RectangleD box);
+
+        /// <summary>
+        /// 标记该几何体需更新边界盒
+        /// </summary>
+        public void NeedRenewBox() { needRenewBox = true; }
 
         public abstract double GetDistance(PointD MouseLocation);
         #endregion
