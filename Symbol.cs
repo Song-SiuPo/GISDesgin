@@ -19,11 +19,30 @@ namespace simpleGIS
     /// </summary>
     public class PointSymbol : Symbol
     {
+        #region 字段
+
+        private int pointType;
+        private Color color;
+        private float size;
+
+        #endregion
+
         #region 属性
 
-        public int PointType { get; set; }  // 点符号的具体形状
-        public Color Color { get; set; }    // 点的颜色
-        public float Size { get; set; }     // 点的大小（单位为像素）
+        /// <summary>
+        /// 点符号的具体形状
+        /// </summary>
+        public int PointType { get => pointType; set => pointType = value; }
+        
+        /// <summary>
+        /// 点的颜色
+        /// </summary>
+        public Color Color { get => color; set => color = value; }
+        
+        /// <summary>
+        /// 点的大小（单位为像素）
+        /// </summary>
+        public float Size { get => size; set => size = value; }
 
         #endregion
     }
@@ -33,9 +52,18 @@ namespace simpleGIS
     /// </summary>
     public class LineSymbol : Symbol
     {
+        #region 字段
+
+        private Pen style;
+
+        #endregion
+
         #region 属性
 
-        public Pen Style { get; set; }  // 线的符号类型，.Net自带，里面有线型，颜色，宽度
+        /// <summary>
+        /// 线的符号类型，.Net自带，里面有线型，颜色，宽度
+        /// </summary>
+        public Pen Style { get => style; set => style = value; }
 
         #endregion
     }
@@ -45,10 +73,24 @@ namespace simpleGIS
     /// </summary>
     public class PolygonSymbol : Symbol
     {
+        #region 字段
+
+        private Pen outLine;
+        private SolidBrush fill;
+
+        #endregion
+
         #region 属性
 
-        public Pen Outline { get; set; }        // 多边形的边界样式
-        public SolidBrush Fill { get; set; }    // 多边形内部填充样式
+        /// <summary>
+        /// 多边形的边界样式
+        /// </summary>
+        public Pen OutLine { get => outLine; set => outLine = value; }
+
+        /// <summary>
+        /// 多边形内部填充样式
+        /// </summary>
+        public SolidBrush Fill { get => fill; set => fill = value; }
 
         #endregion
     }
