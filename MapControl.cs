@@ -213,7 +213,7 @@ namespace simpleGIS
             Layer layer = map.Layers[map.SelectedLayer];
             List<Geometry> selecedGeo = new List<Geometry>();
             // 查找满足条件的几何体
-            HashSet<int> indexSet = new HashSet<int>(layer.SeletedItems);
+            HashSet<int> indexSet = new HashSet<int>(layer.SelectedItems);
             foreach (Geometry geo in layer.Features)
             {
                 if (indexSet.Count == 0) { break; }
@@ -396,23 +396,23 @@ namespace simpleGIS
                 }
             }
             // 更改选择的对象
-            HashSet<int> set = new HashSet<int>(layer.SeletedItems);
+            HashSet<int> set = new HashSet<int>(layer.SelectedItems);
             switch (selectedmode)
             {
                 case SelectedMode.New:
-                    layer.SeletedItems = selectedItems;
+                    layer.SelectedItems = selectedItems;
                     break;
                 case SelectedMode.Add:
                     set.UnionWith(selectedItems);
-                    layer.SeletedItems = new List<int>(set);
+                    layer.SelectedItems = new List<int>(set);
                     break;
                 case SelectedMode.Delete:
                     set.ExceptWith(selectedItems);
-                    layer.SeletedItems = new List<int>(set);
+                    layer.SelectedItems = new List<int>(set);
                     break;
                 case SelectedMode.Intersect:
                     set.IntersectWith(selectedItems);
-                    layer.SeletedItems = new List<int>(set);
+                    layer.SelectedItems = new List<int>(set);
                     break;
             }
         }
@@ -732,7 +732,6 @@ namespace simpleGIS
                 Type layerType = map.Layers[map.SelectedLayer].FeatureType;
                 switch (mapOperation)
                 {
-                    // 删除刚编辑的节点
                     case OperationType.Track:
                         delLastVertexToolStripMenuItem.Visible = trackingPoints.Count != 0;
                         trackNewPartToolStripMenuItem.Visible =
@@ -760,10 +759,20 @@ namespace simpleGIS
                         {
                             delGeoToolStripMenuItem.Visible = editGeometries[2] != null;
                             addPartToolStripMenuItem.Visible = editGeometries[2] != null;
-                            delPartToolStripMenuItem.Visible =
-                                editGeometries[1] != null && ;
+                            if (editGeometries[2].GetType() == typeof(MultiPolyline))
+                            {
+                                delPartToolStripMenuItem.Visible =
+                                   editGeometries[1] != null &&
+                                   ((MultiPolyline)editGeometries[2]).Data.Count > 1;
+
+                            }
+                            else
+                            {
+                                delPartToolStripMenuItem.Visible =
+                                   editGeometries[1] != null &&
+                                   ((MultiPolygon)editGeometries[2]).Data.Count > 1;
+                            }
                         }
-                        delGeoToolStripMenuItem.Visible = 
                         editContextStrip.Show(this, e.X, e.Y);
                         break;
                 }
