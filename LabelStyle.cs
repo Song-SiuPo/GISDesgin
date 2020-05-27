@@ -37,5 +37,18 @@ namespace simpleGIS
         public Color Color { get => color; set => color = value; }
 
         #endregion
+
+        /// <summary>
+        /// 创建新的注记风格
+        /// </summary>
+        /// <param name="_field">注记绑定字段</param>
+        /// <param name="_font">注记字体</param>
+        /// <param name="_color">注记颜色</param>
+        public LabelStyle(string _field, Font _font, Color _color)
+        {
+            field = _field;
+            font = _font;
+            color = _color;
+        }
     }
 }
