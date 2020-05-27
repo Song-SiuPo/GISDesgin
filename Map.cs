@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace simpleGIS
 {
@@ -27,7 +28,13 @@ namespace simpleGIS
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public PointD FromMapPoint(PointD point) { }
+        public PointD FromMapPoint(PointD point)
+        {
+            PointD sPoint = new PointD();
+            sPoint.X = (point.X - OffsetX) / MapScale;
+            sPoint.Y = (point.Y - OffsetY) / MapScale;
+            return sPoint;
+        }
 
 
         /// <summary>
@@ -35,7 +42,13 @@ namespace simpleGIS
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public PointD ToMapPoint(PointD point) { }
+        public PointD ToMapPoint(PointD point)
+        {
+            PointD sPoint = new PointD();
+            sPoint.X = point.X * MapScale + OffsetX;
+            sPoint.Y = point.Y * MapScale + OffsetY;
+            return sPoint;
+        }
 
 
         /// <summary>
@@ -43,7 +56,7 @@ namespace simpleGIS
         /// </summary>
         /// <param name="dis"></param>
         /// <returns></returns>
-        public double FromMapDistance(double dis) { }
+        public double FromMapDistance(double dis) { return dis / MapScale; }
 
 
         /// <summary>
@@ -51,7 +64,7 @@ namespace simpleGIS
         /// </summary>
         /// <param name="dis"></param>
         /// <returns></returns>
-        public double ToMapDistance(double dis) { }
+        public double ToMapDistance(double dis) { return dis * MapScale; }
 
 
         /// <summary>
@@ -59,14 +72,18 @@ namespace simpleGIS
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void PanTo(double x, double y) { }
+        public void PanTo(double x, double y)
+        {
+            OffsetX = x;
+            OffsetY = y;
+        }
 
 
         /// <summary>
         /// 地图的比例尺设为mapscale
         /// </summary>
         /// <param name="mapscale"></param>
-        public void SetMapScale(double mapscale) { }
+        public void SetMapScale(double mapscale) { MapScale = mapscale; }
 
 
         /// <summary>
@@ -74,7 +91,20 @@ namespace simpleGIS
         /// </summary>
         /// <param name="point"></param>
         /// <param name="ratio"></param>
-        public void ZoomByCenter(PointD point, double ratio) { }
+        public void ZoomByCenter(PointD center, double ratio)
+        {
+            //更改比例尺
+            double sDisplayScale;
+            sDisplayScale = MapScale / ratio;
+            MapScale = sDisplayScale;
+
+            //更改投影屏幕左上角坐标
+            double sOffsetX, sOffsetY;//
+            sOffsetX = OffsetX + (1 - 1 / ratio) * (center.X - OffsetX);
+            sOffsetY = OffsetY + (1 - 1 / ratio) * (center.Y - OffsetY);
+            OffsetX = sOffsetX;
+            OffsetY = sOffsetY;
+        }
 
 
         /// <summary>
@@ -85,27 +115,35 @@ namespace simpleGIS
 
 
         //添加一个图层
-        public void AddLayer(Layer layer) { }
+        public void AddLayer(Layer layer) { Layers.Insert(0, layer); }
 
 
         //删除指定下标的图层
-        public void DelLayer(int index) { }
+        public void DelLayer(int index) { Layers.RemoveAt(index); }
 
 
         //清除所有图层
-        public void ClearLayers() { }
+        public void ClearLayers() { Layers.Clear(); }
 
 
         //将指定下标的图层设为选定图层
-        public void SelectLayer(int index) { }
+        public void SelectLayer(int index) { SelectedLayer = index; }
 
 
         //将当前选定的图层上移一层
-        public void MoveUpLayer() { }
+        public void MoveUpLayer()
+        {
+            if(SelectedLayer > 0) { SelectedLayer -= 1; }
+            else { MessageBox.Show("已至最顶层"); }
+        }
 
 
         //将当前选定图层下移一层
-        public void MoveDownLayer() { }
+        public void MoveDownLayer()
+        {
+            if(SelectedLayer <Layers .Count - 1) { SelectedLayer += 1; }
+            else { MessageBox.Show("已至最底层"); }
+        }
 
         #endregion 
     }
