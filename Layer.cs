@@ -115,8 +115,14 @@ namespace simpleGIS
             {
                 if(Features [i].ID == id)
                 {
+                    if (SelectedItems.Contains(id))
+                    {
+                        SelectedItems.Remove(id);
+                    }
+                    
                     Features.RemoveAt(i);
                     Table.Rows.RemoveAt(i);
+                    
                     break;
                 }
             }
@@ -132,80 +138,14 @@ namespace simpleGIS
         //通过属性查询语句查询（SelectedMode是枚举类），并按照SelectedMode更新选中的要素SelectedItems
         public void QuerySQL(string sql, SelectedMode mode)
         {
-            //定义变量
-            string Property = ""; //属性名
-            string Operator = ""; //操作符
-            string value = ""; //属性
-            List<int> selectID = new List<int>();  //选择的feature ID
+            //获得选择的feature
+            DataRow[]  selectedRows = Table.Select(sql);
 
-            List <char> sql_list = sql.ToList ();
-            int mark = 0;
-            
-            //解析sql，属性名，操作符
-            for (; mark < sql_list.Count; mark++)
+            //获得feature的id列表
+            List<int> selectedID = new List<int>();
+            for (int i= 0; i < selectedRows.Length; i++)
             {
-                if (sql_list[mark] == ' ') { continue; }  //空格，忽略
-                else if (sql_list[mark] != '<' | sql_list[mark] != '>' |
-                    sql_list[mark] != '=') { Property += sql_list[mark]; }   //没读到操作符，继续
-                else if (sql_list[mark] == '<' | sql_list[mark] == '>' |
-                    sql_list[mark] == '=')                                    //读到操作符，记录，停止
-                {
-                    Operator += sql_list[mark];
-                    break;
-                }
-            }
-
-            //解析sql，属性值
-            for (;mark < sql_list.Count; mark++)
-            {
-                if(sql_list[mark] == ' ') { continue; }
-                else { value += sql_list[mark]; }
-            }
-
-            if(!Table .Columns.Contains(Property)) { MessageBox.Show("不存在属性。"); }
-            else
-            {
-                Type type = Table.Columns[Property].GetType();  //获得属性类型
-                if(Operator == "=")   //操作符为‘=’
-                {
-                    for (int i = 0; i < Table.Rows.Count; i++)
-                    {
-                        if (Table.Rows[i][Property] == Convert.ChangeType(value, type))  //找到，添加
-                            selectID.Add(i);
-                    }
-                }
-
-                else if (Operator == ">")   //操作符为‘>’
-                {
-                    try
-                    {
-                        for (int i = 0; i < Table.Rows.Count; i++)
-                        {
-                            if ((double)Table.Rows[i][Property] > Convert.ToDouble(value))  //找到，添加
-                                selectID.Add(i);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("属性值判别出错，请检查您的sql语句。");
-                    }
-                }
-
-                else if (Operator == "<")   //操作符为‘<’
-                {
-                    try
-                    {
-                        for (int i = 0; i < Table.Rows.Count; i++)
-                        {
-                            if ((double)Table.Rows[i][Property] < Convert.ToDouble(value))  //找到，添加
-                                selectID.Add(i);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("属性值判别出错，请检查您的sql语句。");
-                    }
-                }
+                selectedID.Add((int)selectedRows[i]["ID"]);
             }
 
             //按照selectmode，更新选择表
@@ -214,44 +154,37 @@ namespace simpleGIS
             if (Enum.GetName(typeof(SelectedMode), mode) == "New")
             {
                 SelectedItems.Clear();
-                SelectedItems.CopyTo(selectID.ToArray());
+                SelectedItems.CopyTo(selectedID.ToArray());
             }
 
             //在原基础上添加新选择的对象
             else if (Enum.GetName(typeof(SelectedMode), mode) == "Add")
             {
-                for (int i=0;i<selectID.Count; i++)
-                {
-                    if(!SelectedItems.Exists (t => t==selectID[i])){ SelectedItems.Add(selectID[i]); }
-                }
+                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                HashSet<int> hash2 = new HashSet<int>(selectedID);
+                hash1.Union(hash2);
+                SelectedItems = new List<int>(hash1);
             }
 
             //在原基础上删除新选择的对象
             else if (Enum.GetName(typeof(SelectedMode), mode) == "Delete")
             {
-                for (int i = 0; i < selectID.Count; i++)
-                {
-                    if (SelectedItems.Exists(t => t == selectID[i])) { SelectedItems.Remove(selectID[i]); }
-                }
-            }
-
-            //在原基础上删除新选择的对象
-            else if (Enum.GetName(typeof(SelectedMode), mode) == "Delete")
-            {
-                for (int i = 0; i < selectID.Count; i++)
-                {
-                    if (SelectedItems.Exists(t => t == selectID[i])) { SelectedItems.Remove(selectID[i]); }
-                }
+                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                HashSet<int> hash2 = new HashSet<int>(selectedID);
+                hash1.ExceptWith(hash2);
+                SelectedItems = new List<int>(hash1);
             }
 
             //在原基础上选择对象和新对象的交集
             else if (Enum.GetName(typeof(SelectedMode), mode) == "Intersect")
             {
-                for (int i = 0; i < SelectedItems .Count; i++)
-                {
-                    if (selectID.Exists(t => t == SelectedItems[i])) { SelectedItems.Remove(selectID[i]); }
-                }
+                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                HashSet<int> hash2 = new HashSet<int>(selectedID);
+                hash1.IntersectWith(hash2);
+                SelectedItems = new List<int>(hash1);
             }
+            
+
         }
         #endregion
 
