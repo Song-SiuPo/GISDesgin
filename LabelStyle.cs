@@ -41,7 +41,11 @@ namespace simpleGIS
         #region 构造函数
 
         public LabelStyle()
-        { }
+        {
+            field = "";
+            font = new Font("宋体", 10f);
+            color = Color.Black;
+        }
 
         /// <summary>
         /// 创建新的注记风格

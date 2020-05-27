@@ -21,7 +21,7 @@ namespace simpleGIS
     /// <summary>
    /// 子类——简单渲染
    /// </summary>
-    public  class SimpleRender:Renderer
+    public  class SimpleRenderer:Renderer
     {
         #region 属性
         public Symbol Symbol { get; set; }
