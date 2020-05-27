@@ -244,6 +244,7 @@ namespace simpleGIS
                 }
             }
 
+
             //在原基础上选择对象和新对象的交集
             else if (Enum.GetName(typeof(SelectedMode), mode) == "Intersect")
             {
