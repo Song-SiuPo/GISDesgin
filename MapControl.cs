@@ -25,7 +25,8 @@ namespace simpleGIS
         // 编辑相关
         private List<PointD> trackingPoints;    // Track模式新绘制的节点集合(地图坐标)
         private bool isHole;                    // 标记trackingPoints是否为多多边形的洞
-        private Geometry[] editGeometries;      // Edit模式正在编辑的几何体，[0]为节点，[1]为线或面，[2]为多面
+        private Geometry[] editGeometries;      // Edit模式正在编辑的几何体，[0]为节点，[1]为线或面，[2]为多线面
+        private int addVertexLoc = -1;          // 编辑模式插入节点时，插入的位置
 
         // 鼠标相关
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
@@ -428,7 +429,7 @@ namespace simpleGIS
             double buffer = map.ToMapDistance(AttractRadius);
 
             // 初始化3层几何体的搜索遍历范围
-            ICollection<Geometry>[] ienumList = new ICollection<Geometry>[3];   // 下标从0~2优先级下降
+            List<Geometry>[] ienumList = new List<Geometry>[3];   // 下标从0~2优先级下降
             // 点：直接搜索图层
             if (layer.FeatureType == typeof(PointD))
             {
@@ -443,11 +444,11 @@ namespace simpleGIS
                 {
                     if (editGeometries[1].GetType() == typeof(Polyline))
                     {
-                        ienumList[0] = ((Polyline)editGeometries[1]).Data;
+                        ienumList[0] = new List<Geometry>(((Polyline)editGeometries[1]).Data);
                     }
                     else
                     {
-                        ienumList[0] = ((Polygon)editGeometries[1]).Data;
+                        ienumList[0] = new List<Geometry>(((Polygon)editGeometries[1]).Data);
                     }
                 }
             }
@@ -460,11 +461,11 @@ namespace simpleGIS
                 {
                     if (layer.FeatureType == typeof(MultiPolyline))
                     {
-                        ienumList[0] = ((Polyline)editGeometries[1]).Data;
+                        ienumList[0] = new List<Geometry>(((Polyline)editGeometries[1]).Data);
                     }
                     else
                     {
-                        ienumList[0] = ((Polygon)editGeometries[1]).Data;
+                        ienumList[0] = new List<Geometry>(((Polygon)editGeometries[1]).Data);
                     }
                 }
             }
@@ -490,11 +491,11 @@ namespace simpleGIS
             {
                 if (editGeometries[2].GetType() == typeof(MultiPolyline))
                 {
-                    ienumList[1] = ((MultiPolyline)editGeometries[2]).Data;
+                    ienumList[1] = new List<Geometry>(((MultiPolyline)editGeometries[2]).Data);
                 }
                 else
                 {
-                    ienumList[1] = ((MultiPolygon)editGeometries[2]).Data;
+                    ienumList[1] = new List<Geometry>(((MultiPolygon)editGeometries[2]).Data);
                 }
                 editGeometries[1] = null;
                 foreach (Geometry geo in ienumList[1])
@@ -515,15 +516,136 @@ namespace simpleGIS
         /// <param name="y">鼠标y坐标</param>
         private void MoveEditGeometry(int x, int y)
         {
-            // TODO:关于更新box的问题要再讨论
             PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
             PointD curPoint = map.ToMapPoint(new PointD(x, y));
+            bool moved = false;
             for (int i = 0; i < 3; i++)
             {
                 if (editGeometries[i] == null) { continue; }
-                editGeometries[i].Move(curPoint.X - prePoint.X, curPoint.Y - prePoint.Y);
-                // TODO:更新box
-                break;
+                if (!moved)
+                {
+                    editGeometries[i].Move(curPoint.X - prePoint.X, curPoint.Y - prePoint.Y);
+                    moved = true;
+                    // TODO:对图层更新box
+                }
+                if (moved)
+                { editGeometries[i].NeedRenewBox(); }
+            }
+        }
+
+        /// <summary>
+        /// 在已选择Polyline或者Polygon时，右键点击选择顶点，放入editGeometries[0]
+        /// </summary>
+        /// <param name="x">鼠标x坐标</param>
+        /// <param name="y">鼠标y坐标</param>
+        private void ChooseVertex(int x, int y)
+        {
+            addVertexLoc = -1;
+            if (editGeometries[1] == null)
+            { return; }
+            PointD mapP = map.ToMapPoint(new PointD(x, y));
+            double buffer = map.ToMapDistance(AttractRadius);
+            // 测试原选择的顶点是否仍然选择
+            if (editGeometries[0] != null &&
+                editGeometries[0].IsPointOn(mapP, buffer))
+            { return; }
+
+            // 未选择原来的顶点，从对应的Polyline或Polygon中选
+            IList<PointD> points;
+            if (editGeometries[1].GetType() == typeof(Polyline))
+            { points = ((Polyline)editGeometries[1]).Data; }
+            else { points = ((Polygon)editGeometries[1]).Data; }
+            // 循环查找哪个顶点满足选择要求
+            foreach (PointD geo in points)
+            {
+                if (geo.IsPointOn(mapP, buffer))
+                {
+                    editGeometries[0] = geo;
+                    return;
+                }
+            }
+
+            // 没有节点被选中，尝试找到插入顶点的位置
+            int loopNum = editGeometries[1].GetType() == typeof(Polyline) ?
+                points.Count - 1 : points.Count;
+            for (int i = 0; i < loopNum; i++)
+            {
+                int nextI = i == points.Count - 1 ? 0 : i + 1;
+                PointD a = new PointD(mapP.X - points[i].X, mapP.Y - points[i].Y);
+                PointD b = new PointD(points[nextI].X - points[i].X,
+                    points[nextI].Y - points[i].Y);
+                double dist = Math.Abs(a.X * b.Y - b.X * a.Y) / Math.Sqrt(b.X * b.X + b.Y * b.Y);
+                if (dist < buffer)
+                {
+                    addVertexLoc = i + 1;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 结束track模式
+        /// </summary>
+        private void FinishTrack()
+        {
+            Layer layer = map.Layers[map.SelectedLayer];
+            if (mapOperation == OperationType.Track)
+            {
+                // TODO：对图层更新box
+                // 生成的是线
+                if ((layer.FeatureType == typeof(Polyline) ||
+                    layer.FeatureType == typeof(MultiPolyline)) &&
+                    trackingPoints.Count > 1)
+                {
+                    Polyline line = new Polyline(trackingPoints);
+                    if (layer.FeatureType == typeof(Polyline))
+                    {
+                        layer.AddFeature(line);
+                    }
+                    else if (editGeometries[2] != null)
+                    {
+                        ((MultiPolyline)editGeometries[2]).Data.Add(line);
+                        editGeometries[2].NeedRenewBox();
+                        editGeometries[1] = line;
+                        mapOperation = OperationType.Edit;
+                    }
+                    else
+                    {
+                        MultiPolyline multiPolyline = new MultiPolyline(new Polyline[] { line });
+                        layer.AddFeature(multiPolyline);
+                    }
+                    needRefresh = true;
+                    needSave = true;
+                }
+                // 生成的是面
+                else if ((layer.FeatureType == typeof(Polygon) ||
+                    layer.FeatureType == typeof(MultiPolygon)) &&
+                    trackingPoints.Count > 2)
+                {
+                    Polygon polygon = new Polygon(trackingPoints);
+                    if (layer.FeatureType == typeof(Polygon))
+                    {
+                        layer.AddFeature(polygon);
+                    }
+                    else if (editGeometries[2] != null)
+                    {
+                        ((MultiPolygon)editGeometries[2]).Data.Add(polygon);
+                        editGeometries[2].NeedRenewBox();
+                        editGeometries[1] = polygon;
+                        // TODO：标记是洞还是实体多边形
+                        mapOperation = OperationType.Edit;
+                    }
+                    else
+                    {
+                        MultiPolygon multiPolygon = new MultiPolygon(new Polygon[] { polygon });
+                        layer.AddFeature(multiPolygon);
+                    }
+                    needRefresh = true;
+                    needSave = true;
+                }
+                if (mapOperation != OperationType.Edit) { mapOperation = OperationType.None; }
+                trackingPoints.Clear();
+                OperationTypeChanged.Invoke(this);
             }
         }
 
@@ -580,6 +702,8 @@ namespace simpleGIS
                             if (map.Layers[map.SelectedLayer].FeatureType == typeof(PointD))
                             {
                                 map.Layers[map.SelectedLayer].AddFeature(mapPoint);
+                                // 更新图层box
+                                needRefresh = true;
                                 needSave = true;
                             }
                             else
@@ -605,20 +729,45 @@ namespace simpleGIS
             // 鼠标右键
             else if (e.Button == MouseButtons.Right)
             {
-
+                Type layerType = map.Layers[map.SelectedLayer].FeatureType;
                 switch (mapOperation)
                 {
                     // 删除刚编辑的节点
                     case OperationType.Track:
-                        if (trackingPoints.Count != 0)
-                        {
-                            trackingPoints.RemoveAt(trackingPoints.Count - 1);
-                        }
-                        Refresh();
+                        delLastVertexToolStripMenuItem.Visible = trackingPoints.Count != 0;
+                        trackNewPartToolStripMenuItem.Visible =
+                            layerType == typeof(MultiPolyline) || layerType == typeof(MultiPolygon);
+                        trackContexStrip.Show(this, e.X, e.Y);
                         break;
                     case OperationType.Edit:
+                        ChooseVertex(e.X, e.Y);
+                        addVertexToolStripMenuItem.Visible = addVertexLoc != -1;
+                        delVertexToolStripMenuItem.Visible = 
+                            layerType != typeof(Point) && editGeometries[0] != null;
+                        if (layerType == typeof(Point))
+                        {
+                            delGeoToolStripMenuItem.Visible = editGeometries[0] != null;
+                            addPartToolStripMenuItem.Visible = false;
+                            delPartToolStripMenuItem.Visible = false;
+                        }
+                        else if (layerType == typeof(Polyline) || layerType == typeof(Polygon))
+                        {
+                            delGeoToolStripMenuItem.Visible = editGeometries[1] != null;
+                            addPartToolStripMenuItem.Visible = false;
+                            delPartToolStripMenuItem.Visible = false;
+                        }
+                        else
+                        {
+                            delGeoToolStripMenuItem.Visible = editGeometries[2] != null;
+                            addPartToolStripMenuItem.Visible = editGeometries[2] != null;
+                            delPartToolStripMenuItem.Visible =
+                                editGeometries[1] != null && ;
+                        }
+                        delGeoToolStripMenuItem.Visible = 
+                        editContextStrip.Show(this, e.X, e.Y);
                         break;
                 }
+                mouseRDownLoc = e.Location;
             }
         }
 
@@ -631,6 +780,7 @@ namespace simpleGIS
                 {
                     case OperationType.Edit:
                         MoveEditGeometry(e.X, e.Y);
+                        needRefresh = true;
                         needSave = true;
                         Refresh();
                         break;
@@ -683,69 +833,8 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
-                Layer layer = map.Layers[map.SelectedLayer];
-                if (mapOperation == OperationType.Track)
-                {
-                    // TODO：更新box
-                    // 生成的是线
-                    if ((layer.FeatureType == typeof(Polyline) ||
-                        layer.FeatureType == typeof(MultiPolyline)) &&
-                        trackingPoints.Count > 1)
-                    {
-                        Polyline line = new Polyline();
-                        line.Data = trackingPoints;
-                        if (layer.FeatureType == typeof(Polyline))
-                        {
-                            layer.AddFeature(line);
-                        }
-                        else if (editGeometries[2] != null)
-                        {
-                            ((MultiPolyline)editGeometries[2]).Data.Add(line);
-                            editGeometries[1] = line;
-                            mapOperation = OperationType.Edit;
-                        }
-                        else
-                        {
-                            MultiPolyline multiPolyline = new MultiPolyline();
-                            multiPolyline.Data.Add(line);
-                            layer.AddFeature(multiPolyline);
-                        }
-                        needRefresh = true;
-                        needSave = true;
-                    }
-                    // 生成的是面
-                    else if ((layer.FeatureType == typeof(Polygon) ||
-                        layer.FeatureType == typeof(MultiPolygon)) &&
-                        trackingPoints.Count > 2)
-                    {
-                        Polygon polygon = new Polygon();
-                        polygon.Data = trackingPoints;
-                        if (layer.FeatureType == typeof(Polygon))
-                        {
-                            layer.AddFeature(polygon);
-                        }
-                        else if (editGeometries[2] != null)
-                        {
-                            ((MultiPolygon)editGeometries[2]).Data.Add(polygon);
-                            editGeometries[1] = polygon;
-                            // TODO：标记是洞还是实体多边形
-                            mapOperation = OperationType.Edit;
-                        }
-                        else
-                        {
-                            MultiPolygon multiPolygon = new MultiPolygon();
-                            multiPolygon.Data.Add(polygon);
-                            layer.AddFeature(multiPolygon);
-                        }
-                        needRefresh = true;
-                        needSave = true;
-                    }
-                    if (mapOperation != OperationType.Edit) { mapOperation = OperationType.None; }
-                    trackingPoints.Clear();
-                    OperationTypeChanged.Invoke(this);
-
-                    Refresh();
-                }
+                FinishTrack();
+                Refresh();
             }
         }
 
@@ -766,6 +855,82 @@ namespace simpleGIS
                 Refresh();
             }
         }
+
+        // 以下为右键菜单处理
+        // Edit模式插入顶点
+        private void addVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PointD p = map.ToMapPoint(new PointD(mouseRDownLoc.X, mouseRDownLoc.Y));
+            if (editGeometries[1].GetType() == typeof(Polyline))
+            {
+                ((Polyline)editGeometries[1]).Data.Add(p);
+            }
+            else
+            {
+                ((Polygon)editGeometries[1]).Data.Add(p);
+            }
+            // TODO:更新图层的box
+            needRefresh = true;
+            needSave = true;
+            editGeometries[1].NeedRenewBox();
+            if (editGeometries[2] != null)
+            { editGeometries[2].NeedRenewBox(); }
+        }
+
+        // Edit模式删除选择的顶点
+        private void delVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Edit模式删除选择的几何体
+        private void delGeoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Edit模式复合几何添加部件
+        private void addPartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Edit模式复合几何删除部件
+        private void delPartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // track模式删除上个顶点
+        private void delLastVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (trackingPoints.Count != 0)
+            {
+                trackingPoints.RemoveAt(trackingPoints.Count - 1);
+                Refresh();
+            }
+        }
+
+        // track模式结束绘制
+        private void finishTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FinishTrack();
+            Refresh();
+        }
+
+        // track模式清除绘制
+        private void clearTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OperationType = OperationType.None;
+            Refresh();
+        }
+
+        // track复合几何体添加新部分
+        private void trackNewPartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion
     }
 
