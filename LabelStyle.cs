@@ -38,6 +38,11 @@ namespace simpleGIS
 
         #endregion
 
+        #region 构造函数
+
+        public LabelStyle()
+        { }
+
         /// <summary>
         /// 创建新的注记风格
         /// </summary>
@@ -50,5 +55,8 @@ namespace simpleGIS
             font = _font;
             color = _color;
         }
+
+        #endregion
+
     }
 }
