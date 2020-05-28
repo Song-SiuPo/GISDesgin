@@ -22,7 +22,35 @@ namespace simpleGIS
 
         #region 方法
 
-
+        /// <summary>
+        /// 更新矩形选择盒
+        /// </summary>
+        public void RefreshBox()
+        {
+            try
+            {
+                if(Layers .Count > 0)
+                {
+                    //只有一个图层
+                    if(Layers .Count == 1) { Box = new RectangleD(Layers[0].Box); }
+                    
+                    //有多个图层
+                    else
+                    {
+                        RectangleD sBox = new RectangleD(Layers[0].Box);
+                        for (int i=0;i<Layers.Count; i++)
+                        {
+                            if (Layers[i].Box.MinX < sBox.MinX) { sBox.MinX = Layers[i].Box.MinX; }
+                            if (Layers[i].Box.MinY < sBox.MinY) { sBox.MinY = Layers[i].Box.MinY; }
+                            if (Layers[i].Box.MaxX > sBox.MaxX) { sBox.MaxX = Layers[i].Box.MaxX; }
+                            if (Layers[i].Box.MaxY > sBox.MaxY) { sBox.MaxY = Layers[i].Box.MaxY; }
+                        }
+                    }
+                }
+                else { MessageBox.Show("地图无图层，不能更新外包矩形。"); }
+            }
+            catch { MessageBox.Show("地图更新外包矩形出错。"); }
+        }
         /// <summary>
         /// 将地图坐标转换为屏幕坐标
         /// </summary>

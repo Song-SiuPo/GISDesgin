@@ -87,7 +87,7 @@ namespace simpleGIS
                     //有一个以上的元素
                     else
                     {
-                        RectangleD sBox = Features[0].Box;  //用来记录临时的外包矩形盒
+                        RectangleD sBox = new RectangleD(Features[0].Box);  //用来记录临时的外包矩形盒
                         for(int i=1; i<Features.Count; i++)
                         {
                             if (Features[i].Box.MinX < sBox.MinX) { sBox.MinX = Features[i].Box.MinX; }
