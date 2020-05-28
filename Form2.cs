@@ -15,15 +15,5 @@ namespace simpleGIS
         {
             InitializeComponent();
         }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void domainUpDown1_SelectedItemChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
