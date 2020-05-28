@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +45,15 @@ namespace simpleGIS
         public Symbol FindSymbol(string value)//唯一值渲染。根据唯一值寻找符号
         {
             Symbol output = new Symbol();
-            return output;
+            //return output;
+            if(Symbols.ContainsKey(value))
+            {
+                return Symbols[value];
+            }
+            else
+            {
+                return output;//定义一个默认符号输出
+            }
         }
         #endregion
     }
@@ -58,15 +66,41 @@ namespace simpleGIS
     public class ClassBreaksRenderer:Renderer
     {
         #region 属性
-        public double[] BreakPoints { get; set; }//分级渲染的断裂点
-        public Symbol[] Symbols { get; set; }//分级渲染的符号，比断裂点个数多1个。
+        public List<double> BreakPoints { get; set; }//分级渲染的断裂点
+        public List<Symbol> Symbols { get; set; }//分级渲染的符号，比断裂点个数多1个。
         #endregion
 
         #region 方法
         Symbol FindSymbol(double value)//分级渲染。根据该属性值寻找对应的符号
         {
-            Symbol output = new Symbol();
-            return output;
+            Symbol output = new Symbol();//同前赋值一个默认的符号
+            if (Symbols.Count()-BreakPoints.Count() == 1)//确保不会溢出
+            {
+                
+                if (value <= BreakPoints[0])//第一个
+                {
+                    return Symbols[0];
+                }
+                else if (value >= BreakPoints.Last())//最后一个
+                {
+                    return Symbols.Last();
+                }
+                else//中间的
+                {
+                    for (int i = 1; i < BreakPoints.Count(); i++)
+                    {
+                        if (value <= BreakPoints[i] && value > BreakPoints[i - 1])
+                        {
+                            output = Symbols[i + 1];
+                        }
+                    }
+                    return output;
+                }
+            }
+            else
+            {
+                return output;
+            }
         }
         #endregion
     }
