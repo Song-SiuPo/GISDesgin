@@ -44,7 +44,7 @@ namespace simpleGIS
         #region 方法
         public Symbol FindSymbol(string value)//唯一值渲染。根据唯一值寻找符号
         {
-            Symbol output = PointSymbol(1, ConsoleColor.Red, 3);
+            Symbol output = new PointSymbol(1, System.Drawing.Color.Red, 3f);//同前赋值一个默认的符号
             //return output;
             if(Symbols.ContainsKey(value))
             {
@@ -73,7 +73,7 @@ namespace simpleGIS
         #region 方法
         Symbol FindSymbol(double value)//分级渲染。根据该属性值寻找对应的符号
         {
-            Symbol output = PointSymbol(1, ConsoleColor.Red, 3);//同前赋值一个默认的符号
+            Symbol output = new PointSymbol(1, System.Drawing.Color.Red, 3f);//同前赋值一个默认的符号
             if (Symbols.Count()-BreakPoints.Count() == 1)//确保不会溢出
             {
                 
