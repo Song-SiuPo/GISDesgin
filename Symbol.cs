@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace simpleGIS
 {
@@ -48,6 +45,8 @@ namespace simpleGIS
 
         #endregion
 
+        #region 构造函数
+
         /// <summary>
         /// 构造点符号
         /// </summary>
@@ -61,13 +60,16 @@ namespace simpleGIS
             size = _size;
         }
 
+        #endregion
+
+        #region 方法
+
         /// <summary>
         /// 在绘图上绘制该点符号
         /// </summary>
         /// <param name="g">GDI绘图对象</param>
-        /// <param name="x">点中心的屏幕x坐标</param>
-        /// <param name="y">点中心的屏幕y坐标</param>
-        public void DrawPoint(Graphics g, float x, float y)
+        /// <param name="pointF">点中心的屏幕坐标PointF</param>
+        public void DrawPoint(Graphics g, PointF pointF)
         {
             Pen pen = new Pen(color);
             SolidBrush brush = new SolidBrush(color);
@@ -75,48 +77,51 @@ namespace simpleGIS
             {
                 // 空心圆
                 case 1:
-                    g.DrawEllipse(pen, x - size / 2, y - size / 2, size, size);
+                    g.DrawEllipse(pen, pointF.X - size / 2, pointF.Y - size / 2, size, size);
                     break;
                 // 实心圆
                 case 2:
-                    g.FillEllipse(brush, x - size / 2, y - size / 2, size, size);
+                    g.FillEllipse(brush, pointF.X - size / 2, pointF.Y - size / 2, size, size);
                     break;
                 // 空心矩形
                 case 3:
-                    g.DrawRectangle(pen, x - size / 2, y - size / 2, size, size);
+                    g.DrawRectangle(pen, pointF.X - size / 2, pointF.Y - size / 2, size, size);
                     break;
                 // 实心矩形
                 case 4:
-                    g.FillRectangle(brush, x - size / 2, y - size / 2, size, size);
+                    g.FillRectangle(brush, pointF.X - size / 2, pointF.Y - size / 2, size, size);
                     break;
                 // 空心三角
                 case 5:
                     PointF[] pointFs = new PointF[3]
-                        { new PointF(x, y - size / sqrt3),
-                            new PointF(x - size / 2, y + size / 2 / sqrt3),
-                            new PointF(x + size / 2, y + size / 2 / sqrt3) };
+                        { new PointF(pointF.X, pointF.Y - size / sqrt3),
+                            new PointF(pointF.X - size / 2, pointF.Y + size / 2 / sqrt3),
+                            new PointF(pointF.X + size / 2, pointF.Y + size / 2 / sqrt3) };
                     g.DrawPolygon(pen, pointFs);
                     break;
                 // 实心三角
                 case 6:
                     PointF[] points = new PointF[3]
-                        { new PointF(x, y - size / sqrt3),
-                            new PointF(x - size / 2, y + size / 2 / sqrt3),
-                            new PointF(x + size / 2, y + size / 2 / sqrt3) };
+                        { new PointF(pointF.X, pointF.Y - size / sqrt3),
+                            new PointF(pointF.X - size / 2, pointF.Y + size / 2 / sqrt3),
+                            new PointF(pointF.X + size / 2, pointF.Y + size / 2 / sqrt3) };
                     g.FillPolygon(brush, points);
                     break;
                 // 圈点
                 case 7:
-                    g.DrawEllipse(pen, x - size / 2, y - size / 2, size, size);
-                    g.FillEllipse(brush, x - size / 6, y - size / 6, size / 3, size / 3);
+                    g.DrawEllipse(pen, pointF.X - size / 2, pointF.Y - size / 2, size, size);
+                    g.FillEllipse(brush, pointF.X - size / 6, pointF.Y - size / 6, size / 3, size / 3);
                     break;
                 // 双空心圈
                 case 8:
-                    g.DrawEllipse(pen, x - size / 2, y - size / 2, size, size);
-                    g.DrawEllipse(pen, x - size / 4, y - size / 4, size / 2, size / 2);
+                    g.DrawEllipse(pen, pointF.X - size / 2, pointF.Y - size / 2, size, size);
+                    g.DrawEllipse(pen, pointF.X - size / 4, pointF.Y - size / 4, size / 2, size / 2);
                     break;
             }
         }
+
+        #endregion
+
     }
 
     /// <summary>
@@ -139,14 +144,31 @@ namespace simpleGIS
 
         #endregion
 
+        #region 构造函数
+
         /// <summary>
         /// 构造线符号
         /// </summary>
-        /// <param name="pen">线的样式</param>
-        public LineSymbol(Pen pen)
+        /// <param name="_style">线的样式</param>
+        public LineSymbol(Pen _style)
         {
-            style = pen;
+            style = _style;
         }
+
+        #endregion
+
+        #region 方法
+        /// <summary>
+        /// 在绘图上绘制该线符号
+        /// </summary>
+        /// <param name="g">GDI绘图对象</param>
+        /// <param name="pointFs">pointF[]</param>
+        public void DrawLine(Graphics g, PointF[] pointFs)
+        {
+            g.DrawLines(style, pointFs);
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -175,10 +197,36 @@ namespace simpleGIS
 
         #endregion
 
+        #region 构造函数
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_outline">多边形的边界样式</param>
+        /// <param name="_fill">多边形内部填充样式</param>
         public PolygonSymbol(Pen _outline, SolidBrush _fill)
         {
             outLine = _outline;
             fill = _fill;
         }
+
+        #endregion
+
+        #region 方法
+
+        /// <summary>
+        /// 在绘图上绘制该面符号
+        /// </summary>
+        /// <param name="g">GDI绘图对象</param>
+        /// <param name="pointFs">PointF[]</param>
+        public void DrawPolygon(Graphics g, PointF[] pointFs)
+        {
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+           
+            g.FillPolygon(fill, pointFs);
+            g.DrawPolygon(outLine, pointFs);
+        }
+
+        #endregion
+
     }
 }
