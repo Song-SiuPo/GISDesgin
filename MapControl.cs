@@ -222,6 +222,8 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawSelectedGeometries(Graphics g)
         {
+            if (map.Layers.Count == 0)
+            { return; }
             Pen highLight = new Pen(Color.Cyan, 3);
             Layer layer = map.Layers[map.SelectedLayer];
             List<Geometry> selecedGeo = new List<Geometry>();
@@ -798,10 +800,10 @@ namespace simpleGIS
             // 鼠标右键
             else if (e.Button == MouseButtons.Right)
             {
-                Type layerType = map.Layers[map.SelectedLayer].FeatureType;
                 switch (mapOperation)
                 {
                     case OperationType.Track:
+                        Type layerType = map.Layers[map.SelectedLayer].FeatureType;
                         delLastVertexToolStripMenuItem.Visible = trackingPoints.Count != 0;
                         trackNewPartToolStripMenuItem.Visible =
                             (layerType == typeof(MultiPolyline) && trackingPoints.Count > 1) ||
