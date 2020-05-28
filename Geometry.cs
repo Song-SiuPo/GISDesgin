@@ -22,6 +22,11 @@ namespace simpleGIS
         #endregion
 
         //构造函数
+        public RectangleD()
+        {
+            MinX = MinY = MaxX = MaxY = 0;
+        }
+        
         public RectangleD(RectangleD rect)
         {
             this.MinX = rect.MinX;
@@ -46,10 +51,10 @@ namespace simpleGIS
     public abstract class Geometry
     {
         protected bool needRenewBox = true;
-        protected RectangleD box;
+        protected RectangleD box = new RectangleD();
 
         #region 属性
-        public int ID { get; set; }//唯一值-标明对象id
+        public int ID { get; set; } = -1;//唯一值-标明对象id
         public RectangleD Box { get { if (needRenewBox)
                 { RenewBox(); needRenewBox = false; }
                 return box; }
@@ -148,6 +153,11 @@ namespace simpleGIS
         #endregion
         #region 方法
         //构造函数
+        public PointD()
+        {
+            this.X = this.Y = 0;
+        }
+
         public PointD(double x,double y)
         {
             this.X = x;
