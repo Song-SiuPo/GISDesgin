@@ -71,7 +71,40 @@ namespace simpleGIS
             SelectedItems = new List<int>();
         }
 
+        /// <summary>
+        /// 更新图层外包矩形
+        /// </summary>
+        public void RefreshBox()
+        {
+            try
+            {
+                //有一个以上的元素
+                if(Features .Count > 0)
+                {
+                    //仅有一个元素
+                    if(Features .Count == 1) { Box = new RectangleD (Features [0].Box); }
 
+                    //有一个以上的元素
+                    else
+                    {
+                        RectangleD sBox = Features[0].Box;  //用来记录临时的外包矩形盒
+                        for(int i=1; i<Features.Count; i++)
+                        {
+                            if (Features[i].Box.MinX < sBox.MinX) { sBox.MinX = Features[i].Box.MinX; }
+                            if (Features[i].Box.MinY < sBox.MinY) { sBox.MinY = Features[i].Box.MinY; }
+                            if (Features[i].Box.MaxX > sBox.MaxX) { sBox.MaxX = Features[i].Box.MaxX; }
+                            if (Features[i].Box.MaxY > sBox.MaxY) { sBox.MaxY = Features[i].Box.MaxY; }
+                        }
+                        Box = new RectangleD(sBox);
+                    }
+                }
+                else { MessageBox.Show("当前图层没有feature，不能更新外包矩形。"); }
+            }
+            catch
+            {
+                MessageBox.Show("图层更新外包矩形出错。");
+            }
+        }
         /// <summary>
         /// 增加几何体
         /// </summary>
