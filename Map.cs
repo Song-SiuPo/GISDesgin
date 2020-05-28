@@ -61,6 +61,7 @@ namespace simpleGIS
                             if (Layers[i].Box.MaxX > sBox.MaxX) { sBox.MaxX = Layers[i].Box.MaxX; }
                             if (Layers[i].Box.MaxY > sBox.MaxY) { sBox.MaxY = Layers[i].Box.MaxY; }
                         }
+                        Box = new RectangleD(sBox);
                     }
                 }
             }
@@ -244,7 +245,11 @@ namespace simpleGIS
         }
 
 
-        //简单渲染单个图层
+        /// <summary>
+        /// 简单渲染单个图层
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="layer"></param>
         private void RenderAsSimpleRenderer(Graphics g, Layer layer)
         {
             SimpleRenderer sRenderer = layer.Renderer as SimpleRenderer; // 强转，使图层渲染器为唯一值渲染器
@@ -345,13 +350,17 @@ namespace simpleGIS
         }
 
 
-        //唯一值渲染单个图层
+        /// <summary>
+        /// 唯一值渲染单个图层
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="layer"></param>
         private void RenderAsUniqueValueRenderer(Graphics g, Layer layer)
         {
             UniqueValueRenderer uRenderer = layer.Renderer as UniqueValueRenderer; // 强转，使图层渲染器为唯一值渲染器
             string field = uRenderer.Field;
 
-
+            //图层为点图层
             if (layer.FeatureType == typeof(PointD))
             {
                 for (int i=0;i<layer .Features.Count; i++)
@@ -367,7 +376,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为折线图层
             else if (layer.FeatureType == typeof(Polyline))
             {
                 for(int i = 0;i<layer.Features.Count; i++)
@@ -387,7 +396,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为复合折线图层
             else if (layer.FeatureType == typeof(MultiPolyline))
             {
                 for(int i=0;i<layer .Features.Count; i++)
@@ -410,7 +419,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为多边形图层
             else if (layer.FeatureType == typeof(Polygon))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -430,7 +439,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为复合多边形图层
             else if (layer.FeatureType == typeof(MultiPolygon))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -455,13 +464,17 @@ namespace simpleGIS
         }
 
 
-        //分级渲染单个图层
+        /// <summary>
+        /// 分级渲染单个图层
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="layer"></param>
         private void RenderAsClassBreaksRenderer(Graphics g, Layer layer)
         {
-            ClassBreaksRenderer cRenderer = layer.Renderer as ClassBreaksRenderer; // 强转，使图层渲染器为唯一值渲染器
+            ClassBreaksRenderer cRenderer = layer.Renderer as ClassBreaksRenderer; // 强转，使图层渲染器为分级渲染器
             string field = cRenderer.Field;
 
-
+            //图层为点图层
             if (layer.FeatureType == typeof(PointD))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -477,7 +490,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为折线图层
             else if (layer.FeatureType == typeof(Polyline))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -497,7 +510,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为复合折线图层
             else if (layer.FeatureType == typeof(MultiPolyline))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -520,7 +533,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为多边形图层
             else if (layer.FeatureType == typeof(Polygon))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
@@ -540,7 +553,7 @@ namespace simpleGIS
                 }
             }
 
-
+            //图层为复合折线图层
             else if (layer.FeatureType == typeof(MultiPolygon))
             {
                 for (int i = 0; i < layer.Features.Count; i++)
