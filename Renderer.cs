@@ -44,7 +44,6 @@ namespace simpleGIS
         #region 方法
         public Symbol FindSymbol(string value)//唯一值渲染。根据唯一值寻找符号
         {
-            Symbol output = new PointSymbol(1, System.Drawing.Color.Red, 3f);//同前赋值一个默认的符号
             //return output;
             if(Symbols.ContainsKey(value))
             {
@@ -52,7 +51,7 @@ namespace simpleGIS
             }
             else
             {
-                return output;//定义一个默认符号输出
+                return DefaultSymbol;   //默认符号输出
             }
         }
         #endregion
@@ -91,7 +90,7 @@ namespace simpleGIS
                     {
                         if (value <= BreakPoints[i] && value > BreakPoints[i - 1])
                         {
-                            output = Symbols[i + 1];
+                            output = Symbols[i];
                         }
                     }
                     return output;
@@ -99,7 +98,7 @@ namespace simpleGIS
             }
             else
             {
-                return output;
+                throw new IndexOutOfRangeException("分级渲染数据错误：断裂点 != 样式数目 - 1");
             }
         }
         #endregion
