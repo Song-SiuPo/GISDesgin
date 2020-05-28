@@ -148,14 +148,14 @@ namespace simpleGIS
             //按照selectmode，更新选择表
 
             //选取新的对象
-            if (Enum.GetName(typeof(SelectedMode), mode) == "New")
+            if (mode == SelectedMode.New)
             {
                 SelectedItems.Clear();
-                SelectedItems.CopyTo(selectedID.ToArray());
+                SelectedItems = new List<int>(selectedID);
             }
 
             //在原基础上添加新选择的对象
-            else if (Enum.GetName(typeof(SelectedMode), mode) == "Add")
+            else if (mode == SelectedMode.Add)
             {
                 HashSet<int> hash1 = new HashSet<int>(SelectedItems);
                 HashSet<int> hash2 = new HashSet<int>(selectedID);
@@ -164,7 +164,7 @@ namespace simpleGIS
             }
 
             //在原基础上删除新选择的对象
-            else if (Enum.GetName(typeof(SelectedMode), mode) == "Delete")
+            else if (mode == SelectedMode.Delete)
             {
                 HashSet<int> hash1 = new HashSet<int>(SelectedItems);
                 HashSet<int> hash2 = new HashSet<int>(selectedID);
@@ -173,7 +173,7 @@ namespace simpleGIS
             }
 
             //在原基础上选择对象和新对象的交集
-            else if (Enum.GetName(typeof(SelectedMode), mode) == "Intersect")
+            else if (mode == SelectedMode.Intersect)
             {
                 HashSet<int> hash1 = new HashSet<int>(SelectedItems);
                 HashSet<int> hash2 = new HashSet<int>(selectedID);
