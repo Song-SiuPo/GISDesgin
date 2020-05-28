@@ -51,7 +51,7 @@ namespace simpleGIS
         #region 属性
         public int ID { get; set; }//唯一值-标明对象id
         public RectangleD Box { get { if (needRenewBox)
-                { RenewBox(); }
+                { RenewBox(); needRenewBox = false; }
                 return box; }
             set => box = value; }//记录外包矩形
         #endregion
@@ -77,6 +77,14 @@ namespace simpleGIS
         /// <param name="box">矩形</param>
         /// <returns></returns>
         public abstract bool IsWithinBox(RectangleD box);
+
+        /// <summary>
+        /// 指示几何体需更新外包矩形
+        /// </summary>
+        public void NeedRenewBox()
+        {
+            needRenewBox = true;
+        }
 
         public abstract double GetDistance(PointD MouseLocation);
         #endregion
@@ -432,11 +440,11 @@ namespace simpleGIS
             this.Data = new List<Polyline>();
             this.ID = id;
         }
-        public MultiPolyline(List<Polyline> value)
+        public MultiPolyline(IList<Polyline> value)
         {
             this.Data = new List<Polyline>(value);
         }
-        public MultiPolyline(List<Polyline> value, int id)
+        public MultiPolyline(IList<Polyline> value, int id)
         {
             this.ID = id;
             this.Data = new List<Polyline>(value);
@@ -546,11 +554,11 @@ namespace simpleGIS
             this.Data = new List<Polygon>();
             this.ID = id;
         }
-        public MultiPolygon(List<Polygon> value)
+        public MultiPolygon(IList<Polygon> value)
         {
             this.Data = new List<Polygon>(value);
         }
-        public MultiPolygon(List<Polygon> value, int id)
+        public MultiPolygon(IList<Polygon> value, int id)
         {
             this.ID = id;
             this.Data = new List<Polygon>(value);
