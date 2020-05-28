@@ -71,6 +71,20 @@ namespace simpleGIS
             SelectedItems = new List<int>();
         }
 
+        public Layer (Layer layer)
+        {
+            Name = layer .Name;
+            Visible = layer .Visible;
+            IsEdit = layer .IsEdit;
+            FeatureType = layer.FeatureType;
+            Box = new RectangleD(layer .Box);
+            Renderer = layer .Renderer;
+            LabelVisible = layer .LabelVisible;
+            LabelStyle = layer .LabelStyle;
+            Table = layer.Table.Clone();
+            SelectedItems = new List<int>(layer.SelectedItems);
+        }
+
         /// <summary>
         /// 更新图层外包矩形
         /// </summary>
@@ -98,11 +112,10 @@ namespace simpleGIS
                         Box = new RectangleD(sBox);
                     }
                 }
-                else { MessageBox.Show("当前图层没有feature，不能更新外包矩形。"); }
             }
             catch
             {
-                MessageBox.Show("图层更新外包矩形出错。");
+                throw new Exception();
             }
         }
         /// <summary>
