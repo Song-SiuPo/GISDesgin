@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace simpleGIS
 {
     /// <summary>
     /// 符号标记类
     /// </summary>
+    [Serializable]
     public abstract class Symbol
     {
 
@@ -14,6 +16,7 @@ namespace simpleGIS
     /// <summary>
     /// 点标记类
     /// </summary>
+    [Serializable]
     public class PointSymbol : Symbol
     {
         #region 字段
@@ -127,11 +130,17 @@ namespace simpleGIS
     /// <summary>
     /// 线标记类
     /// </summary>
+    [Serializable]
     public class LineSymbol : Symbol
     {
         #region 字段
 
+        [NonSerialized]
         private Pen style;
+
+        private Color color;
+        private float width;
+        private DashStyle dashStyle;
 
         #endregion
 
@@ -140,7 +149,24 @@ namespace simpleGIS
         /// <summary>
         /// 线的符号类型，.Net自带，里面有线型，颜色，宽度
         /// </summary>
-        public Pen Style { get => style; set => style = value; }
+        public Pen Style
+        {
+            get
+            {
+                if (style == null) {
+                    style = new Pen(color, width);
+                    style.DashStyle = dashStyle;
+                }
+                return style;
+            }
+            set
+            {
+                style = value;
+                color = style.Color;
+                width = style.Width;
+                dashStyle = style.DashStyle;
+            }
+        }
 
         #endregion
 
@@ -153,6 +179,9 @@ namespace simpleGIS
         public LineSymbol(Pen _style)
         {
             style = _style;
+            color = _style.Color;
+            width = _style.Width;
+            dashStyle = _style.DashStyle;
         }
 
         #endregion
@@ -165,7 +194,7 @@ namespace simpleGIS
         /// <param name="pointFs">pointF[]</param>
         public void DrawLine(Graphics g, PointF[] pointFs)
         {
-            g.DrawLines(style, pointFs);
+            g.DrawLines(Style, pointFs);
         }
 
         #endregion
@@ -174,12 +203,18 @@ namespace simpleGIS
     /// <summary>
     /// 面标记类
     /// </summary>
+    [Serializable]
     public class PolygonSymbol : Symbol
     {
         #region 字段
 
+        [NonSerialized]
         private Pen outLine;
+        [NonSerialized]
         private SolidBrush fill;
+        
+        private Color outLineColor;
+        private Color fillColor;
 
         #endregion
 
@@ -188,12 +223,42 @@ namespace simpleGIS
         /// <summary>
         /// 多边形的边界样式
         /// </summary>
-        public Pen OutLine { get => outLine; set => outLine = value; }
+        public Pen OutLine
+        {
+            get
+            {
+                if (outLine == null)
+                {
+                    outLine = new Pen(outLineColor);
+                }
+                return outLine;
+            }
+            set
+            {
+                outLine = value;
+                outLineColor = outLine.Color;
+            }
+        }
 
         /// <summary>
         /// 多边形内部填充样式
         /// </summary>
-        public SolidBrush Fill { get => fill; set => fill = value; }
+        public SolidBrush Fill
+        {
+            get
+            {
+                if (fill == null)
+                {
+                    fill = new SolidBrush(fillColor);
+                }
+                return fill;
+            }
+            set
+            {
+                fill = value;
+                fillColor = fill.Color;
+            }
+        }
 
         #endregion
 
@@ -207,6 +272,9 @@ namespace simpleGIS
         {
             outLine = _outline;
             fill = _fill;
+
+            outLineColor = _outline.Color;
+            fillColor = _fill.Color;
         }
 
         #endregion
@@ -222,8 +290,8 @@ namespace simpleGIS
         {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
            
-            g.FillPolygon(fill, pointFs);
-            g.DrawPolygon(outLine, pointFs);
+            g.FillPolygon(Fill, pointFs);
+            g.DrawPolygon(OutLine, pointFs);
         }
 
         #endregion
