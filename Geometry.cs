@@ -15,11 +15,28 @@ namespace simpleGIS
     public class RectangleD
     {
         #region 属性
-        public double MinX { get => MinX; set => MinX = value; }
-        public double MinY { get => MinY; set => MinY = value; }
-        public double MaxX { get => MaxX; set => MaxX = value; }
-        public double MaxY { get => MaxY; set => MaxY = value; }
+        public double MinX { get; set ; }
+        public double MinY { get ; set; }
+        public double MaxX { get; set; }
+        public double MaxY { get; set; }
         #endregion
+
+        //构造函数
+        public RectangleD(RectangleD rect)
+        {
+            this.MinX = rect.MinX;
+            this.MaxX = rect.MaxX;
+            this.MinY = rect.MinY;
+            this.MaxY = rect.MaxY;
+        }
+        public RectangleD(double minx,double miny,double maxx,double maxy)
+        {
+            this.MinX = minx;
+            this.MinY = miny;
+            this.MaxX = maxx;
+            this.MaxY = maxy;
+        }
+
     }
 
 
@@ -28,13 +45,13 @@ namespace simpleGIS
     /// </summary>
     public abstract class Geometry
     {
-        protected bool needRenewBox = false;
+        protected bool needRenewBox = true;
         protected RectangleD box;
 
         #region 属性
         public int ID { get; set; }//唯一值-标明对象id
         public RectangleD Box { get { if (needRenewBox)
-                { RenewBox(); needRenewBox = false; }
+                { RenewBox(); }
                 return box; }
             set => box = value; }//记录外包矩形
         #endregion
@@ -61,11 +78,6 @@ namespace simpleGIS
         /// <returns></returns>
         public abstract bool IsWithinBox(RectangleD box);
 
-        /// <summary>
-        /// 标记该几何体需更新边界盒
-        /// </summary>
-        public void NeedRenewBox() { needRenewBox = true; }
-
         public abstract double GetDistance(PointD MouseLocation);
         #endregion
 
@@ -85,24 +97,22 @@ namespace simpleGIS
                 if (data[i].Y > maxY)
                     maxY = data[i].Y;
             }
-            PointD outputP = new PointD();
-            outputP.X = maxX;
-            outputP.Y = maxY;
+            PointD outputP = new PointD(maxX,maxY);
+            
             return outputP;
         }
         public PointD FindMinXY(List<PointD> data)
         {
-            double maxX = data[0].X, maxY = data[0].Y;
+            double minX = data[0].X, minY = data[0].Y;
             for (int i = 0; i < data.Count(); i++)
             {
-                if (data[i].X < maxX)
-                    maxX = data[i].X;
-                if (data[i].Y < maxY)
-                    maxY = data[i].Y;
+                if (data[i].X < minX)
+                    minX = data[i].X;
+                if (data[i].Y < minY)
+                    minY = data[i].Y;
             }
-            PointD outputP = new PointD();
-            outputP.X = maxX;
-            outputP.Y = maxY;
+            PointD outputP = new PointD(minX,minY);
+            
             return outputP;
         }
         public bool IfHasPoint(PointD point,PointD startP,PointD endP)
@@ -125,13 +135,23 @@ namespace simpleGIS
     public class PointD:Geometry
     {
         #region 属性
-        public double X { get => X; set=>X = value; }//点的横坐标
-        public double Y { get => X; set=>X = value; }
-
-       
-
+        public double X { get ; set; }//点的横坐标
+        public double Y { get; set; }
         #endregion
         #region 方法
+        //构造函数
+        public PointD(double x,double y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+        public PointD(double x,double y,int id)
+        {
+            this.X = x;
+            this.Y = y;
+            this.ID = id;
+        }
+
         //点类——点选——缓冲区4*4
         public override bool IsPointOn(PointD point, double BufferDist)
         {
@@ -179,18 +199,44 @@ namespace simpleGIS
     public class Polyline:Geometry
     {
         #region 属性
-        public List<PointD> Data { get=>Data.ToList<PointD>(); set { Data.Clear();Data.AddRange(value); } }
-
+        private List<PointD> data = new List<PointD>();
+        public List<PointD> Data{ get=>data; set { data.Clear();data.AddRange(value); } }
         #endregion
 
         #region 方法
+
+        //构造函数
+        public Polyline()
+        {
+            this.Data = new List<PointD>();
+        }
+        public Polyline(int id)
+        {
+            this.Data = new List<PointD>();
+            this.ID = id;
+        }
+        public Polyline(List<PointD> value)
+        {
+            this.Data = new List<PointD>(value);
+        }
+        public Polyline(List<PointD>value,int id)
+        {
+            this.ID = id;
+            this.Data = new List<PointD>(value);
+        }
         public override bool IsPointOn(PointD point,double BufferDist)
         {
-            double point_dis = GetDistance(point);
-            if (point_dis <= BufferDist)
-                return true;
+            if (point.X <= this.box.MaxX && point.X >= this.box.MinX && point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
+            {
+                double point_dis = GetDistance(point);
+                if (point_dis <= BufferDist)
+                    return true;
+                else
+                    return false;
+            }
             else
                 return false;
+                
         }
 
         public override bool IsWithinBox(RectangleD box)
@@ -232,18 +278,33 @@ namespace simpleGIS
         {
             //throw new NotImplementedException();
             double MinDistance = Math.Sqrt((Data[0].X - MouseLocation.X) * (Data[0].X - MouseLocation.X) + (Data[0].Y - MouseLocation.Y) * (Data[0].Y - MouseLocation.Y));
+            double distance1;
             for(int i=0;i<Data.Count()-1;i++)
             {
-                PointD a = new PointD();
-                PointD b = new PointD();
+                PointD a = new PointD(1,1);
+                PointD b = new PointD(1,1);
                 a.X = MouseLocation.X - Data[i].X;
                 a.Y = MouseLocation.Y - Data[i].Y;
+
                 b.X = Data[i + 1].X - Data[i].X;
                 b.Y = Data[i + 1].Y - Data[i].Y;
-                double dist;
-                dist = Math.Abs(a.X * b.Y - b.X * a.Y) / Math.Sqrt(b.X * b.X + b.Y * b.Y);
-                if (dist < MinDistance)
-                    MinDistance = dist;
+                double neiji = (a.X * b.X) + (a.Y * b.Y);
+                double judge = neiji / b.X * b.X + b.Y * b.Y;
+                if(judge < 0)
+                {
+                    distance1 = Math.Sqrt(a.X * a.X + a.Y * a.Y);
+                }
+                else if(judge > 1)
+                {
+                    distance1 = Math.Sqrt((MouseLocation.X - Data[i + 1].X) * (MouseLocation.X - Data[i + 1].X) + (MouseLocation.Y - Data[i + 1].Y) * (MouseLocation.Y - Data[i + 1].Y));
+                }
+                else
+                {
+                    distance1 = Math.Abs(a.X * b.Y - b.X * a.Y) / Math.Sqrt(b.X * b.X + b.Y * b.Y);
+                }
+
+                if (distance1 < MinDistance)
+                    MinDistance = distance1;
             }
             return MinDistance;
         }
@@ -257,25 +318,55 @@ namespace simpleGIS
     public class Polygon:Geometry
     {
         #region 属性
-        public List<PointD> Data { get=>Data.ToList<PointD>(); set { Data.Clear();Data.AddRange(value); } }
+        private List<PointD> data;
+        public List<PointD> Data { get => data; set { data.Clear();data.AddRange(value); } }
         #endregion
 
         #region 方法
+
+        //构造函数
+        public Polygon()
+        {
+            this.Data = new List<PointD>();
+        }
+        public Polygon(int id)
+        {
+            this.Data = new List<PointD>();
+            this.ID = id;
+        }
+        public Polygon(List<PointD> value)
+        {
+            this.Data = new List<PointD>(value);
+        }
+        public Polygon(List<PointD> value, int id)
+        {
+            this.ID = id;
+            this.Data = new List<PointD>(value);
+        }
+
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
-            int NumOfPointIntersection = 0;
-            for(int i=0;i<this.Data.Count()-1;i++)
+            if(point.X<=this.box.MaxX&&point.X>=this.box.MinX&& point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
             {
-                //Data[i]和data[i+1]组成一个线段
-                if (IfHasPoint(point, this.Data[i], this.Data[i + 1]))
-                    NumOfPointIntersection = NumOfPointIntersection + 1;
+                int NumOfPointIntersection = 0;
+                for (int i = 0; i < this.Data.Count() - 1; i++)
+                {
+                    //Data[i]和data[i+1]组成一个线段
+                    if (IfHasPoint(point, this.Data[i], this.Data[i + 1]))
+                        NumOfPointIntersection = NumOfPointIntersection + 1;
 
+                }
+                if (NumOfPointIntersection / 2 == 0)
+                    return false;
+                else
+                    return true;
             }
-            if (NumOfPointIntersection / 2 == 0)
-                return false;
             else
-                return true;
+            {
+                return false;
+            }
+            
         }
 
         public override bool IsWithinBox(RectangleD box)
@@ -325,11 +416,32 @@ namespace simpleGIS
     public class MultiPolyline:Geometry
     {
         #region 属性
-        public List<Polyline> Data { get=>Data.ToList<Polyline>(); set { Data.Clear();Data.AddRange(value); } }
+        private List<Polyline> data;
+        public List<Polyline> Data { get=>data; set { data.Clear(); data.AddRange(value); } }
 
         #endregion
 
         #region 方法
+        //构造函数
+        public MultiPolyline()
+        {
+            this.Data = new List<Polyline>();
+        }
+        public MultiPolyline(int id)
+        {
+            this.Data = new List<Polyline>();
+            this.ID = id;
+        }
+        public MultiPolyline(List<Polyline> value)
+        {
+            this.Data = new List<Polyline>(value);
+        }
+        public MultiPolyline(List<Polyline> value, int id)
+        {
+            this.ID = id;
+            this.Data = new List<Polyline>(value);
+        }
+
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
@@ -419,10 +531,31 @@ namespace simpleGIS
     public class MultiPolygon:Geometry
     {
         #region 属性
-        public List<Polygon> Data { get=>Data.ToList<Polygon>(); set { Data.Clear();Data.AddRange(value); } }
+        private List<Polygon> data;
+        public List<Polygon> Data { get=>data; set { data.Clear();data.AddRange(value); } }
         #endregion
 
         #region 方法
+        //构造函数
+        public MultiPolygon()
+        {
+            this.Data = new List<Polygon>();
+        }
+        public MultiPolygon(int id)
+        {
+            this.Data = new List<Polygon>();
+            this.ID = id;
+        }
+        public MultiPolygon(List<Polygon> value)
+        {
+            this.Data = new List<Polygon>(value);
+        }
+        public MultiPolygon(List<Polygon> value, int id)
+        {
+            this.ID = id;
+            this.Data = new List<Polygon>(value);
+        }
+
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
