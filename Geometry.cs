@@ -182,7 +182,7 @@ namespace simpleGIS
 
         public override bool IsWithinBox(RectangleD box)
         {
-            if (X < box.MaxX && X > box.MinX && Y < box.MaxY && Y > box.MinY)
+            if (X < Box.MaxX && X > box.MinX && Y < box.MaxY && Y > box.MinY)
                 return true;
             else
                 return false;
@@ -244,7 +244,7 @@ namespace simpleGIS
         }
         public override bool IsPointOn(PointD point,double BufferDist)
         {
-            if (point.X <= this.box.MaxX && point.X >= this.box.MinX && point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
+            if (point.X <= this.Box.MaxX && point.X >= this.box.MinX && point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
             {
                 double point_dis = GetDistance(point);
                 if (point_dis <= BufferDist)
@@ -261,7 +261,7 @@ namespace simpleGIS
         {
             PointD MaxXY = FindMaxXY(this.Data);
             PointD MinXY = FindMinXY(this.Data);
-            if (MaxXY.X <= box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X > box.MinX && MinXY.Y > box.MinY)
+            if (MaxXY.X <= Box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X > box.MinX && MinXY.Y > box.MinY)
                 return true;
             else
                 return false;
@@ -336,7 +336,7 @@ namespace simpleGIS
     public class Polygon:Geometry
     {
         #region 属性
-        private List<PointD> data;
+        private List<PointD> data = new List<PointD>();
         public List<PointD> Data { get => data; set { data.Clear();data.AddRange(value); } }
         #endregion
 
@@ -365,7 +365,7 @@ namespace simpleGIS
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
-            if(point.X<=this.box.MaxX&&point.X>=this.box.MinX&& point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
+            if(point.X<=this.Box.MaxX&&point.X>=this.box.MinX&& point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
             {
                 int NumOfPointIntersection = 0;
                 for (int i = 0; i < this.Data.Count() - 1; i++)
@@ -434,7 +434,7 @@ namespace simpleGIS
     public class MultiPolyline:Geometry
     {
         #region 属性
-        private List<Polyline> data;
+        private List<Polyline> data = new List<Polyline>();
         public List<Polyline> Data { get=>data; set { data.Clear(); data.AddRange(value); } }
 
         #endregion
@@ -492,7 +492,7 @@ namespace simpleGIS
                 if (min.Y < minY)
                     minY = min.Y;
             }
-            if (minX >= box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
+            if (minX >= Box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
                 return true;
             else
                 return false;
@@ -549,7 +549,7 @@ namespace simpleGIS
     public class MultiPolygon:Geometry
     {
         #region 属性
-        private List<Polygon> data;
+        private List<Polygon> data = new List<Polygon>();
         public List<Polygon> Data { get=>data; set { data.Clear();data.AddRange(value); } }
         #endregion
 
@@ -611,7 +611,7 @@ namespace simpleGIS
                 if (min.Y < minY)
                     minY = min.Y;
             }
-            if (minX >= box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
+            if (minX >= Box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
                 return true;
             else
                 return false;
