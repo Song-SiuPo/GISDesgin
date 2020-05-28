@@ -9,6 +9,7 @@ namespace simpleGIS
     /// <summary>
     /// 注记风格类
     /// </summary>
+    [Serializable]
     public class LabelStyle
     {
         #region 字段
