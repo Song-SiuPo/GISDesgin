@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace simpleGIS
 {
+    [Serializable]
     public class Layer
     {
         #region 属性

@@ -8,6 +8,7 @@ using System.Runtime.Remoting.Messaging;
 
 namespace simpleGIS
 {
+    [Serializable]
     public class Map
     {
         #region 属性
