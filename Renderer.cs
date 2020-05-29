@@ -37,8 +37,8 @@ namespace simpleGIS
     public class UniqueValueRenderer:Renderer
     {
         #region 属性
-        Dictionary<string, Symbol> Symbols { get; set; }
-        Symbol DefaultSymbol { get; set; }
+        public Dictionary<string, Symbol> Symbols { get; set; }
+        public Symbol DefaultSymbol { get; set; }
         #endregion
 
         #region 方法
