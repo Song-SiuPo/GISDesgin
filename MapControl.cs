@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace simpleGIS
 {
@@ -15,7 +17,7 @@ namespace simpleGIS
     public partial class MapControl : UserControl
     {
         #region 字段
-        private Map map = new Map();            // 地图对象
+        private Map map;                        // 地图对象
         private OperationType mapOperation;     // 当前地图操作类型
         private SelectedMode selectedmode;      // 地图选择对象的模式
         private bool needRefresh = false;       // 是否需要更新cache
@@ -42,6 +44,9 @@ namespace simpleGIS
         {
             InitializeComponent();
 
+            Graphics g = Graphics.FromHwnd(Handle);
+            map = new Map(g);
+            g.Dispose();
             cache = new Bitmap(Width, Height);
             selectedmode = SelectedMode.New;
             mapOperation = OperationType.None;
@@ -67,6 +72,11 @@ namespace simpleGIS
             {
                 if (mapOperation != value)
                 {
+                    if (value == OperationType.Edit || value == OperationType.Track)
+                    {
+                        if (map.SelectedLayer == -1 || map.Layers[map.SelectedLayer].IsEdit == false)
+                        { throw new Exception("错误：试图编辑未开启编辑模式的图层"); }
+                    }
                     mapOperation = value;
                     ClearEditTrack();
                     OperationTypeChanged?.Invoke(this);
@@ -94,9 +104,12 @@ namespace simpleGIS
 
         public void NewMap()
         {
-            map = new Map();
+            Graphics g = Graphics.FromHwnd(Handle);
+            map = new Map(g);
+            g.Dispose();
             needRefresh = true;
             needSave = false;
+            OperationType = OperationType.None;
         }
 
         /// <summary>
@@ -105,7 +118,19 @@ namespace simpleGIS
         /// <param name="path">文件路径</param>
         public void OpenFile(string path)
         {
-
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                map = (Map)bf.Deserialize(fs);
+            }
+            catch (Exception e)
+            {
+                fs.Dispose();
+                throw new FileLoadException("错误：map数据文件读取失败", e);
+            }
+            fs.Dispose();
+            needRefresh = true;
         }
 
         /// <summary>
@@ -114,7 +139,11 @@ namespace simpleGIS
         /// <param name="path">文件保存路径</param>
         public void SaveFile(string path)
         {
-
+            FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(fs, map);
+            fs.Dispose();
+            needSave = false;
         }
 
         /// <summary>
@@ -180,7 +209,7 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawTrackingLayer(Graphics g)
         {
-            if (trackingPoints.Count == 0) { return; }
+            if (map.SelectedLayer == -1) { return; }
 
             Layer layer = map.Layers[map.SelectedLayer];
             PointF[] screenPs = new PointF[trackingPoints.Count + 1];
@@ -222,8 +251,6 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawSelectedGeometries(Graphics g)
         {
-            if (map.Layers.Count == 0)
-            { return; }
             Pen highLight = new Pen(Color.Cyan, 3);
             Layer layer = map.Layers[map.SelectedLayer];
             List<Geometry> selecedGeo = new List<Geometry>();
@@ -374,7 +401,7 @@ namespace simpleGIS
         /// <param name="y">鼠标y坐标</param>
         private void SelectFeature(int x, int y)
         {
-            if (map.Layers.Count == 0)
+            if (map.SelectedLayer == -1)
             {
                 return ;
             }
@@ -439,6 +466,7 @@ namespace simpleGIS
         /// <param name="y">鼠标y坐标</param>
         private void StartEditGeometry(int x, int y)
         {
+            if (map.SelectedLayer == -1) { return; }
             Layer layer = map.Layers[map.SelectedLayer];
             PointD mouseMapP = map.ToMapPoint(new PointD(x, y));
             double buffer = map.ToMapDistance(AttractRadius);
@@ -541,10 +569,14 @@ namespace simpleGIS
                 {
                     editGeometries[i].Move(curPoint.X - prePoint.X, curPoint.Y - prePoint.Y);
                     moved = true;
-                    // TODO:对图层更新box
                 }
                 if (moved)
                 { editGeometries[i].NeedRenewBox(); }
+            }
+            if (moved)
+            {
+                map.Layers[map.SelectedLayer].RefreshBox();
+                map.RefreshBox();
             }
         }
 
@@ -611,7 +643,6 @@ namespace simpleGIS
             Layer layer = map.Layers[map.SelectedLayer];
             if (mapOperation == OperationType.Track)
             {
-                // TODO：对图层更新box
                 // 生成的是线
                 if ((layer.FeatureType == typeof(Polyline) ||
                     layer.FeatureType == typeof(MultiPolyline)) &&
@@ -634,6 +665,8 @@ namespace simpleGIS
                         MultiPolyline multiPolyline = new MultiPolyline(new Polyline[] { line });
                         layer.AddFeature(multiPolyline);
                     }
+                    map.Layers[map.SelectedLayer].RefreshBox();
+                    map.RefreshBox();
                     needRefresh = true;
                     needSave = true;
                 }
@@ -660,6 +693,8 @@ namespace simpleGIS
                         MultiPolygon multiPolygon = new MultiPolygon(new Polygon[] { polygon });
                         layer.AddFeature(multiPolygon);
                     }
+                    map.Layers[map.SelectedLayer].RefreshBox();
+                    map.RefreshBox();
                     needRefresh = true;
                     needSave = true;
                 }
@@ -732,7 +767,10 @@ namespace simpleGIS
                 RedrawMap();
             }
             e.Graphics.DrawImage(cache, 0, 0);
-            DrawSelectedGeometries(e.Graphics);
+            if (map.SelectedLayer != -1)
+            {
+                DrawSelectedGeometries(e.Graphics);
+            }
             if (mapOperation == OperationType.Edit)
             {
                 DrawEditGeometry(e.Graphics);
@@ -770,10 +808,12 @@ namespace simpleGIS
                         if (e.Clicks == 1)
                         {
                             // 添加点直接添加
-                            if (map.Layers[map.SelectedLayer].FeatureType == typeof(PointD))
+                            Layer layer = map.Layers[map.SelectedLayer];
+                            if (layer.FeatureType == typeof(PointD))
                             {
-                                map.Layers[map.SelectedLayer].AddFeature(mapPoint);
-                                // 更新图层box
+                                layer.AddFeature(mapPoint);
+                                layer.RefreshBox();
+                                map.RefreshBox();
                                 needRefresh = true;
                                 needSave = true;
                             }
@@ -918,12 +958,13 @@ namespace simpleGIS
             {
                 ((Polygon)editGeometries[1]).Data.Add(p);
             }
-            // TODO:更新图层的box
             needRefresh = true;
             needSave = true;
             editGeometries[1].NeedRenewBox();
             if (editGeometries[2] != null)
             { editGeometries[2].NeedRenewBox(); }
+            map.Layers[map.SelectedLayer].RefreshBox();
+            map.RefreshBox();
             Refresh();
         }
 
@@ -941,7 +982,8 @@ namespace simpleGIS
             editGeometries[0] = null;
             editGeometries[1].NeedRenewBox();
             if (editGeometries[2] != null) { editGeometries[2].NeedRenewBox(); }
-            // TODO：更新图层box
+            map.Layers[map.SelectedLayer].RefreshBox();
+            map.RefreshBox();
             needRefresh = true;
             needSave = true;
             Refresh();
@@ -995,7 +1037,8 @@ namespace simpleGIS
             }
             editGeometries[2].NeedRenewBox();
             editGeometries[0] = null;
-            // 更新图层box
+            map.Layers[map.SelectedLayer].RefreshBox();
+            map.RefreshBox();
             needRefresh = true;
             needSave = true;
             Refresh();
@@ -1052,7 +1095,8 @@ namespace simpleGIS
                 }
                 editGeometries[1] = polygon;
             }
-            // 更新图层box
+            layer.RefreshBox();
+            map.RefreshBox();
             trackingPoints.Clear();
             needRefresh = true;
             needSave = true;

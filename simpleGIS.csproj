@@ -121,6 +121,7 @@
     <None Include="Resources\GenericDocument16.png" />
     <Content Include="Resources\ArcMap16.png" />
     <Content Include="Resources\DataAdd16.png" />
+    <None Include="Resources\EditingVertex16.png" />
     <Content Include="Resources\ElementSelectTool16.png" />
     <Content Include="Resources\Folder16.png" />
     <Content Include="Resources\Folder161.png" />
@@ -129,6 +130,8 @@
     <Content Include="Resources\GenericSave16.png" />
     <Content Include="Resources\GenericSaveAs16.png" />
     <Content Include="Resources\GenericSearch16.png" />
+    <None Include="Resources\PanTool_B_16.png" />
+    <None Include="Resources\SelectionSelectTool16.png" />
     <Content Include="Resources\ZoomFixedZoomOut16.png" />
     <Content Include="Resources\ZoomInTool_B_16.png" />
     <Content Include="Resources\ZoomOutTool_B_16.png" />
