@@ -34,17 +34,21 @@
             this.txtBoxLayerName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageRender = new System.Windows.Forms.TabPage();
-            this.pBoxShowStyle = new System.Windows.Forms.PictureBox();
-            this.panelBreakPoints = new System.Windows.Forms.Panel();
-            this.txtBoxMaxValue = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.numGroupNum = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbClassBreak = new System.Windows.Forms.RadioButton();
+            this.rbUniqueValue = new System.Windows.Forms.RadioButton();
+            this.rbSimple = new System.Windows.Forms.RadioButton();
             this.panelColumns = new System.Windows.Forms.Panel();
             this.labelColumn = new System.Windows.Forms.Label();
             this.cbBoxGroups = new System.Windows.Forms.ComboBox();
             this.cbBoxColumn = new System.Windows.Forms.ComboBox();
             this.labelItem = new System.Windows.Forms.Label();
+            this.panelBreakPoints = new System.Windows.Forms.Panel();
+            this.txtBoxMaxValue = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.numGroupNum = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupPolygon = new System.Windows.Forms.GroupBox();
             this.pBoxFillColor = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -64,10 +68,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbBoxPointType = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbClassBreak = new System.Windows.Forms.RadioButton();
-            this.rbUniqueValue = new System.Windows.Forms.RadioButton();
-            this.rbSimple = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pBoxShowStyle = new System.Windows.Forms.PictureBox();
             this.tabPageLabel = new System.Windows.Forms.TabPage();
             this.pBoxShowFontStyle = new System.Windows.Forms.PictureBox();
             this.pBoxFontColor = new System.Windows.Forms.PictureBox();
@@ -78,15 +80,14 @@
             this.checkBoxLabelVisible = new System.Windows.Forms.CheckBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl.SuspendLayout();
             this.tabPageNorm.SuspendLayout();
             this.tabPageRender.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.panelColumns.SuspendLayout();
             this.panelBreakPoints.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupNum)).BeginInit();
-            this.panelColumns.SuspendLayout();
             this.groupPolygon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFillColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxBoundColor)).BeginInit();
@@ -96,12 +97,11 @@
             this.groupPoint.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPointSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxPointColor)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).BeginInit();
             this.tabPageLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -167,15 +167,123 @@
             this.tabPageRender.Text = "图层渲染";
             this.tabPageRender.UseVisualStyleBackColor = true;
             // 
-            // pBoxShowStyle
+            // flowLayoutPanel1
             // 
-            this.pBoxShowStyle.BackColor = System.Drawing.Color.White;
-            this.pBoxShowStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxShowStyle.Location = new System.Drawing.Point(253, 3);
-            this.pBoxShowStyle.Name = "pBoxShowStyle";
-            this.pBoxShowStyle.Size = new System.Drawing.Size(64, 64);
-            this.pBoxShowStyle.TabIndex = 10;
-            this.pBoxShowStyle.TabStop = false;
+            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel1.Controls.Add(this.panelColumns);
+            this.flowLayoutPanel1.Controls.Add(this.panelBreakPoints);
+            this.flowLayoutPanel1.Controls.Add(this.groupPolygon);
+            this.flowLayoutPanel1.Controls.Add(this.groupPolyline);
+            this.flowLayoutPanel1.Controls.Add(this.groupPoint);
+            this.flowLayoutPanel1.Controls.Add(this.panel1);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(589, 488);
+            this.flowLayoutPanel1.TabIndex = 11;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbClassBreak);
+            this.groupBox1.Controls.Add(this.rbUniqueValue);
+            this.groupBox1.Controls.Add(this.rbSimple);
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(579, 84);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "渲染方式";
+            // 
+            // rbClassBreak
+            // 
+            this.rbClassBreak.AutoSize = true;
+            this.rbClassBreak.Enabled = false;
+            this.rbClassBreak.Location = new System.Drawing.Point(392, 37);
+            this.rbClassBreak.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbClassBreak.Name = "rbClassBreak";
+            this.rbClassBreak.Size = new System.Drawing.Size(109, 29);
+            this.rbClassBreak.TabIndex = 2;
+            this.rbClassBreak.TabStop = true;
+            this.rbClassBreak.Text = "分级渲染";
+            this.rbClassBreak.UseVisualStyleBackColor = true;
+            // 
+            // rbUniqueValue
+            // 
+            this.rbUniqueValue.AutoSize = true;
+            this.rbUniqueValue.Enabled = false;
+            this.rbUniqueValue.Location = new System.Drawing.Point(211, 37);
+            this.rbUniqueValue.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbUniqueValue.Name = "rbUniqueValue";
+            this.rbUniqueValue.Size = new System.Drawing.Size(128, 29);
+            this.rbUniqueValue.TabIndex = 1;
+            this.rbUniqueValue.TabStop = true;
+            this.rbUniqueValue.Text = "唯一值渲染";
+            this.rbUniqueValue.UseVisualStyleBackColor = true;
+            // 
+            // rbSimple
+            // 
+            this.rbSimple.AutoSize = true;
+            this.rbSimple.Location = new System.Drawing.Point(45, 37);
+            this.rbSimple.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbSimple.Name = "rbSimple";
+            this.rbSimple.Size = new System.Drawing.Size(109, 29);
+            this.rbSimple.TabIndex = 0;
+            this.rbSimple.TabStop = true;
+            this.rbSimple.Text = "简单渲染";
+            this.rbSimple.UseVisualStyleBackColor = true;
+            // 
+            // panelColumns
+            // 
+            this.panelColumns.Controls.Add(this.labelColumn);
+            this.panelColumns.Controls.Add(this.cbBoxGroups);
+            this.panelColumns.Controls.Add(this.cbBoxColumn);
+            this.panelColumns.Controls.Add(this.labelItem);
+            this.panelColumns.Location = new System.Drawing.Point(3, 93);
+            this.panelColumns.Name = "panelColumns";
+            this.panelColumns.Size = new System.Drawing.Size(579, 65);
+            this.panelColumns.TabIndex = 8;
+            this.panelColumns.Visible = false;
+            // 
+            // labelColumn
+            // 
+            this.labelColumn.AutoSize = true;
+            this.labelColumn.Location = new System.Drawing.Point(40, 20);
+            this.labelColumn.Margin = new System.Windows.Forms.Padding(20);
+            this.labelColumn.Name = "labelColumn";
+            this.labelColumn.Size = new System.Drawing.Size(69, 25);
+            this.labelColumn.TabIndex = 4;
+            this.labelColumn.Text = "字段：";
+            // 
+            // cbBoxGroups
+            // 
+            this.cbBoxGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoxGroups.FormattingEnabled = true;
+            this.cbBoxGroups.IntegralHeight = false;
+            this.cbBoxGroups.Location = new System.Drawing.Point(416, 17);
+            this.cbBoxGroups.MaxDropDownItems = 10;
+            this.cbBoxGroups.Name = "cbBoxGroups";
+            this.cbBoxGroups.Size = new System.Drawing.Size(121, 32);
+            this.cbBoxGroups.TabIndex = 7;
+            // 
+            // cbBoxColumn
+            // 
+            this.cbBoxColumn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoxColumn.FormattingEnabled = true;
+            this.cbBoxColumn.Location = new System.Drawing.Point(132, 17);
+            this.cbBoxColumn.Name = "cbBoxColumn";
+            this.cbBoxColumn.Size = new System.Drawing.Size(121, 32);
+            this.cbBoxColumn.TabIndex = 5;
+            // 
+            // labelItem
+            // 
+            this.labelItem.AutoSize = true;
+            this.labelItem.Location = new System.Drawing.Point(338, 20);
+            this.labelItem.Margin = new System.Windows.Forms.Padding(20);
+            this.labelItem.Name = "labelItem";
+            this.labelItem.Size = new System.Drawing.Size(69, 25);
+            this.labelItem.TabIndex = 6;
+            this.labelItem.Text = "分组：";
             // 
             // panelBreakPoints
             // 
@@ -214,11 +322,16 @@
             0,
             0,
             0});
+            this.numGroupNum.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.numGroupNum.Name = "numGroupNum";
             this.numGroupNum.Size = new System.Drawing.Size(69, 31);
             this.numGroupNum.TabIndex = 8;
             this.numGroupNum.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             0});
@@ -232,56 +345,6 @@
             this.label10.Size = new System.Drawing.Size(107, 25);
             this.label10.TabIndex = 5;
             this.label10.Text = "分组数目：";
-            // 
-            // panelColumns
-            // 
-            this.panelColumns.Controls.Add(this.labelColumn);
-            this.panelColumns.Controls.Add(this.cbBoxGroups);
-            this.panelColumns.Controls.Add(this.cbBoxColumn);
-            this.panelColumns.Controls.Add(this.labelItem);
-            this.panelColumns.Location = new System.Drawing.Point(3, 93);
-            this.panelColumns.Name = "panelColumns";
-            this.panelColumns.Size = new System.Drawing.Size(579, 65);
-            this.panelColumns.TabIndex = 8;
-            this.panelColumns.Visible = false;
-            // 
-            // labelColumn
-            // 
-            this.labelColumn.AutoSize = true;
-            this.labelColumn.Location = new System.Drawing.Point(40, 20);
-            this.labelColumn.Margin = new System.Windows.Forms.Padding(20);
-            this.labelColumn.Name = "labelColumn";
-            this.labelColumn.Size = new System.Drawing.Size(69, 25);
-            this.labelColumn.TabIndex = 4;
-            this.labelColumn.Text = "字段：";
-            // 
-            // cbBoxGroups
-            // 
-            this.cbBoxGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBoxGroups.FormattingEnabled = true;
-            this.cbBoxGroups.Location = new System.Drawing.Point(416, 17);
-            this.cbBoxGroups.Name = "cbBoxGroups";
-            this.cbBoxGroups.Size = new System.Drawing.Size(121, 32);
-            this.cbBoxGroups.TabIndex = 7;
-            // 
-            // cbBoxColumn
-            // 
-            this.cbBoxColumn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBoxColumn.FormattingEnabled = true;
-            this.cbBoxColumn.Location = new System.Drawing.Point(132, 17);
-            this.cbBoxColumn.Name = "cbBoxColumn";
-            this.cbBoxColumn.Size = new System.Drawing.Size(121, 32);
-            this.cbBoxColumn.TabIndex = 5;
-            // 
-            // labelItem
-            // 
-            this.labelItem.AutoSize = true;
-            this.labelItem.Location = new System.Drawing.Point(338, 20);
-            this.labelItem.Margin = new System.Windows.Forms.Padding(20);
-            this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(69, 25);
-            this.labelItem.TabIndex = 6;
-            this.labelItem.Text = "分组：";
             // 
             // groupPolygon
             // 
@@ -505,53 +568,23 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "点的形状：";
             // 
-            // groupBox1
+            // panel1
             // 
-            this.groupBox1.Controls.Add(this.rbClassBreak);
-            this.groupBox1.Controls.Add(this.rbUniqueValue);
-            this.groupBox1.Controls.Add(this.rbSimple);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(579, 84);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "渲染方式";
+            this.panel1.Controls.Add(this.pBoxShowStyle);
+            this.panel1.Location = new System.Drawing.Point(588, 334);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(576, 73);
+            this.panel1.TabIndex = 11;
             // 
-            // rbClassBreak
+            // pBoxShowStyle
             // 
-            this.rbClassBreak.AutoSize = true;
-            this.rbClassBreak.Location = new System.Drawing.Point(392, 37);
-            this.rbClassBreak.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbClassBreak.Name = "rbClassBreak";
-            this.rbClassBreak.Size = new System.Drawing.Size(109, 29);
-            this.rbClassBreak.TabIndex = 2;
-            this.rbClassBreak.TabStop = true;
-            this.rbClassBreak.Text = "分级渲染";
-            this.rbClassBreak.UseVisualStyleBackColor = true;
-            // 
-            // rbUniqueValue
-            // 
-            this.rbUniqueValue.AutoSize = true;
-            this.rbUniqueValue.Location = new System.Drawing.Point(211, 37);
-            this.rbUniqueValue.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbUniqueValue.Name = "rbUniqueValue";
-            this.rbUniqueValue.Size = new System.Drawing.Size(128, 29);
-            this.rbUniqueValue.TabIndex = 1;
-            this.rbUniqueValue.TabStop = true;
-            this.rbUniqueValue.Text = "唯一值渲染";
-            this.rbUniqueValue.UseVisualStyleBackColor = true;
-            // 
-            // rbSimple
-            // 
-            this.rbSimple.AutoSize = true;
-            this.rbSimple.Location = new System.Drawing.Point(45, 37);
-            this.rbSimple.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbSimple.Name = "rbSimple";
-            this.rbSimple.Size = new System.Drawing.Size(109, 29);
-            this.rbSimple.TabIndex = 0;
-            this.rbSimple.TabStop = true;
-            this.rbSimple.Text = "简单渲染";
-            this.rbSimple.UseVisualStyleBackColor = true;
+            this.pBoxShowStyle.BackColor = System.Drawing.Color.White;
+            this.pBoxShowStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pBoxShowStyle.Location = new System.Drawing.Point(253, 3);
+            this.pBoxShowStyle.Name = "pBoxShowStyle";
+            this.pBoxShowStyle.Size = new System.Drawing.Size(64, 64);
+            this.pBoxShowStyle.TabIndex = 10;
+            this.pBoxShowStyle.TabStop = false;
             // 
             // tabPageLabel
             // 
@@ -652,30 +685,6 @@
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
-            this.flowLayoutPanel1.Controls.Add(this.panelColumns);
-            this.flowLayoutPanel1.Controls.Add(this.panelBreakPoints);
-            this.flowLayoutPanel1.Controls.Add(this.groupPolygon);
-            this.flowLayoutPanel1.Controls.Add(this.groupPolyline);
-            this.flowLayoutPanel1.Controls.Add(this.groupPoint);
-            this.flowLayoutPanel1.Controls.Add(this.panel1);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(589, 488);
-            this.flowLayoutPanel1.TabIndex = 11;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.pBoxShowStyle);
-            this.panel1.Location = new System.Drawing.Point(588, 334);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(576, 73);
-            this.panel1.TabIndex = 11;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -696,12 +705,14 @@
             this.tabPageNorm.ResumeLayout(false);
             this.tabPageNorm.PerformLayout();
             this.tabPageRender.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panelColumns.ResumeLayout(false);
+            this.panelColumns.PerformLayout();
             this.panelBreakPoints.ResumeLayout(false);
             this.panelBreakPoints.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupNum)).EndInit();
-            this.panelColumns.ResumeLayout(false);
-            this.panelColumns.PerformLayout();
             this.groupPolygon.ResumeLayout(false);
             this.groupPolygon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFillColor)).EndInit();
@@ -714,14 +725,12 @@
             this.groupPoint.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPointSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxPointColor)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).EndInit();
             this.tabPageLabel.ResumeLayout(false);
             this.tabPageLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
