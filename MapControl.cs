@@ -188,6 +188,11 @@ namespace simpleGIS
         /// </summary>
         public event SimpleHandler SelectedModeChanged;
 
+        /// <summary>
+        /// 图层的被选择要素发生变化之后
+        /// </summary>
+        public event SimpleHandler SelectedFeatureChanged;
+
         #endregion
 
         #region 私有函数
@@ -457,6 +462,7 @@ namespace simpleGIS
                     layer.SelectedItems = new List<int>(set);
                     break;
             }
+            SelectedFeatureChanged?.Invoke(this);
         }
 
         /// <summary>
