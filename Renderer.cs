@@ -70,7 +70,7 @@ namespace simpleGIS
         #endregion
 
         #region 方法
-        Symbol FindSymbol(double value)//分级渲染。根据该属性值寻找对应的符号
+        public Symbol FindSymbol(double value)//分级渲染。根据该属性值寻找对应的符号
         {
             Symbol output = new PointSymbol(1, System.Drawing.Color.Red, 3f);//同前赋值一个默认的符号
             if (Symbols.Count()-BreakPoints.Count() == 1)//确保不会溢出
