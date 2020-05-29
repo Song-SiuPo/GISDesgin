@@ -80,6 +80,9 @@
             this.checkBoxLabelVisible = new System.Windows.Forms.CheckBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.cbBoxLabelField = new System.Windows.Forms.ComboBox();
+            this.panelFont = new System.Windows.Forms.Panel();
             this.tabControl.SuspendLayout();
             this.tabPageNorm.SuspendLayout();
             this.tabPageRender.SuspendLayout();
@@ -102,6 +105,7 @@
             this.tabPageLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).BeginInit();
+            this.panelFont.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -588,12 +592,7 @@
             // 
             // tabPageLabel
             // 
-            this.tabPageLabel.Controls.Add(this.pBoxShowFontStyle);
-            this.tabPageLabel.Controls.Add(this.pBoxFontColor);
-            this.tabPageLabel.Controls.Add(this.label13);
-            this.tabPageLabel.Controls.Add(this.buttonSetFont);
-            this.tabPageLabel.Controls.Add(this.labelFontName);
-            this.tabPageLabel.Controls.Add(this.label12);
+            this.tabPageLabel.Controls.Add(this.panelFont);
             this.tabPageLabel.Controls.Add(this.checkBoxLabelVisible);
             this.tabPageLabel.Location = new System.Drawing.Point(4, 33);
             this.tabPageLabel.Name = "tabPageLabel";
@@ -607,7 +606,7 @@
             // 
             this.pBoxShowFontStyle.BackColor = System.Drawing.Color.White;
             this.pBoxShowFontStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxShowFontStyle.Location = new System.Drawing.Point(186, 250);
+            this.pBoxShowFontStyle.Location = new System.Drawing.Point(188, 161);
             this.pBoxShowFontStyle.Name = "pBoxShowFontStyle";
             this.pBoxShowFontStyle.Size = new System.Drawing.Size(210, 81);
             this.pBoxShowFontStyle.TabIndex = 11;
@@ -617,7 +616,7 @@
             // 
             this.pBoxFontColor.BackColor = System.Drawing.Color.White;
             this.pBoxFontColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxFontColor.Location = new System.Drawing.Point(154, 177);
+            this.pBoxFontColor.Location = new System.Drawing.Point(471, 45);
             this.pBoxFontColor.Name = "pBoxFontColor";
             this.pBoxFontColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxFontColor.TabIndex = 8;
@@ -626,7 +625,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(41, 177);
+            this.label13.Location = new System.Drawing.Point(358, 48);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(107, 25);
             this.label13.TabIndex = 7;
@@ -634,7 +633,7 @@
             // 
             // buttonSetFont
             // 
-            this.buttonSetFont.Location = new System.Drawing.Point(402, 104);
+            this.buttonSetFont.Location = new System.Drawing.Point(393, 95);
             this.buttonSetFont.Name = "buttonSetFont";
             this.buttonSetFont.Size = new System.Drawing.Size(106, 39);
             this.buttonSetFont.TabIndex = 6;
@@ -643,7 +642,7 @@
             // 
             // labelFontName
             // 
-            this.labelFontName.Location = new System.Drawing.Point(116, 111);
+            this.labelFontName.Location = new System.Drawing.Point(107, 102);
             this.labelFontName.Name = "labelFontName";
             this.labelFontName.Size = new System.Drawing.Size(280, 25);
             this.labelFontName.TabIndex = 5;
@@ -651,7 +650,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(41, 111);
+            this.label12.Location = new System.Drawing.Point(32, 102);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(69, 25);
             this.label12.TabIndex = 4;
@@ -684,6 +683,39 @@
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(35, 48);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(107, 25);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "注记字段：";
+            // 
+            // cbBoxLabelField
+            // 
+            this.cbBoxLabelField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoxLabelField.FormattingEnabled = true;
+            this.cbBoxLabelField.Location = new System.Drawing.Point(148, 45);
+            this.cbBoxLabelField.Name = "cbBoxLabelField";
+            this.cbBoxLabelField.Size = new System.Drawing.Size(164, 32);
+            this.cbBoxLabelField.TabIndex = 13;
+            // 
+            // panelFont
+            // 
+            this.panelFont.Controls.Add(this.pBoxShowFontStyle);
+            this.panelFont.Controls.Add(this.cbBoxLabelField);
+            this.panelFont.Controls.Add(this.pBoxFontColor);
+            this.panelFont.Controls.Add(this.label14);
+            this.panelFont.Controls.Add(this.label13);
+            this.panelFont.Controls.Add(this.buttonSetFont);
+            this.panelFont.Controls.Add(this.label12);
+            this.panelFont.Controls.Add(this.labelFontName);
+            this.panelFont.Location = new System.Drawing.Point(6, 63);
+            this.panelFont.Name = "panelFont";
+            this.panelFont.Size = new System.Drawing.Size(586, 267);
+            this.panelFont.TabIndex = 14;
             // 
             // Form2
             // 
@@ -731,6 +763,8 @@
             this.tabPageLabel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).EndInit();
+            this.panelFont.ResumeLayout(false);
+            this.panelFont.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -789,5 +823,8 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ComboBox cbBoxLabelField;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Panel panelFont;
     }
 }
