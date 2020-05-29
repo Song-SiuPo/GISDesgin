@@ -102,7 +102,7 @@ namespace simpleGIS
         /// </summary>
         /// <param name="dis"></param>
         /// <returns></returns>
-        public double FromMapDistance(double dis) { return dis *39.37*DpiX/ MapScale; }
+        public double FromMapDistance(double dis) { return dis * 39.37 * DpiX / MapScale; }
 
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace simpleGIS
         /// </summary>
         /// <param name="dis">屏幕距离对应的DPI</param>
         /// <returns></returns>
-        public double ToMapDistance(double dis) { return dis * MapScale/(dis*39.37); }
+        public double ToMapDistance(double dis) { return dis * MapScale / (DpiX * 39.37); }
 
 
         /// <summary>
