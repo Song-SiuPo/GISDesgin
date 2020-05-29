@@ -11,7 +11,11 @@ namespace simpleGIS
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        /// <summary>
+        /// 生成图层属性对话框
+        /// </summary>
+        /// <param name="layer">图层</param>
+        public Form2(Layer layer)
         {
             InitializeComponent();
         }
