@@ -102,15 +102,15 @@ namespace simpleGIS
         /// </summary>
         /// <param name="dis"></param>
         /// <returns></returns>
-        public double FromMapDistance(double dis) { return dis / MapScale; }
+        public double FromMapDistance(double dis) { return dis *39.37*DpiX/ MapScale; }
 
 
         /// <summary>
         /// 将屏幕距离转换为地图距离
         /// </summary>
-        /// <param name="dis"></param>
+        /// <param name="dis">屏幕距离对应的DPI</param>
         /// <returns></returns>
-        public double ToMapDistance(double dis) { return dis * MapScale; }
+        public double ToMapDistance(double dis) { return dis * MapScale/(dis*39.37); }
 
 
         /// <summary>
@@ -202,10 +202,13 @@ namespace simpleGIS
             if (layerID > 0)
             {
                 //交换顺序
-                Layer layer = new Layer(Layers[layerID - 1]);
-                Layers[layerID - 1] = new Layer(Layers[layerID]);
-                Layers[layerID] = new Layer(layer);
+                Layer layer = Layers[layerID - 1];
+                Layers[layerID - 1] = Layers[layerID];
+                Layers[layerID] = layer;
 
+                //选择图层处理
+                if(SelectedLayer == layerID) { SelectedLayer -= 1; }
+                else if(SelectedLayer ==layerID - 1) { SelectedLayer += 1; }
             }
 
             else { MessageBox.Show("已至最顶层"); }
@@ -218,9 +221,13 @@ namespace simpleGIS
             if (SelectedLayer < Layers.Count - 1)
             {
                 //交换顺序
-                Layer layer = new Layer(Layers[layerID + 1]);
-                Layers[layerID + 1] = new Layer(Layers[layerID]);
-                Layers[layerID] = new Layer(layer);
+                Layer layer = Layers[layerID + 1];
+                Layers[layerID + 1] = Layers[layerID];
+                Layers[layerID] = layer;
+
+                //选择图层处理
+                if (SelectedLayer == layerID) { SelectedLayer += 1; }
+                else if (SelectedLayer == layerID + 1) { SelectedLayer -= 1; }
             }
             else { MessageBox.Show("已至最底层"); }
         }
@@ -236,13 +243,21 @@ namespace simpleGIS
         /// <param name="layer"></param>
         private void RenderSingleLayer(Graphics g, Layer layer)
         {
-            if (layer.Features.Count > 0)  //保证图层有元素
+            //绘制图层,保证图层可见且有元素
+            if (layer .Visible == true && layer.Features.Count > 0)
             {
                 Type renderType = layer.Renderer.GetType();  //获得渲染类型
                 if (renderType == typeof(SimpleRenderer)) { RenderAsSimpleRenderer(g, layer); }
                 else if (renderType == typeof(UniqueValueRenderer)) { RenderAsUniqueValueRenderer(g, layer); }
                 else if (renderType == typeof(ClassBreaksRenderer)) { RenderAsClassBreaksRenderer(g, layer); }
             }
+
+            //绘制注记，保证注记可见
+            if(layer.LabelVisible && layer.Features.Count > 0)
+            {
+                RenderLabel(g, layer);
+            }
+
         }
 
 
@@ -540,7 +555,7 @@ namespace simpleGIS
                 for (int i = 0; i < layer.Features.Count; i++)
                 {
                     double value = Convert.ToDouble(layer.Table.Rows[i][field]);  //获取feature的相应值
-                    PolygonSymbol pSymbol =cuRenderer.FindSymbol(value) as PolygonSymbol;  //获取符号类型
+                    PolygonSymbol pSymbol =cRenderer.FindSymbol(value) as PolygonSymbol;  //获取符号类型
 
                     Polygon polygon = layer.Features[i] as Polygon;  //获得折线
                     List<PointF> screenPolygon = new List<PointF>();
@@ -576,6 +591,41 @@ namespace simpleGIS
                     }
                 }
             }
+        }
+
+
+        private void RenderLabel(Graphics g, Layer layer)
+        {
+            //获取标注的风格
+            LabelStyle lStyle = layer.LabelStyle;
+            string sField = lStyle.Field;
+            Font sFont = lStyle.Font;
+            Brush sBrush = new SolidBrush(lStyle.Color);
+
+            try
+            {
+                for (int i = 0; i < layer.Features.Count; i++)
+                {
+                    //获取注记位置
+                    PointD LabelLocation = new PointD();
+                    LabelLocation.X = (float)(layer.Box.MinX + layer.Box.MaxX) / 2;
+                    LabelLocation.Y = (float)(layer.Box.MinY + layer.Box.MaxY) / 2;
+                    LabelLocation = FromMapPoint(LabelLocation);
+                    PointF screenLocation = new PointF();
+                    screenLocation.X = (float)LabelLocation.X;
+                    screenLocation.Y = (float)LabelLocation.Y;
+
+                    //获取注记文本大小，调整注记中心
+                    string labelStr = layer.Table.Rows[i][sField].ToString();
+                    SizeF labelSize = g.MeasureString(labelStr, sFont);
+                    screenLocation.X -= labelSize.Width / 2;
+                    screenLocation.Y -= labelSize.Height / 2;
+
+                    //绘图
+                    g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                }
+            }
+            catch { throw new Exception(); }
         }
 
         #endregion 

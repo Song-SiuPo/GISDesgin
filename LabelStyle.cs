@@ -43,7 +43,7 @@ namespace simpleGIS
 
         public LabelStyle()
         {
-            field = "";
+            field = "ID";
             font = new Font("宋体", 10f);
             color = Color.Black;
         }
