@@ -30,6 +30,7 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuItemFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemNewMap = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSave = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSavePic = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,16 +40,14 @@
             this.menuItemNewGeo = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemEditGeo = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemLayer = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemSelect = new System.Windows.Forms.ToolStripMenuItem();
-            this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.menuItemNewLayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemDelLayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemLayerTable = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemLayerAttr = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemLayerUp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemLayerDown = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuItemNewLayer = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemDelLayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSelectMouse = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSelectStr = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSelectMode = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,30 +55,33 @@
             this.menuItemSelectUnion = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSelectDel = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSelectIntersect = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.clboxLayers = new System.Windows.Forms.CheckedListBox();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsButtonNew = new System.Windows.Forms.ToolStripButton();
             this.tsButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.tsButtonSave = new System.Windows.Forms.ToolStripButton();
             this.tsButtonSavePic = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsButtonOperateNone = new System.Windows.Forms.ToolStripButton();
             this.tsButtonPan = new System.Windows.Forms.ToolStripButton();
             this.tsButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.tsButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsButtonNewLayer = new System.Windows.Forms.ToolStripButton();
+            this.tsButtonSelect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.tsButtonNewGeo = new System.Windows.Forms.ToolStripButton();
             this.tsButtonEditGeo = new System.Windows.Forms.ToolStripButton();
-            this.tsButtonSelect = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuItemNewMap = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.clboxLayers = new System.Windows.Forms.CheckedListBox();
+            this.mapControl1 = new simpleGIS.MapControl();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,22 +114,28 @@
             this.menuItemFile.Size = new System.Drawing.Size(80, 21);
             this.menuItemFile.Text = "文件";
             // 
+            // menuItemNewMap
+            // 
+            this.menuItemNewMap.Name = "menuItemNewMap";
+            this.menuItemNewMap.Size = new System.Drawing.Size(204, 30);
+            this.menuItemNewMap.Text = "新建空白地图";
+            // 
             // menuItemOpen
             // 
             this.menuItemOpen.Name = "menuItemOpen";
-            this.menuItemOpen.Size = new System.Drawing.Size(216, 30);
+            this.menuItemOpen.Size = new System.Drawing.Size(204, 30);
             this.menuItemOpen.Text = "打开";
             // 
             // menuItemSave
             // 
             this.menuItemSave.Name = "menuItemSave";
-            this.menuItemSave.Size = new System.Drawing.Size(216, 30);
+            this.menuItemSave.Size = new System.Drawing.Size(204, 30);
             this.menuItemSave.Text = "保存";
             // 
             // menuItemSavePic
             // 
             this.menuItemSavePic.Name = "menuItemSavePic";
-            this.menuItemSavePic.Size = new System.Drawing.Size(216, 30);
+            this.menuItemSavePic.Size = new System.Drawing.Size(204, 30);
             this.menuItemSavePic.Text = "输出为图片";
             // 
             // menuItemEdit
@@ -180,50 +188,22 @@
             this.menuItemLayer.Size = new System.Drawing.Size(80, 21);
             this.menuItemLayer.Text = "图层";
             // 
-            // menuItemSelect
+            // menuItemNewLayer
             // 
-            this.menuItemSelect.AutoSize = false;
-            this.menuItemSelect.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItemSelectMouse,
-            this.menuItemSelectStr,
-            this.menuItemSelectMode});
-            this.menuItemSelect.Name = "menuItemSelect";
-            this.menuItemSelect.Size = new System.Drawing.Size(80, 21);
-            this.menuItemSelect.Text = "选择";
+            this.menuItemNewLayer.Name = "menuItemNewLayer";
+            this.menuItemNewLayer.Size = new System.Drawing.Size(204, 30);
+            this.menuItemNewLayer.Text = "创建新图层";
             // 
-            // 帮助ToolStripMenuItem
+            // menuItemDelLayer
             // 
-            this.帮助ToolStripMenuItem.AutoSize = false;
-            this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(80, 21);
-            this.帮助ToolStripMenuItem.Text = "帮助";
+            this.menuItemDelLayer.Name = "menuItemDelLayer";
+            this.menuItemDelLayer.Size = new System.Drawing.Size(204, 30);
+            this.menuItemDelLayer.Text = "删除当前图层";
             // 
-            // toolStrip1
+            // toolStripSeparator2
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsButtonNew,
-            this.tsButtonOpen,
-            this.tsButtonSave,
-            this.tsButtonSavePic,
-            this.toolStripSeparator3,
-            this.tsButtonOperateNone,
-            this.tsButtonPan,
-            this.tsButtonZoomIn,
-            this.tsButtonZoomOut,
-            this.toolStripButton9,
-            this.toolStripSeparator4,
-            this.tsButtonNewLayer,
-            this.tsButtonSelect,
-            this.toolStripSeparator5,
-            this.tsButtonEdit,
-            this.tsButtonNewGeo,
-            this.tsButtonEditGeo});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1257, 27);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(201, 6);
             // 
             // menuItemLayerTable
             // 
@@ -249,22 +229,16 @@
             this.menuItemLayerDown.Size = new System.Drawing.Size(204, 30);
             this.menuItemLayerDown.Text = "图层下移";
             // 
-            // toolStripSeparator2
+            // menuItemSelect
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(201, 6);
-            // 
-            // menuItemNewLayer
-            // 
-            this.menuItemNewLayer.Name = "menuItemNewLayer";
-            this.menuItemNewLayer.Size = new System.Drawing.Size(204, 30);
-            this.menuItemNewLayer.Text = "创建新图层";
-            // 
-            // menuItemDelLayer
-            // 
-            this.menuItemDelLayer.Name = "menuItemDelLayer";
-            this.menuItemDelLayer.Size = new System.Drawing.Size(204, 30);
-            this.menuItemDelLayer.Text = "删除当前图层";
+            this.menuItemSelect.AutoSize = false;
+            this.menuItemSelect.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemSelectMouse,
+            this.menuItemSelectStr,
+            this.menuItemSelectMode});
+            this.menuItemSelect.Name = "menuItemSelect";
+            this.menuItemSelect.Size = new System.Drawing.Size(80, 21);
+            this.menuItemSelect.Text = "选择";
             // 
             // menuItemSelectMouse
             // 
@@ -313,38 +287,39 @@
             this.menuItemSelectIntersect.Size = new System.Drawing.Size(242, 30);
             this.menuItemSelectIntersect.Text = "与当前选择求交集";
             // 
-            // splitContainer1
+            // 帮助ToolStripMenuItem
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 51);
-            this.splitContainer1.Name = "splitContainer1";
+            this.帮助ToolStripMenuItem.AutoSize = false;
+            this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(80, 21);
+            this.帮助ToolStripMenuItem.Text = "帮助";
             // 
-            // splitContainer1.Panel1
+            // toolStrip1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.clboxLayers);
-            this.splitContainer1.Size = new System.Drawing.Size(1257, 653);
-            this.splitContainer1.SplitterDistance = 233;
-            this.splitContainer1.TabIndex = 2;
-            // 
-            // clboxLayers
-            // 
-            this.clboxLayers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clboxLayers.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.clboxLayers.FormattingEnabled = true;
-            this.clboxLayers.Location = new System.Drawing.Point(0, 0);
-            this.clboxLayers.Name = "clboxLayers";
-            this.clboxLayers.Size = new System.Drawing.Size(233, 653);
-            this.clboxLayers.TabIndex = 0;
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsButtonNew,
+            this.tsButtonOpen,
+            this.tsButtonSave,
+            this.tsButtonSavePic,
+            this.toolStripSeparator3,
+            this.tsButtonOperateNone,
+            this.tsButtonPan,
+            this.tsButtonZoomIn,
+            this.tsButtonZoomOut,
+            this.toolStripButton9,
+            this.toolStripSeparator4,
+            this.tsButtonNewLayer,
+            this.tsButtonSelect,
+            this.toolStripSeparator5,
+            this.tsButtonEdit,
+            this.tsButtonNewGeo,
+            this.tsButtonEditGeo});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1257, 27);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
             // 
             // tsButtonNew
             // 
@@ -385,6 +360,11 @@
             this.tsButtonSavePic.Size = new System.Drawing.Size(24, 24);
             this.tsButtonSavePic.Text = "toolStripButton4";
             this.tsButtonSavePic.ToolTipText = "保存为图片";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // tsButtonOperateNone
             // 
@@ -435,6 +415,11 @@
             this.toolStripButton9.Size = new System.Drawing.Size(24, 24);
             this.toolStripButton9.Text = "toolStripButton9";
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
+            // 
             // tsButtonNewLayer
             // 
             this.tsButtonNewLayer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -444,6 +429,21 @@
             this.tsButtonNewLayer.Size = new System.Drawing.Size(24, 24);
             this.tsButtonNewLayer.Text = "tsButtonAddLayer";
             this.tsButtonNewLayer.ToolTipText = "创建新图层";
+            // 
+            // tsButtonSelect
+            // 
+            this.tsButtonSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsButtonSelect.Image = global::simpleGIS.Properties.Resources.SelectionSelectTool16;
+            this.tsButtonSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsButtonSelect.Name = "tsButtonSelect";
+            this.tsButtonSelect.Size = new System.Drawing.Size(24, 24);
+            this.tsButtonSelect.Text = "toolStripButton7";
+            this.tsButtonSelect.ToolTipText = "选择要素";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 27);
             // 
             // tsButtonEdit
             // 
@@ -475,26 +475,45 @@
             this.tsButtonEditGeo.Text = "toolStripButton4";
             this.tsButtonEditGeo.ToolTipText = "编辑要素几何";
             // 
-            // tsButtonSelect
+            // splitContainer1
             // 
-            this.tsButtonSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsButtonSelect.Image = global::simpleGIS.Properties.Resources.SelectionSelectTool16;
-            this.tsButtonSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsButtonSelect.Name = "tsButtonSelect";
-            this.tsButtonSelect.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonSelect.Text = "toolStripButton7";
-            this.tsButtonSelect.ToolTipText = "选择要素";
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 51);
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // toolStripSeparator5
+            // splitContainer1.Panel1
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 27);
+            this.splitContainer1.Panel1.Controls.Add(this.clboxLayers);
             // 
-            // menuItemNewMap
+            // splitContainer1.Panel2
             // 
-            this.menuItemNewMap.Name = "menuItemNewMap";
-            this.menuItemNewMap.Size = new System.Drawing.Size(216, 30);
-            this.menuItemNewMap.Text = "新建空白地图";
+            this.splitContainer1.Panel2.Controls.Add(this.mapControl1);
+            this.splitContainer1.Size = new System.Drawing.Size(1257, 653);
+            this.splitContainer1.SplitterDistance = 233;
+            this.splitContainer1.TabIndex = 2;
+            // 
+            // clboxLayers
+            // 
+            this.clboxLayers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clboxLayers.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.clboxLayers.FormattingEnabled = true;
+            this.clboxLayers.Location = new System.Drawing.Point(0, 0);
+            this.clboxLayers.Name = "clboxLayers";
+            this.clboxLayers.Size = new System.Drawing.Size(233, 653);
+            this.clboxLayers.TabIndex = 0;
+            // 
+            // mapControl1
+            // 
+            this.mapControl1.BackColor = System.Drawing.Color.White;
+            this.mapControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.mapControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapControl1.Location = new System.Drawing.Point(0, 0);
+            this.mapControl1.Name = "mapControl1";
+            this.mapControl1.NeedSave = false;
+            this.mapControl1.OperationType = simpleGIS.OperationType.None;
+            this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
+            this.mapControl1.Size = new System.Drawing.Size(1020, 653);
+            this.mapControl1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -513,6 +532,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -570,6 +590,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton tsButtonEditGeo;
         private System.Windows.Forms.ToolStripMenuItem menuItemNewMap;
+        private MapControl mapControl1;
     }
 }
 
