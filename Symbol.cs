@@ -10,7 +10,10 @@ namespace simpleGIS
     [Serializable]
     public abstract class Symbol
     {
-
+        /// <summary>
+        /// 将Symbol的属性保存到可序列化的字段中
+        /// </summary>
+        public virtual void SaveToStruct() { }
     }
 
     /// <summary>
@@ -198,6 +201,13 @@ namespace simpleGIS
         }
 
         #endregion
+
+        public override void SaveToStruct()
+        {
+            color = style.Color;
+            width = style.Width;
+            dashStyle = style.DashStyle;
+        }
     }
 
     /// <summary>
@@ -295,6 +305,12 @@ namespace simpleGIS
         }
 
         #endregion
+
+        public override void SaveToStruct()
+        {
+            outLineColor = outLine.Color;
+            fillColor = fill.Color;
+        }
 
     }
 }
