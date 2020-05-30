@@ -36,17 +36,6 @@ namespace simpleGIS
             sTable = layer.Table.Clone();
         }
 
-        /// <summary>
-        /// 保存属性表
-        /// </summary>
-        /// <returns></returns>
-        public void SetTable() { sLayer.Table = sTable; }
-
-
-        /// <summary>
-        /// 重新读取已选择图层，更新选择要素
-        /// </summary>
-        public void ReReadLayer() { }
         #endregion
 
         #region 事件

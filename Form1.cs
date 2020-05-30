@@ -113,25 +113,30 @@ namespace simpleGIS
         //图层-打开属性表
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
-
+            Form3 frm3 = new Form3();
+            int id = mapControl1.Map.SelectedLayer;
+            frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
         }
 
         //图层-设置图层属性
         private void menuItemLayerAttr_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
         }
 
         //图层-图层上移
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
-            
+            int id = mapControl1.Map.SelectedLayer;
+            mapControl1.Map.MoveUpLayer(id);
         }
 
         //图层-图层下移
         private void menuItemLayerDown_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            mapControl1.Map.MoveDownLayer(id);
         }
 
         //选择-鼠标选择几何体
@@ -218,13 +223,21 @@ namespace simpleGIS
             mapControl1.OperationType = OperationType.ZoomOut;
         }
 
-        //固定比例缩小——弃
+        //全屏显示--弃
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
             //PointD CenterPoint = new PointD(mapControl1.Width / 2, mapControl1.Height / 2);
             //mapControl1.Map.ZoomByCenter(CenterPoint, 1.2f);
-           
+
             //mapControl1.Refresh();
+            /*
+            RectangleD box = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer].Box;
+            PointD centerPoint = new PointD();
+            centerPoint.X = (double)(box.MinX + box.MaxX) / 2;
+            centerPoint.Y = (double)(box.MinY + box.MaxY) / 2;
+            double xdis = mapControl1.Map.ToMapDistance(this.Width);
+            double ydis = mapControl1.Map.ToMapDistance(this.Height);
+            */
         }
 
         //创建新图层
