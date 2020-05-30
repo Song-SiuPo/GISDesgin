@@ -76,10 +76,12 @@
             this.tsButtonEditGeo = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.clboxLayers = new System.Windows.Forms.CheckedListBox();
+            this.mapControl1 = new simpleGIS.MapControl();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,7 +120,7 @@
             this.menuItemNewMap.Name = "menuItemNewMap";
             this.menuItemNewMap.ShortcutKeyDisplayString = "Ctrl+N";
             this.menuItemNewMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.menuItemNewMap.Size = new System.Drawing.Size(187, 26);
+            this.menuItemNewMap.Size = new System.Drawing.Size(183, 22);
             this.menuItemNewMap.Text = "新建(&N)";
             this.menuItemNewMap.ToolTipText = "新建(Ctrl+N)\r\n创建新的地图文档";
             this.menuItemNewMap.Click += new System.EventHandler(this.menuItemNewMap_Click);
@@ -129,7 +131,7 @@
             this.menuItemOpen.Name = "menuItemOpen";
             this.menuItemOpen.ShortcutKeyDisplayString = "Ctrl+O";
             this.menuItemOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.menuItemOpen.Size = new System.Drawing.Size(187, 26);
+            this.menuItemOpen.Size = new System.Drawing.Size(183, 22);
             this.menuItemOpen.Text = "打开(&O)";
             this.menuItemOpen.ToolTipText = "打开(Ctrl+O)\r\n打开现有地图文档";
             this.menuItemOpen.Click += new System.EventHandler(this.menuItemOpen_Click);
@@ -140,7 +142,7 @@
             this.menuItemSave.Name = "menuItemSave";
             this.menuItemSave.ShortcutKeyDisplayString = "Ctrl+S";
             this.menuItemSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.menuItemSave.Size = new System.Drawing.Size(187, 26);
+            this.menuItemSave.Size = new System.Drawing.Size(183, 22);
             this.menuItemSave.Text = "保存(&S)";
             this.menuItemSave.ToolTipText = "保存(Ctrl+S)\r\n保存当前地图文档";
             this.menuItemSave.Click += new System.EventHandler(this.menuItemSave_Click);
@@ -151,7 +153,7 @@
             this.menuItemSavePic.Name = "menuItemSavePic";
             this.menuItemSavePic.ShortcutKeyDisplayString = "Ctrl+P";
             this.menuItemSavePic.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.menuItemSavePic.Size = new System.Drawing.Size(187, 26);
+            this.menuItemSavePic.Size = new System.Drawing.Size(183, 22);
             this.menuItemSavePic.Text = "导出地图(&P)";
             this.menuItemSavePic.ToolTipText = "导出地图(Ctrl+P)\r\n将此地图导出为BitMap文件";
             this.menuItemSavePic.Click += new System.EventHandler(this.menuItemSavePic_Click);
@@ -171,26 +173,26 @@
             // menuItemEditMode
             // 
             this.menuItemEditMode.Name = "menuItemEditMode";
-            this.menuItemEditMode.Size = new System.Drawing.Size(180, 22);
+            this.menuItemEditMode.Size = new System.Drawing.Size(166, 22);
             this.menuItemEditMode.Text = "编辑模式(&S)";
             this.menuItemEditMode.Click += new System.EventHandler(this.menuItemEditMode_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
             // 
             // menuItemNewGeo
             // 
             this.menuItemNewGeo.Name = "menuItemNewGeo";
-            this.menuItemNewGeo.Size = new System.Drawing.Size(180, 22);
+            this.menuItemNewGeo.Size = new System.Drawing.Size(166, 22);
             this.menuItemNewGeo.Text = "绘制新几何体(&N)";
             this.menuItemNewGeo.Click += new System.EventHandler(this.menuItemNewGeo_Click);
             // 
             // menuItemEditGeo
             // 
             this.menuItemEditGeo.Name = "menuItemEditGeo";
-            this.menuItemEditGeo.Size = new System.Drawing.Size(180, 22);
+            this.menuItemEditGeo.Size = new System.Drawing.Size(166, 22);
             this.menuItemEditGeo.Text = "编辑几何体(&E)";
             this.menuItemEditGeo.Click += new System.EventHandler(this.menuItemEditGeo_Click);
             // 
@@ -533,6 +535,10 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.clboxLayers);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.mapControl1);
             this.splitContainer1.Size = new System.Drawing.Size(943, 512);
             this.splitContainer1.SplitterDistance = 172;
             this.splitContainer1.SplitterWidth = 3;
@@ -548,6 +554,19 @@
             this.clboxLayers.Name = "clboxLayers";
             this.clboxLayers.Size = new System.Drawing.Size(172, 512);
             this.clboxLayers.TabIndex = 0;
+            // 
+            // mapControl1
+            // 
+            this.mapControl1.BackColor = System.Drawing.Color.White;
+            this.mapControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.mapControl1.Location = new System.Drawing.Point(4, 4);
+            this.mapControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mapControl1.Name = "mapControl1";
+            this.mapControl1.NeedSave = false;
+            this.mapControl1.OperationType = simpleGIS.OperationType.None;
+            this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
+            this.mapControl1.Size = new System.Drawing.Size(764, 508);
+            this.mapControl1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -567,6 +586,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);

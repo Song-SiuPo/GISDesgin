@@ -23,28 +23,41 @@ namespace simpleGIS
         private void menuItemNewMap_Click(object sender, EventArgs e)
         {
 
+            if (mapControl1.NeedSave)
+                MessageBox.Show(this, "当前有未保存的更改。", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                mapControl1.NewMap();
+                menuItemSave.PerformClick();
+            }
         }
 
         //文件-打开
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "所有文件(*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
-            openFileDialog.Multiselect = false;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (mapControl1.NeedSave)
+                MessageBox.Show(this, "当前有未保存的更改。", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
             {
-                string openFileName = openFileDialog.FileName.ToString();
-                mapControl1.OpenFile(openFileName);
-                mapControl1.Refresh();
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = false;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string openFileName = openFileDialog.FileName.ToString();
+                    mapControl1.OpenFile(openFileName);
+                    mapControl1.Refresh();
+                }
             }
+
         }
 
         //文件-保存
         private void menuItemSave_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "所有文件(*.*)|*.*";
+            saveFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
             saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -69,7 +82,7 @@ namespace simpleGIS
         //编辑-编辑模式
         private void menuItemEditMode_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         //编辑-绘制新几何体
