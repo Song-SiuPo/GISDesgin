@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -197,37 +197,40 @@ namespace simpleGIS
         //鼠标指针
         private void tsButtonOperateNone_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.None;
         }
 
         //漫游
         private void tsButtonPan_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Pan;
         }
 
         //放大
         private void tsButtonZoomIn_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.ZoomIn;
         }
 
         //缩小
         private void tsButtonZoomOut_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.ZoomOut;
         }
 
-        //固定比例缩小
+        //固定比例缩小——弃
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
-
+            //PointD CenterPoint = new PointD(mapControl1.Width / 2, mapControl1.Height / 2);
+            //mapControl1.Map.ZoomByCenter(CenterPoint, 1.2f);
+           
+            //mapControl1.Refresh();
         }
 
         //创建新图层
         private void tsButtonNewLayer_Click(object sender, EventArgs e)
         {
-
+            menuItemNewLayer.PerformClick();
         }
 
         //选择要素
