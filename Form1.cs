@@ -28,19 +28,42 @@ namespace simpleGIS
         //文件-打开
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "所有文件(*.*)|*.*";
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = false;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string openFileName = openFileDialog.FileName.ToString();
+                mapControl1.OpenFile(openFileName);
+                mapControl1.Refresh();
+            }
         }
 
         //文件-保存
         private void menuItemSave_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "所有文件(*.*)|*.*";
+            saveFileDialog.AddExtension = true;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string saveFileName = saveFileDialog.FileName.ToString();
+                mapControl1.SaveFile(saveFileName);
+            }
         }
 
         //文件-输出为图片
         private void menuItemSavePic_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "BitMap文件(*.BMP*)|*.BMP|所有文件(*.*)|*.*";
+            saveFileDialog.AddExtension = true;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string saveFileName = saveFileDialog.FileName.ToString();
+                mapControl1.SaveBitmap(saveFileName);
+            }
         }
 
         //编辑-编辑模式
@@ -136,25 +159,25 @@ namespace simpleGIS
         //新建
         private void tsButtonNew_Click(object sender, EventArgs e)
         {
-
+            menuItemNewMap.PerformClick();
         }
 
         //打开
         private void tsButtonOpen_Click(object sender, EventArgs e)
         {
-
+            menuItemOpen.PerformClick();
         }
 
         //保存地图
         private void tsButtonSave_Click(object sender, EventArgs e)
         {
-
+            menuItemSave.PerformClick();
         }
 
         //保存为图片
         private void tsButtonSavePic_Click(object sender, EventArgs e)
         {
-
+            menuItemSavePic.PerformClick();
         }
 
         //鼠标指针
