@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace simpleGIS
 {
@@ -20,6 +21,10 @@ namespace simpleGIS
         private SimpleRenderer simpleR = new SimpleRenderer();
         private UniqueValueRenderer uniqueR = new UniqueValueRenderer();
         private ClassBreaksRenderer classBreaksR = new ClassBreaksRenderer();
+        // 点线面当前编辑样式的引用
+        private PointSymbol pSymbol;
+        private LineSymbol lineSymbol;
+        private PolygonSymbol polySymbol;
 
         // 注记样式
         private LabelStyle labelStyle;
@@ -74,6 +79,12 @@ namespace simpleGIS
             checkBoxLabelVisible.Enabled = !layer.IsEdit;
 
             // 渲染
+            // 确定图层类型，选择显示何种几何符号
+            if (layer.FeatureType == typeof(PointD)) { groupPoint.Visible = true; }
+            else if (layer.FeatureType == typeof(Polyline) ||
+                layer.FeatureType == typeof(MultiPolyline))
+            { groupPolyline.Visible = true; }
+            else { groupPolygon.Visible = true; }
             // 从源图层读取到简单渲染
             if (layer.Renderer.GetType() == typeof(SimpleRenderer))
             {
@@ -154,6 +165,7 @@ namespace simpleGIS
 
             // 注记
             checkBoxLabelVisible.Checked = layer.LabelVisible;
+            panelFont.Enabled = layer.LabelVisible;
             labelStyle = new LabelStyle(layer.LabelStyle.Field,
                 (Font)layer.LabelStyle.Font.Clone(), layer.LabelStyle.Color);
             cbBoxLabelField.SelectedItem = layer.LabelStyle.Field;
@@ -186,6 +198,38 @@ namespace simpleGIS
             return newSymbol;
         }
 
+        // 设置symbol符号为当前编辑符号
+        private void SetCurrentSymbol(Symbol symbol)
+        {
+            if (symbol.GetType() == typeof(PointSymbol))
+            { pSymbol = (PointSymbol)symbol; }
+            else if (symbol.GetType() == typeof(LineSymbol))
+            { lineSymbol = (LineSymbol)symbol; }
+            else { polySymbol = (PolygonSymbol)symbol; }
+        }
+
+        // 根据暂存的各个当前symbol字段刷新界面
+        private void ChangeStyleFromSymbol()
+        {
+            if (pSymbol != null)
+            {
+                cbBoxPointType.SelectedIndex = pSymbol.PointType - 1;
+                numPointSize.Value = new decimal(pSymbol.Size);
+                pBoxPointColor.BackColor = pSymbol.Color;
+            }
+            if (lineSymbol != null)
+            {
+                cbBoxLineDash.SelectedIndex = (int)lineSymbol.Style.DashStyle;
+                numLineWidth.Value = new decimal(lineSymbol.Style.Width);
+                pBoxLineColor.BackColor = lineSymbol.Style.Color;
+            }
+            if (polySymbol != null)
+            {
+                pBoxBoundColor.BackColor = polySymbol.OutLine.Color;
+                pBoxFillColor.BackColor = polySymbol.Fill.Color;
+            }
+        }
+
         #endregion
 
         #region 事件处理
@@ -193,25 +237,64 @@ namespace simpleGIS
         // 按下OK按钮
         private void buttonOK_Click(object sender, EventArgs e)
         {
-
+            // 各个符号存到可序列化字段中
+            if (rbSimple.Checked)
+            {
+                simpleR.Symbol.SaveToStruct();
+            }
+            else if (rbUniqueValue.Checked)
+            {
+                foreach (KeyValuePair<string, Symbol> kvp in uniqueR.Symbols)
+                { kvp.Value.SaveToStruct(); }
+                uniqueR.DefaultSymbol.SaveToStruct();
+            }
+            else if (rbClassBreak.Checked)
+            {
+                foreach (Symbol symbol in classBreaksR.Symbols)
+                { symbol.SaveToStruct(); }
+            }
+            DialogResult = DialogResult.OK;
         }
 
         // 按下取消按钮
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.Cancel;
         }
 
         // 图层名输入框完成编辑
         private void txtBoxLayerName_Leave(object sender, EventArgs e)
         {
-
+            if (txtBoxLayerName.Text == "" || txtBoxLayerName.Text.
+                All((char c) =>  c == ' '))
+            {
+                MessageBox.Show(this, "输入的图层名不能为空。", "图层名错误",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtBoxLayerName.Text = layerName;
+            }
+            else { layerName = txtBoxLayerName.Text; }
         }
 
         // 选择简单渲染
         private void rbSimple_CheckedChanged(object sender, EventArgs e)
         {
-
+            panelBreakPoints.Visible = panelColumns.Visible = false;
+            Symbol _symbol;     // 当前编辑的Symbol
+            // 原先没有简单渲染，新建
+            if (simpleR == null)
+            {
+                simpleR = new SimpleRenderer();
+                if (uniqueR != null)
+                {
+                    simpleR.Symbol = CloneSymbol(uniqueR.DefaultSymbol);
+                    _symbol = simpleR.Symbol;
+                }
+                else if (classBreaksR != null)
+                {
+                    simpleR.Symbol = CloneSymbol(classBreaksR.Symbols[0]);
+                    _symbol = simpleR.Symbol;
+                }
+            }
         }
 
         // 选择唯一值渲染
