@@ -29,6 +29,7 @@ namespace simpleGIS
             {
                 mapControl1.NewMap();
                 menuItemSave.PerformClick();
+                mapControl1.Refresh();
             }
         }
 
