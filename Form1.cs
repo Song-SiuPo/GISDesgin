@@ -71,7 +71,7 @@ namespace simpleGIS
         private void menuItemSavePic_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "BitMap文件(*.BMP*)|*.BMP|所有文件(*.*)|*.*";
+            saveFileDialog.Filter = "BMP文件(*.BMP*)|*.BMP|JPG文件(*.jpg*)|*.jpg|PNG文件(*.png*)|*.png|所有文件(*.*)|*.*";
             saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -125,7 +125,7 @@ namespace simpleGIS
         //图层-图层上移
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         //图层-图层下移
