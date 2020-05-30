@@ -18,13 +18,13 @@ namespace simpleGIS
         private string layerName;   // 真正的图层名
 
         // 可用字段
-        private List<string> uniqueColumns;
-        private List<string> classBreakColumns;
+        private List<string> uniqueColumns = new List<string>();
+        private List<string> classBreakColumns = new List<string>();
 
         // 三种渲染器都存着
-        private SimpleRenderer simpleR = new SimpleRenderer();
-        private UniqueValueRenderer uniqueR = new UniqueValueRenderer();
-        private ClassBreaksRenderer classBreaksR = new ClassBreaksRenderer();
+        private SimpleRenderer simpleR;
+        private UniqueValueRenderer uniqueR;
+        private ClassBreaksRenderer classBreaksR;
         // 点线面当前编辑样式的引用
         private PointSymbol pSymbol;
         private LineSymbol lineSymbol;
@@ -82,8 +82,11 @@ namespace simpleGIS
             InitializeComponent();
 
             _layer = layer;
-            // 将Layer的属性值移到界面上
-            // 常规
+            simpleR = new SimpleRenderer(layer.FeatureType);
+            uniqueR = new UniqueValueRenderer(layer.FeatureType);
+            classBreaksR = new ClassBreaksRenderer(layer.FeatureType);
+        // 将Layer的属性值移到界面上
+        // 常规
             layerName = txtBoxLayerName.Text = layer.Name;
             checkBoxLabelVisible.Checked = layer.Visible;
             checkBoxLabelVisible.Enabled = !layer.IsEdit;
