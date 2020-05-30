@@ -180,28 +180,28 @@
             // tmiStartEdit
             // 
             this.tmiStartEdit.Name = "tmiStartEdit";
-            this.tmiStartEdit.Size = new System.Drawing.Size(180, 22);
+            this.tmiStartEdit.Size = new System.Drawing.Size(124, 22);
             this.tmiStartEdit.Text = "开始编辑";
             this.tmiStartEdit.Click += new System.EventHandler(this.tmiStartEdit_Click);
             // 
             // tmiStopEdit
             // 
             this.tmiStopEdit.Name = "tmiStopEdit";
-            this.tmiStopEdit.Size = new System.Drawing.Size(180, 22);
+            this.tmiStopEdit.Size = new System.Drawing.Size(124, 22);
             this.tmiStopEdit.Text = "结束编辑";
             this.tmiStopEdit.Click += new System.EventHandler(this.tmiStopEdit_Click);
             // 
             // tmiSaveEdit
             // 
             this.tmiSaveEdit.Name = "tmiSaveEdit";
-            this.tmiSaveEdit.Size = new System.Drawing.Size(180, 22);
+            this.tmiSaveEdit.Size = new System.Drawing.Size(124, 22);
             this.tmiSaveEdit.Text = "保存更改";
             this.tmiSaveEdit.Click += new System.EventHandler(this.tmiSaveEdit_Click);
             // 
             // tmiCancelEdit
             // 
             this.tmiCancelEdit.Name = "tmiCancelEdit";
-            this.tmiCancelEdit.Size = new System.Drawing.Size(180, 22);
+            this.tmiCancelEdit.Size = new System.Drawing.Size(124, 22);
             this.tmiCancelEdit.Text = "取消更改";
             this.tmiCancelEdit.Click += new System.EventHandler(this.tmiCancelEdit_Click);
             // 
@@ -219,21 +219,21 @@
             // tmiAddColumn
             // 
             this.tmiAddColumn.Name = "tmiAddColumn";
-            this.tmiAddColumn.Size = new System.Drawing.Size(180, 22);
+            this.tmiAddColumn.Size = new System.Drawing.Size(136, 22);
             this.tmiAddColumn.Text = "增加字段";
             this.tmiAddColumn.Click += new System.EventHandler(this.tmiAddColumn_Click);
             // 
             // tmiDeleteRow
             // 
             this.tmiDeleteRow.Name = "tmiDeleteRow";
-            this.tmiDeleteRow.Size = new System.Drawing.Size(180, 22);
+            this.tmiDeleteRow.Size = new System.Drawing.Size(136, 22);
             this.tmiDeleteRow.Text = "删除所选行";
             this.tmiDeleteRow.Click += new System.EventHandler(this.tmiDeleteRow_Click);
             // 
             // 删除列ToolStripMenuItem
             // 
             this.删除列ToolStripMenuItem.Name = "删除列ToolStripMenuItem";
-            this.删除列ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.删除列ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.删除列ToolStripMenuItem.Text = "删除列";
             this.删除列ToolStripMenuItem.Click += new System.EventHandler(this.删除列ToolStripMenuItem_Click);
             // 
@@ -249,14 +249,14 @@
             // tmiSelectClear
             // 
             this.tmiSelectClear.Name = "tmiSelectClear";
-            this.tmiSelectClear.Size = new System.Drawing.Size(180, 22);
+            this.tmiSelectClear.Size = new System.Drawing.Size(124, 22);
             this.tmiSelectClear.Text = "清除选择";
             this.tmiSelectClear.Click += new System.EventHandler(this.清除选择ToolStripMenuItem_Click);
             // 
             // 全选ToolStripMenuItem
             // 
             this.全选ToolStripMenuItem.Name = "全选ToolStripMenuItem";
-            this.全选ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.全选ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.全选ToolStripMenuItem.Text = "全选";
             this.全选ToolStripMenuItem.Click += new System.EventHandler(this.全选ToolStripMenuItem_Click);
             // 
@@ -296,7 +296,9 @@
             this.Controls.Add(this.dataGridView1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
             this.Name = "Form3";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "要素属性表";
             this.Load += new System.EventHandler(this.Form3_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

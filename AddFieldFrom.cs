@@ -28,13 +28,11 @@ namespace simpleGIS
         public string Field
         {
             get { return _Field; }
-            set { _Field = value; }
         }
 
         public Type Type
         {
             get { return _Type; }
-            set { _Type = value; }
         }
 
         #endregion
@@ -47,33 +45,42 @@ namespace simpleGIS
             if(tbxField .Text != "" && cbxType .SelectedItem != null)
             {
                 //获得字段名
-                Field = tbxField.Text;
+                _Field = tbxField.Text;
 
                 //获得字段类型
                 if (cbxType.SelectedItem.ToString() == "int")
-                    Type = typeof(int);
+                    _Type = typeof(int);
                 else if (cbxType.SelectedItem.ToString() == "float")
-                    Type = typeof(float);
+                    _Type = typeof(float);
                 else if (cbxType.SelectedItem.ToString() == "double")
-                    Type = typeof(double);
+                    _Type = typeof(double);
                 else if (cbxType.SelectedItem.ToString() == "string")
-                    Type = typeof(string);
+                    _Type = typeof(string);
 
                 this.DialogResult = DialogResult.OK;
             }
+            else { MessageBox.Show("字段名或属性为空。"); }
         }
 
+        //确定
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
         }
 
+        //加载
         private void AddFieldFrom_Load(object sender, EventArgs e)
         {
             cbxType.Items.Add("int");
             cbxType.Items.Add("float");
             cbxType.Items.Add("double");
             cbxType.Items.Add("string");
+
+            //默认，文本字段，字段名为‘new_field’
+            _Field = "new_field";
+            _Type = typeof(string);
+            cbxType.SelectedItem = cbxType.Items.IndexOf("string");
+            tbxField.Text = "new_Field";
         }
 
         #endregion

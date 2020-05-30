@@ -21,7 +21,6 @@ namespace simpleGIS
 
         private DataTable sTable; //属性表
         private Layer sLayer; //操作图层
-        private bool EditCapable; //是否可编辑
 
         #endregion
 
@@ -67,7 +66,6 @@ namespace simpleGIS
         private void tmiStartEdit_Click(object sender, EventArgs e)
         {
             tmiEdit.Enabled = true;
-            EditCapable = true;  //编辑状态改为可以
             dataGridView1.ReadOnly =false;  //表开始编辑
             sLayer.IsEdit = true;   //图层开始编辑
         }
@@ -76,55 +74,39 @@ namespace simpleGIS
         private void tmiStopEdit_Click(object sender, EventArgs e)
         {
             tmiEdit.Enabled = false;
-            EditCapable = false;
             dataGridView1.ReadOnly = true;
+            sLayer.IsEdit = false;
         }
 
         //保存编辑
         private void tmiSaveEdit_Click(object sender, EventArgs e)
         {
-            sLayer.Table = sTable.Copy ();
+            sLayer.Table = sTable.Copy();
         }
 
         //取消编辑
         private void tmiCancelEdit_Click(object sender, EventArgs e)
         {
             sTable = sLayer.Table.Copy();
-            dataGridView1.DataSource = sTable;
         }
 
 
         //增加字段
         private void tmiAddColumn_Click(object sender, EventArgs e)
         {
-            if (EditCapable)
+            AddFieldFrom af = new AddFieldFrom();
+
+            //录入结束
+            if (af.ShowDialog(this) == DialogResult.OK)
             {
-                AddFieldFrom af = new AddFieldFrom();
+                //临时表增加字段
+                string NewField = af.Field;
+                Type NewFieldType = af.Type;
+                sTable.Columns.Add(NewField, NewFieldType);
 
-                //默认
-                af.Field = "new_Field";
-                af.Type = typeof(string);
-
-                if (af.ShowDialog(this) == DialogResult.OK)
-                {
-                    //临时表增加字段
-                    string NewField = af.Field;
-                    Type NewFieldType = af.Type;
-                    sTable.Columns.Add(NewField, NewFieldType);
-
-                    //更新datagridview
-                    dataGridView1.DataSource = sTable;
-                    dataGridView1.Refresh();
-                }
-
-                //为表头添加右击菜单
-                if (dataGridView1.Columns.Count > 0)
-                {
-                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
-                    {
-                        dataGridView1.Columns[i].HeaderCell.ContextMenuStrip = contextMenuStrip1;
-                    }
-                }
+                //更新datagridview
+                dataGridView1.DataSource = sTable;
+                dataGridView1.Refresh();
             }
         }
 
@@ -136,15 +118,6 @@ namespace simpleGIS
             sTable = new DataTable();
             dataGridView1.Columns.Clear();
             dataGridView1.DataSource = sTable;
-
-            //为表头添加右击菜单
-            if(dataGridView1 .Columns .Count > 0)
-            {
-                for(int i=0;i<dataGridView1 .Columns.Count; i++)
-                {
-                    dataGridView1.Columns[i].HeaderCell.ContextMenuStrip = contextMenuStrip1;
-                }
-            }
 
             //快捷图标
             stpSearch.Click += btnSearch_Click;
@@ -166,9 +139,13 @@ namespace simpleGIS
             }
 
             //datagridview更新选择
-            for (int i = 0; i < sLayer.SelectedItems.Count; i++)
+            foreach(DataGridViewRow row in  dataGridView1.Rows)
             {
-                dataGridView1.Rows[sLayer.SelectedItems[i]].Selected = true;
+                //如果在选择范围
+                if (sLayer.SelectedItems.Contains((int)row.Cells ["ID"].Value))
+                {
+                    row.Selected = true;
+                }
             }
 
             //触发联动事件,form1显示选择要素
@@ -191,13 +168,10 @@ namespace simpleGIS
             sLayer.SelectedItems.Clear();
 
             //遍历，找到选择的要素
-            for(int i=0;i<sTable .Rows.Count; i++)
+            foreach(DataGridViewRow row in dataGridView1 .SelectedRows)
             {
-                if(dataGridView1 .Rows [i].Selected)
-                {
-                    int ID = (int)dataGridView1.Rows[i].Cells["ID"].Value;
-                    sLayer.SelectedItems.Add(ID);
-                }
+                int ID = (int)row.Cells["ID"].Value;
+                sLayer.SelectedItems.Add(ID);
             }
 
             //联动，form1显示选择的要素
@@ -219,32 +193,31 @@ namespace simpleGIS
             dataGridView1.SelectAll();
         }
 
-        #endregion
-
-        #region 私有函数
-
-
-        #endregion
-
-
-
+        //删除列操作
         private void 删除列ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //新建删除窗体
             DeleteColumnsForm dcfrm = new DeleteColumnsForm();
+
+            //得到列名列表，传给删除窗体
             List<string> columns = new List<string>();
-            foreach(DataColumn co in sTable .Columns)
+            foreach (DataColumn co in sTable.Columns)
             {
                 columns.Add(co.ToString());
             }
             dcfrm.GetColumns(columns);
+
+            //窗体操作完成
             if (dcfrm.ShowDialog(this) == DialogResult.OK)
             {
+                //删除返回的列名
                 List<string> deleteitems = dcfrm.ColumnsToDelete;
-                foreach(string item in deleteitems)
+                foreach (string item in deleteitems)
                 {
                     sTable.Columns.Remove(item);
                 }
             }
         }
+        #endregion
     }
 }
