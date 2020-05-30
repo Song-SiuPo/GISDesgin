@@ -14,6 +14,19 @@ namespace simpleGIS
         /// 将Symbol的属性保存到可序列化的字段中
         /// </summary>
         public virtual void SaveToStruct() { }
+
+        /// <summary>
+        /// 生成Symbol的副本
+        /// </summary>
+        /// <returns>新的Symbol</returns>
+        public abstract Symbol Clone();
+
+        /// <summary>
+        /// 以调用对象为原型，生成随机符号
+        /// </summary>
+        /// <param name="num">生成的随机符号个数</param>
+        /// <returns>生成的Symbol</returns>
+        public abstract Symbol[] RandomSymbolFromSelf(int num);
     }
 
     /// <summary>
@@ -69,6 +82,32 @@ namespace simpleGIS
         #endregion
 
         #region 方法
+
+        /// <summary>
+        /// 生成PointSymbol的副本
+        /// </summary>
+        /// <returns>新的PointSymbol</returns>
+        public override Symbol Clone()
+        {
+            return new PointSymbol(pointType, color, size);
+        }
+
+        /// <summary>
+        /// 以调用对象为原型，生成随机点符号
+        /// </summary>
+        /// <param name="num">生成的随机符号个数</param>
+        /// <returns>生成的PointSymbol</returns>
+        public override Symbol[] RandomSymbolFromSelf(int num)
+        {
+            Random random = new Random(DateTime.Now.Millisecond);
+            PointSymbol[] result = new PointSymbol[num];
+            for (int i = 0; i < num; i++)
+            {
+                result[i] = new PointSymbol(random.Next(1, 9),
+                    Color.FromKnownColor((KnownColor)random.Next(28, 168)), size);
+            }
+            return result;
+        }
 
         /// <summary>
         /// 在绘图上绘制该点符号
@@ -190,6 +229,34 @@ namespace simpleGIS
         #endregion
 
         #region 方法
+
+        /// <summary>
+        /// 生成LineSymbol的副本
+        /// </summary>
+        /// <returns>新的LineSymbol</returns>
+        public override Symbol Clone()
+        {
+            return new LineSymbol((Pen)style.Clone());
+        }
+
+        /// <summary>
+        /// 以调用对象为原型，生成随机线符号
+        /// </summary>
+        /// <param name="num">生成的随机符号个数</param>
+        /// <returns>生成的LineSymbol</returns>
+        public override Symbol[] RandomSymbolFromSelf(int num)
+        {
+            Random random = new Random(DateTime.Now.Millisecond);
+            LineSymbol[] result = new LineSymbol[num];
+            for (int i = 0; i < num; i++)
+            {
+                Pen _pen = new Pen(Color.FromKnownColor((KnownColor)random.Next(28, 168)), width);
+                _pen.DashStyle = style.DashStyle;
+                    result[i] = new LineSymbol(_pen);
+            }
+            return result;
+        }
+
         /// <summary>
         /// 在绘图上绘制该线符号
         /// </summary>
@@ -199,15 +266,15 @@ namespace simpleGIS
         {
             g.DrawLines(Style, pointFs);
         }
-
-        #endregion
-
+        
         public override void SaveToStruct()
         {
             color = style.Color;
             width = style.Width;
             dashStyle = style.DashStyle;
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -292,6 +359,33 @@ namespace simpleGIS
         #region 方法
 
         /// <summary>
+        /// 生成PolygonSymbol的副本
+        /// </summary>
+        /// <returns>新的PolygonSymbol</returns>
+        public override Symbol Clone()
+        {
+            return new PolygonSymbol((Pen)outLine.Clone(), (SolidBrush)fill.Clone());
+        }
+
+        /// <summary>
+        /// 以调用对象为原型，生成随机面符号
+        /// </summary>
+        /// <param name="num">生成的随机符号个数</param>
+        /// <returns>生成的PolygonSymbol</returns>
+        public override Symbol[] RandomSymbolFromSelf(int num)
+        {
+            Random random = new Random(DateTime.Now.Millisecond);
+            PolygonSymbol[] result = new PolygonSymbol[num];
+            for (int i = 0; i < num; i++)
+            {
+                Pen _pen = new Pen(Color.FromKnownColor((KnownColor)random.Next(28, 168)));
+                SolidBrush _brush = new SolidBrush(Color.FromKnownColor((KnownColor)random.Next(28, 168)));
+                result[i] = new PolygonSymbol(_pen, _brush);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 在绘图上绘制该面符号
         /// </summary>
         /// <param name="g">GDI绘图对象</param>
@@ -303,14 +397,13 @@ namespace simpleGIS
             g.FillPolygon(Fill, pointFs);
             g.DrawPolygon(OutLine, pointFs);
         }
-
-        #endregion
-
+        
         public override void SaveToStruct()
         {
             outLineColor = outLine.Color;
             fillColor = fill.Color;
         }
 
+        #endregion
     }
 }

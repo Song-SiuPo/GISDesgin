@@ -34,17 +34,21 @@
             this.txtBoxLayerName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPageRender = new System.Windows.Forms.TabPage();
-            this.pBoxShowStyle = new System.Windows.Forms.PictureBox();
-            this.panelBreakPoints = new System.Windows.Forms.Panel();
-            this.txtBoxMaxValue = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.numGroupNum = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbClassBreak = new System.Windows.Forms.RadioButton();
+            this.rbUniqueValue = new System.Windows.Forms.RadioButton();
+            this.rbSimple = new System.Windows.Forms.RadioButton();
             this.panelColumns = new System.Windows.Forms.Panel();
             this.labelColumn = new System.Windows.Forms.Label();
             this.cbBoxGroups = new System.Windows.Forms.ComboBox();
             this.cbBoxColumn = new System.Windows.Forms.ComboBox();
             this.labelItem = new System.Windows.Forms.Label();
+            this.panelBreakPoints = new System.Windows.Forms.Panel();
+            this.txtBoxMaxValue = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.numGroupNum = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupPolygon = new System.Windows.Forms.GroupBox();
             this.pBoxFillColor = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -64,29 +68,29 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbBoxPointType = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbClassBreak = new System.Windows.Forms.RadioButton();
-            this.rbUniqueValue = new System.Windows.Forms.RadioButton();
-            this.rbSimple = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pBoxShowStyle = new System.Windows.Forms.PictureBox();
             this.tabPageLabel = new System.Windows.Forms.TabPage();
+            this.panelFont = new System.Windows.Forms.Panel();
             this.pBoxShowFontStyle = new System.Windows.Forms.PictureBox();
+            this.cbBoxLabelField = new System.Windows.Forms.ComboBox();
             this.pBoxFontColor = new System.Windows.Forms.PictureBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.buttonSetFont = new System.Windows.Forms.Button();
-            this.labelFontName = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.labelFontName = new System.Windows.Forms.Label();
             this.checkBoxLabelVisible = new System.Windows.Forms.CheckBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl.SuspendLayout();
             this.tabPageNorm.SuspendLayout();
             this.tabPageRender.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.panelColumns.SuspendLayout();
             this.panelBreakPoints.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupNum)).BeginInit();
-            this.panelColumns.SuspendLayout();
             this.groupPolygon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFillColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxBoundColor)).BeginInit();
@@ -96,12 +100,12 @@
             this.groupPoint.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPointSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxPointColor)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).BeginInit();
             this.tabPageLabel.SuspendLayout();
+            this.panelFont.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -112,7 +116,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(603, 531);
+            this.tabControl.Size = new System.Drawing.Size(599, 531);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageNorm
@@ -123,7 +127,7 @@
             this.tabPageNorm.Location = new System.Drawing.Point(4, 33);
             this.tabPageNorm.Name = "tabPageNorm";
             this.tabPageNorm.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageNorm.Size = new System.Drawing.Size(595, 494);
+            this.tabPageNorm.Size = new System.Drawing.Size(593, 494);
             this.tabPageNorm.TabIndex = 0;
             this.tabPageNorm.Text = "常规";
             this.tabPageNorm.UseVisualStyleBackColor = true;
@@ -145,6 +149,7 @@
             this.txtBoxLayerName.Name = "txtBoxLayerName";
             this.txtBoxLayerName.Size = new System.Drawing.Size(200, 31);
             this.txtBoxLayerName.TabIndex = 1;
+            this.txtBoxLayerName.Leave += new System.EventHandler(this.txtBoxLayerName_Leave);
             // 
             // label1
             // 
@@ -162,76 +167,79 @@
             this.tabPageRender.Location = new System.Drawing.Point(4, 33);
             this.tabPageRender.Name = "tabPageRender";
             this.tabPageRender.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRender.Size = new System.Drawing.Size(595, 494);
+            this.tabPageRender.Size = new System.Drawing.Size(591, 494);
             this.tabPageRender.TabIndex = 1;
             this.tabPageRender.Text = "图层渲染";
             this.tabPageRender.UseVisualStyleBackColor = true;
             // 
-            // pBoxShowStyle
+            // flowLayoutPanel1
             // 
-            this.pBoxShowStyle.BackColor = System.Drawing.Color.White;
-            this.pBoxShowStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxShowStyle.Location = new System.Drawing.Point(253, 3);
-            this.pBoxShowStyle.Name = "pBoxShowStyle";
-            this.pBoxShowStyle.Size = new System.Drawing.Size(64, 64);
-            this.pBoxShowStyle.TabIndex = 10;
-            this.pBoxShowStyle.TabStop = false;
+            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel1.Controls.Add(this.panelColumns);
+            this.flowLayoutPanel1.Controls.Add(this.panelBreakPoints);
+            this.flowLayoutPanel1.Controls.Add(this.groupPolygon);
+            this.flowLayoutPanel1.Controls.Add(this.groupPolyline);
+            this.flowLayoutPanel1.Controls.Add(this.groupPoint);
+            this.flowLayoutPanel1.Controls.Add(this.panel1);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(585, 488);
+            this.flowLayoutPanel1.TabIndex = 11;
             // 
-            // panelBreakPoints
+            // groupBox1
             // 
-            this.panelBreakPoints.Controls.Add(this.txtBoxMaxValue);
-            this.panelBreakPoints.Controls.Add(this.label11);
-            this.panelBreakPoints.Controls.Add(this.numGroupNum);
-            this.panelBreakPoints.Controls.Add(this.label10);
-            this.panelBreakPoints.Location = new System.Drawing.Point(3, 164);
-            this.panelBreakPoints.Name = "panelBreakPoints";
-            this.panelBreakPoints.Size = new System.Drawing.Size(576, 74);
-            this.panelBreakPoints.TabIndex = 9;
-            this.panelBreakPoints.Visible = false;
+            this.groupBox1.Controls.Add(this.rbClassBreak);
+            this.groupBox1.Controls.Add(this.rbUniqueValue);
+            this.groupBox1.Controls.Add(this.rbSimple);
+            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(579, 84);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "渲染方式";
             // 
-            // txtBoxMaxValue
+            // rbClassBreak
             // 
-            this.txtBoxMaxValue.Location = new System.Drawing.Point(392, 18);
-            this.txtBoxMaxValue.Name = "txtBoxMaxValue";
-            this.txtBoxMaxValue.Size = new System.Drawing.Size(161, 31);
-            this.txtBoxMaxValue.TabIndex = 10;
+            this.rbClassBreak.AutoSize = true;
+            this.rbClassBreak.Enabled = false;
+            this.rbClassBreak.Location = new System.Drawing.Point(392, 37);
+            this.rbClassBreak.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbClassBreak.Name = "rbClassBreak";
+            this.rbClassBreak.Size = new System.Drawing.Size(109, 29);
+            this.rbClassBreak.TabIndex = 2;
+            this.rbClassBreak.TabStop = true;
+            this.rbClassBreak.Text = "分级渲染";
+            this.rbClassBreak.UseVisualStyleBackColor = true;
+            this.rbClassBreak.CheckedChanged += new System.EventHandler(this.rbClassBreak_CheckedChanged);
             // 
-            // label11
+            // rbUniqueValue
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(266, 20);
-            this.label11.Margin = new System.Windows.Forms.Padding(20);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(126, 25);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "本组最大值：";
+            this.rbUniqueValue.AutoSize = true;
+            this.rbUniqueValue.Enabled = false;
+            this.rbUniqueValue.Location = new System.Drawing.Point(211, 37);
+            this.rbUniqueValue.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbUniqueValue.Name = "rbUniqueValue";
+            this.rbUniqueValue.Size = new System.Drawing.Size(128, 29);
+            this.rbUniqueValue.TabIndex = 1;
+            this.rbUniqueValue.TabStop = true;
+            this.rbUniqueValue.Text = "唯一值渲染";
+            this.rbUniqueValue.UseVisualStyleBackColor = true;
+            this.rbUniqueValue.CheckedChanged += new System.EventHandler(this.rbUniqueValue_CheckedChanged);
             // 
-            // numGroupNum
+            // rbSimple
             // 
-            this.numGroupNum.Location = new System.Drawing.Point(130, 18);
-            this.numGroupNum.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numGroupNum.Name = "numGroupNum";
-            this.numGroupNum.Size = new System.Drawing.Size(69, 31);
-            this.numGroupNum.TabIndex = 8;
-            this.numGroupNum.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(24, 20);
-            this.label10.Margin = new System.Windows.Forms.Padding(20);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(107, 25);
-            this.label10.TabIndex = 5;
-            this.label10.Text = "分组数目：";
+            this.rbSimple.AutoSize = true;
+            this.rbSimple.Location = new System.Drawing.Point(45, 37);
+            this.rbSimple.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
+            this.rbSimple.Name = "rbSimple";
+            this.rbSimple.Size = new System.Drawing.Size(109, 29);
+            this.rbSimple.TabIndex = 0;
+            this.rbSimple.TabStop = true;
+            this.rbSimple.Text = "简单渲染";
+            this.rbSimple.UseVisualStyleBackColor = true;
+            this.rbSimple.CheckedChanged += new System.EventHandler(this.rbSimple_CheckedChanged);
             // 
             // panelColumns
             // 
@@ -259,10 +267,13 @@
             // 
             this.cbBoxGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBoxGroups.FormattingEnabled = true;
+            this.cbBoxGroups.IntegralHeight = false;
             this.cbBoxGroups.Location = new System.Drawing.Point(416, 17);
+            this.cbBoxGroups.MaxDropDownItems = 10;
             this.cbBoxGroups.Name = "cbBoxGroups";
             this.cbBoxGroups.Size = new System.Drawing.Size(121, 32);
             this.cbBoxGroups.TabIndex = 7;
+            this.cbBoxGroups.SelectedIndexChanged += new System.EventHandler(this.cbBoxGroups_SelectedIndexChanged);
             // 
             // cbBoxColumn
             // 
@@ -272,6 +283,7 @@
             this.cbBoxColumn.Name = "cbBoxColumn";
             this.cbBoxColumn.Size = new System.Drawing.Size(121, 32);
             this.cbBoxColumn.TabIndex = 5;
+            this.cbBoxColumn.SelectedIndexChanged += new System.EventHandler(this.cbBoxColumn_SelectedIndexChanged);
             // 
             // labelItem
             // 
@@ -282,6 +294,69 @@
             this.labelItem.Size = new System.Drawing.Size(69, 25);
             this.labelItem.TabIndex = 6;
             this.labelItem.Text = "分组：";
+            // 
+            // panelBreakPoints
+            // 
+            this.panelBreakPoints.Controls.Add(this.txtBoxMaxValue);
+            this.panelBreakPoints.Controls.Add(this.label11);
+            this.panelBreakPoints.Controls.Add(this.numGroupNum);
+            this.panelBreakPoints.Controls.Add(this.label10);
+            this.panelBreakPoints.Location = new System.Drawing.Point(3, 164);
+            this.panelBreakPoints.Name = "panelBreakPoints";
+            this.panelBreakPoints.Size = new System.Drawing.Size(576, 74);
+            this.panelBreakPoints.TabIndex = 9;
+            this.panelBreakPoints.Visible = false;
+            // 
+            // txtBoxMaxValue
+            // 
+            this.txtBoxMaxValue.Location = new System.Drawing.Point(392, 18);
+            this.txtBoxMaxValue.Name = "txtBoxMaxValue";
+            this.txtBoxMaxValue.Size = new System.Drawing.Size(161, 31);
+            this.txtBoxMaxValue.TabIndex = 10;
+            this.txtBoxMaxValue.Leave += new System.EventHandler(this.txtBoxMaxValue_Leave);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(266, 20);
+            this.label11.Margin = new System.Windows.Forms.Padding(20);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(126, 25);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "本组最大值：";
+            // 
+            // numGroupNum
+            // 
+            this.numGroupNum.Location = new System.Drawing.Point(130, 18);
+            this.numGroupNum.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numGroupNum.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numGroupNum.Name = "numGroupNum";
+            this.numGroupNum.Size = new System.Drawing.Size(69, 31);
+            this.numGroupNum.TabIndex = 8;
+            this.numGroupNum.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numGroupNum.ValueChanged += new System.EventHandler(this.numGroupNum_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(24, 20);
+            this.label10.Margin = new System.Windows.Forms.Padding(20);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(107, 25);
+            this.label10.TabIndex = 5;
+            this.label10.Text = "分组数目：";
             // 
             // groupPolygon
             // 
@@ -305,6 +380,7 @@
             this.pBoxFillColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxFillColor.TabIndex = 9;
             this.pBoxFillColor.TabStop = false;
+            this.pBoxFillColor.Click += new System.EventHandler(this.pBoxFillColor_Click);
             // 
             // label9
             // 
@@ -325,6 +401,7 @@
             this.pBoxBoundColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxBoundColor.TabIndex = 7;
             this.pBoxBoundColor.TabStop = false;
+            this.pBoxBoundColor.Click += new System.EventHandler(this.pBoxBoundColor_Click);
             // 
             // label8
             // 
@@ -355,6 +432,11 @@
             // 
             this.numLineWidth.DecimalPlaces = 1;
             this.numLineWidth.Location = new System.Drawing.Point(167, 104);
+            this.numLineWidth.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.numLineWidth.Name = "numLineWidth";
             this.numLineWidth.Size = new System.Drawing.Size(94, 31);
             this.numLineWidth.TabIndex = 7;
@@ -363,6 +445,7 @@
             0,
             0,
             0});
+            this.numLineWidth.ValueChanged += new System.EventHandler(this.numLineWidth_ValueChanged);
             // 
             // label7
             // 
@@ -383,6 +466,7 @@
             this.pBoxLineColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxLineColor.TabIndex = 5;
             this.pBoxLineColor.TabStop = false;
+            this.pBoxLineColor.Click += new System.EventHandler(this.pBoxLineColor_Click);
             // 
             // label6
             // 
@@ -408,6 +492,7 @@
             this.cbBoxLineDash.Name = "cbBoxLineDash";
             this.cbBoxLineDash.Size = new System.Drawing.Size(175, 32);
             this.cbBoxLineDash.TabIndex = 2;
+            this.cbBoxLineDash.SelectedIndexChanged += new System.EventHandler(this.cbBoxLineDash_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -438,14 +523,25 @@
             // 
             this.numPointSize.DecimalPlaces = 1;
             this.numPointSize.Location = new System.Drawing.Point(159, 101);
+            this.numPointSize.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numPointSize.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.numPointSize.Name = "numPointSize";
             this.numPointSize.Size = new System.Drawing.Size(94, 31);
             this.numPointSize.TabIndex = 5;
             this.numPointSize.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
+            this.numPointSize.ValueChanged += new System.EventHandler(this.numPointSize_ValueChanged);
             // 
             // label4
             // 
@@ -466,6 +562,7 @@
             this.pBoxPointColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxPointColor.TabIndex = 3;
             this.pBoxPointColor.TabStop = false;
+            this.pBoxPointColor.Click += new System.EventHandler(this.pBoxPointColor_Click);
             // 
             // label3
             // 
@@ -494,6 +591,7 @@
             this.cbBoxPointType.Name = "cbBoxPointType";
             this.cbBoxPointType.Size = new System.Drawing.Size(132, 32);
             this.cbBoxPointType.TabIndex = 1;
+            this.cbBoxPointType.SelectedIndexChanged += new System.EventHandler(this.cbBoxPointType_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -505,95 +603,97 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "点的形状：";
             // 
-            // groupBox1
+            // panel1
             // 
-            this.groupBox1.Controls.Add(this.rbClassBreak);
-            this.groupBox1.Controls.Add(this.rbUniqueValue);
-            this.groupBox1.Controls.Add(this.rbSimple);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(579, 84);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "渲染方式";
+            this.panel1.Controls.Add(this.pBoxShowStyle);
+            this.panel1.Location = new System.Drawing.Point(588, 334);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(576, 73);
+            this.panel1.TabIndex = 11;
             // 
-            // rbClassBreak
+            // pBoxShowStyle
             // 
-            this.rbClassBreak.AutoSize = true;
-            this.rbClassBreak.Location = new System.Drawing.Point(392, 37);
-            this.rbClassBreak.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbClassBreak.Name = "rbClassBreak";
-            this.rbClassBreak.Size = new System.Drawing.Size(109, 29);
-            this.rbClassBreak.TabIndex = 2;
-            this.rbClassBreak.TabStop = true;
-            this.rbClassBreak.Text = "分级渲染";
-            this.rbClassBreak.UseVisualStyleBackColor = true;
-            // 
-            // rbUniqueValue
-            // 
-            this.rbUniqueValue.AutoSize = true;
-            this.rbUniqueValue.Location = new System.Drawing.Point(211, 37);
-            this.rbUniqueValue.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbUniqueValue.Name = "rbUniqueValue";
-            this.rbUniqueValue.Size = new System.Drawing.Size(128, 29);
-            this.rbUniqueValue.TabIndex = 1;
-            this.rbUniqueValue.TabStop = true;
-            this.rbUniqueValue.Text = "唯一值渲染";
-            this.rbUniqueValue.UseVisualStyleBackColor = true;
-            // 
-            // rbSimple
-            // 
-            this.rbSimple.AutoSize = true;
-            this.rbSimple.Location = new System.Drawing.Point(45, 37);
-            this.rbSimple.Margin = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.rbSimple.Name = "rbSimple";
-            this.rbSimple.Size = new System.Drawing.Size(109, 29);
-            this.rbSimple.TabIndex = 0;
-            this.rbSimple.TabStop = true;
-            this.rbSimple.Text = "简单渲染";
-            this.rbSimple.UseVisualStyleBackColor = true;
+            this.pBoxShowStyle.BackColor = System.Drawing.Color.White;
+            this.pBoxShowStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pBoxShowStyle.Location = new System.Drawing.Point(253, 3);
+            this.pBoxShowStyle.Name = "pBoxShowStyle";
+            this.pBoxShowStyle.Size = new System.Drawing.Size(64, 64);
+            this.pBoxShowStyle.TabIndex = 10;
+            this.pBoxShowStyle.TabStop = false;
+            this.pBoxShowStyle.Paint += new System.Windows.Forms.PaintEventHandler(this.pBoxShowStyle_Paint);
             // 
             // tabPageLabel
             // 
-            this.tabPageLabel.Controls.Add(this.pBoxShowFontStyle);
-            this.tabPageLabel.Controls.Add(this.pBoxFontColor);
-            this.tabPageLabel.Controls.Add(this.label13);
-            this.tabPageLabel.Controls.Add(this.buttonSetFont);
-            this.tabPageLabel.Controls.Add(this.labelFontName);
-            this.tabPageLabel.Controls.Add(this.label12);
+            this.tabPageLabel.Controls.Add(this.panelFont);
             this.tabPageLabel.Controls.Add(this.checkBoxLabelVisible);
             this.tabPageLabel.Location = new System.Drawing.Point(4, 33);
             this.tabPageLabel.Name = "tabPageLabel";
             this.tabPageLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLabel.Size = new System.Drawing.Size(595, 494);
+            this.tabPageLabel.Size = new System.Drawing.Size(591, 494);
             this.tabPageLabel.TabIndex = 2;
             this.tabPageLabel.Text = "注记";
             this.tabPageLabel.UseVisualStyleBackColor = true;
+            // 
+            // panelFont
+            // 
+            this.panelFont.Controls.Add(this.pBoxShowFontStyle);
+            this.panelFont.Controls.Add(this.cbBoxLabelField);
+            this.panelFont.Controls.Add(this.pBoxFontColor);
+            this.panelFont.Controls.Add(this.label14);
+            this.panelFont.Controls.Add(this.label13);
+            this.panelFont.Controls.Add(this.buttonSetFont);
+            this.panelFont.Controls.Add(this.label12);
+            this.panelFont.Controls.Add(this.labelFontName);
+            this.panelFont.Location = new System.Drawing.Point(6, 63);
+            this.panelFont.Name = "panelFont";
+            this.panelFont.Size = new System.Drawing.Size(586, 267);
+            this.panelFont.TabIndex = 14;
             // 
             // pBoxShowFontStyle
             // 
             this.pBoxShowFontStyle.BackColor = System.Drawing.Color.White;
             this.pBoxShowFontStyle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxShowFontStyle.Location = new System.Drawing.Point(186, 250);
+            this.pBoxShowFontStyle.Location = new System.Drawing.Point(188, 161);
             this.pBoxShowFontStyle.Name = "pBoxShowFontStyle";
             this.pBoxShowFontStyle.Size = new System.Drawing.Size(210, 81);
             this.pBoxShowFontStyle.TabIndex = 11;
             this.pBoxShowFontStyle.TabStop = false;
+            this.pBoxShowFontStyle.Paint += new System.Windows.Forms.PaintEventHandler(this.pBoxShowFontStyle_Paint);
+            // 
+            // cbBoxLabelField
+            // 
+            this.cbBoxLabelField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoxLabelField.FormattingEnabled = true;
+            this.cbBoxLabelField.Location = new System.Drawing.Point(148, 45);
+            this.cbBoxLabelField.Name = "cbBoxLabelField";
+            this.cbBoxLabelField.Size = new System.Drawing.Size(164, 32);
+            this.cbBoxLabelField.TabIndex = 13;
+            this.cbBoxLabelField.SelectedIndexChanged += new System.EventHandler(this.cbBoxLabelField_SelectedIndexChanged);
             // 
             // pBoxFontColor
             // 
             this.pBoxFontColor.BackColor = System.Drawing.Color.White;
             this.pBoxFontColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBoxFontColor.Location = new System.Drawing.Point(154, 177);
+            this.pBoxFontColor.Location = new System.Drawing.Point(471, 45);
             this.pBoxFontColor.Name = "pBoxFontColor";
             this.pBoxFontColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxFontColor.TabIndex = 8;
             this.pBoxFontColor.TabStop = false;
+            this.pBoxFontColor.Click += new System.EventHandler(this.pBoxFontColor_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(35, 48);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(107, 25);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "注记字段：";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(41, 177);
+            this.label13.Location = new System.Drawing.Point(358, 48);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(107, 25);
             this.label13.TabIndex = 7;
@@ -601,28 +701,29 @@
             // 
             // buttonSetFont
             // 
-            this.buttonSetFont.Location = new System.Drawing.Point(402, 104);
+            this.buttonSetFont.Location = new System.Drawing.Point(393, 95);
             this.buttonSetFont.Name = "buttonSetFont";
             this.buttonSetFont.Size = new System.Drawing.Size(106, 39);
             this.buttonSetFont.TabIndex = 6;
             this.buttonSetFont.Text = "设置字体";
             this.buttonSetFont.UseVisualStyleBackColor = true;
-            // 
-            // labelFontName
-            // 
-            this.labelFontName.Location = new System.Drawing.Point(116, 111);
-            this.labelFontName.Name = "labelFontName";
-            this.labelFontName.Size = new System.Drawing.Size(280, 25);
-            this.labelFontName.TabIndex = 5;
+            this.buttonSetFont.Click += new System.EventHandler(this.buttonSetFont_Click);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(41, 111);
+            this.label12.Location = new System.Drawing.Point(32, 102);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(69, 25);
             this.label12.TabIndex = 4;
             this.label12.Text = "字体：";
+            // 
+            // labelFontName
+            // 
+            this.labelFontName.Location = new System.Drawing.Point(107, 102);
+            this.labelFontName.Name = "labelFontName";
+            this.labelFontName.Size = new System.Drawing.Size(280, 25);
+            this.labelFontName.TabIndex = 5;
             // 
             // checkBoxLabelVisible
             // 
@@ -633,6 +734,7 @@
             this.checkBoxLabelVisible.TabIndex = 3;
             this.checkBoxLabelVisible.Text = "显示注记";
             this.checkBoxLabelVisible.UseVisualStyleBackColor = true;
+            this.checkBoxLabelVisible.CheckedChanged += new System.EventHandler(this.checkBoxLabelVisible_CheckedChanged);
             // 
             // buttonOK
             // 
@@ -642,6 +744,7 @@
             this.buttonOK.TabIndex = 1;
             this.buttonOK.Text = "确定";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -651,36 +754,13 @@
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
-            this.flowLayoutPanel1.Controls.Add(this.panelColumns);
-            this.flowLayoutPanel1.Controls.Add(this.panelBreakPoints);
-            this.flowLayoutPanel1.Controls.Add(this.groupPolygon);
-            this.flowLayoutPanel1.Controls.Add(this.groupPolyline);
-            this.flowLayoutPanel1.Controls.Add(this.groupPoint);
-            this.flowLayoutPanel1.Controls.Add(this.panel1);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(589, 488);
-            this.flowLayoutPanel1.TabIndex = 11;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.pBoxShowStyle);
-            this.panel1.Location = new System.Drawing.Point(588, 334);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(576, 73);
-            this.panel1.TabIndex = 11;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(625, 602);
+            this.ClientSize = new System.Drawing.Size(622, 602);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.tabControl);
@@ -696,12 +776,14 @@
             this.tabPageNorm.ResumeLayout(false);
             this.tabPageNorm.PerformLayout();
             this.tabPageRender.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panelColumns.ResumeLayout(false);
+            this.panelColumns.PerformLayout();
             this.panelBreakPoints.ResumeLayout(false);
             this.panelBreakPoints.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupNum)).EndInit();
-            this.panelColumns.ResumeLayout(false);
-            this.panelColumns.PerformLayout();
             this.groupPolygon.ResumeLayout(false);
             this.groupPolygon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFillColor)).EndInit();
@@ -714,14 +796,14 @@
             this.groupPoint.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPointSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxPointColor)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).EndInit();
             this.tabPageLabel.ResumeLayout(false);
             this.tabPageLabel.PerformLayout();
+            this.panelFont.ResumeLayout(false);
+            this.panelFont.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -780,5 +862,8 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ComboBox cbBoxLabelField;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Panel panelFont;
     }
 }

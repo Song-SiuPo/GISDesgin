@@ -138,6 +138,7 @@
   <ItemGroup>
     <None Include="Resources\GenericDocument16.png" />
     <Content Include="Resources\ArcMap16.png" />
+    <None Include="Resources\Cross.ico" />
     <Content Include="Resources\DataAdd16.png" />
     <None Include="Resources\EditingVertex16.png" />
     <Content Include="Resources\ElementSelectTool16.png" />
@@ -150,8 +151,11 @@
     <Content Include="Resources\GenericSearch16.png" />
     <None Include="Resources\PanTool_B_16.png" />
     <None Include="Resources\SelectionSelectTool16.png" />
+    <None Include="Resources\PanUp.ico" />
     <Content Include="Resources\ZoomFixedZoomOut16.png" />
+    <None Include="Resources\ZoomIn.ico" />
     <Content Include="Resources\ZoomInTool_B_16.png" />
+    <None Include="Resources\ZoomOut.ico" />
     <Content Include="Resources\ZoomOutTool_B_16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
