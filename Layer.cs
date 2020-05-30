@@ -41,6 +41,7 @@ namespace simpleGIS
             Renderer = new SimpleRenderer();
             LabelVisible = false;
             LabelStyle = new LabelStyle();
+            Table = new DataTable();
             Table.Columns.Add("ID");
             SelectedItems = new List<int>();
         }
@@ -55,6 +56,7 @@ namespace simpleGIS
             Renderer = new SimpleRenderer();
             LabelVisible = false;
             LabelStyle = new LabelStyle();
+            Table = new DataTable();
             Table.Columns.Add("ID");
             SelectedItems = new List<int>();
         }
@@ -68,6 +70,7 @@ namespace simpleGIS
             Renderer = new SimpleRenderer();
             LabelVisible = false;
             LabelStyle = new LabelStyle();
+            Table = new DataTable();
             Table.Columns.Add("ID");
             SelectedItems = new List<int>();
         }
