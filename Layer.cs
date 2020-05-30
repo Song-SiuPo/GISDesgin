@@ -15,7 +15,7 @@ namespace simpleGIS
         public string Name { get; set; }   //图层名字
         public bool Visible { get; set; }    //图层是否可见
         public bool IsEdit { get; set; }    //图层是否在编辑状态
-        public List<Geometry> Features { get; set; }   //要素集的几何数据
+        public List<Geometry> Features { get; set; } = new List<Geometry>();   //要素集的几何数据
         public Type FeatureType { get; set; }   //要素集Features中元素的几何类型
         public DataTable Table { get; set; }   //要素集的属性数据
         public List<int> SelectedItems{ get; set; }   //选中的要素，int记录其ID
@@ -38,11 +38,11 @@ namespace simpleGIS
             IsEdit = false;
             FeatureType = typeof(PointD);   //默认类型为点
             Box = new RectangleD();
-            Renderer = new SimpleRenderer();
+            Renderer = new SimpleRenderer(FeatureType);
             LabelVisible = false;
             LabelStyle = new LabelStyle();
             Table = new DataTable();
-            Table.Columns.Add("ID");
+            Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
         }
 
@@ -53,11 +53,11 @@ namespace simpleGIS
             IsEdit = false;
             FeatureType = type;
             Box = new RectangleD();
-            Renderer = new SimpleRenderer();
+            Renderer = new SimpleRenderer(FeatureType);
             LabelVisible = false;
             LabelStyle = new LabelStyle();
             Table = new DataTable();
-            Table.Columns.Add("ID");
+            Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
         }
         public Layer (string name ,Type type)
@@ -67,11 +67,11 @@ namespace simpleGIS
             IsEdit = false;
             FeatureType = type;   //默认类型为点
             Box = new RectangleD();
-            Renderer = new SimpleRenderer();
+            Renderer = new SimpleRenderer(FeatureType);
             LabelVisible = false;
             LabelStyle = new LabelStyle();
             Table = new DataTable();
-            Table.Columns.Add("ID");
+            Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
         }
 
