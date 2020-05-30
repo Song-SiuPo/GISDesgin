@@ -22,11 +22,25 @@ namespace simpleGIS
         //CTRL快捷键实现
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyValue)
+            if (ModifierKeys == Keys.Control)
             {
-                default:
-                    break;
+                switch (e.KeyCode)
+                {
+                    case Keys.N:
+                        tsButtonNew.PerformClick();
+                        break;
+                    case Keys.O:
+                        tsButtonOpen.PerformClick();
+                        break;
+                    case Keys.S:
+                        tsButtonSave.PerformClick();
+                        break;
+                    case Keys.P:
+                        tsButtonSavePic.PerformClick();
+                        break;
+                }
             }
+
         }
 
         //文件-新建空白地图
