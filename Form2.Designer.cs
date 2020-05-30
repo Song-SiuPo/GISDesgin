@@ -116,7 +116,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(601, 531);
+            this.tabControl.Size = new System.Drawing.Size(599, 531);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageNorm
@@ -127,7 +127,7 @@
             this.tabPageNorm.Location = new System.Drawing.Point(4, 33);
             this.tabPageNorm.Name = "tabPageNorm";
             this.tabPageNorm.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageNorm.Size = new System.Drawing.Size(592, 494);
+            this.tabPageNorm.Size = new System.Drawing.Size(593, 494);
             this.tabPageNorm.TabIndex = 0;
             this.tabPageNorm.Text = "常规";
             this.tabPageNorm.UseVisualStyleBackColor = true;
@@ -167,7 +167,7 @@
             this.tabPageRender.Location = new System.Drawing.Point(4, 33);
             this.tabPageRender.Name = "tabPageRender";
             this.tabPageRender.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRender.Size = new System.Drawing.Size(593, 494);
+            this.tabPageRender.Size = new System.Drawing.Size(591, 494);
             this.tabPageRender.TabIndex = 1;
             this.tabPageRender.Text = "图层渲染";
             this.tabPageRender.UseVisualStyleBackColor = true;
@@ -185,7 +185,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(587, 488);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(585, 488);
             this.flowLayoutPanel1.TabIndex = 11;
             // 
             // groupBox1
@@ -620,6 +620,7 @@
             this.pBoxShowStyle.Size = new System.Drawing.Size(64, 64);
             this.pBoxShowStyle.TabIndex = 10;
             this.pBoxShowStyle.TabStop = false;
+            this.pBoxShowStyle.Paint += new System.Windows.Forms.PaintEventHandler(this.pBoxShowStyle_Paint);
             // 
             // tabPageLabel
             // 
@@ -628,7 +629,7 @@
             this.tabPageLabel.Location = new System.Drawing.Point(4, 33);
             this.tabPageLabel.Name = "tabPageLabel";
             this.tabPageLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLabel.Size = new System.Drawing.Size(592, 494);
+            this.tabPageLabel.Size = new System.Drawing.Size(591, 494);
             this.tabPageLabel.TabIndex = 2;
             this.tabPageLabel.Text = "注记";
             this.tabPageLabel.UseVisualStyleBackColor = true;
@@ -657,6 +658,7 @@
             this.pBoxShowFontStyle.Size = new System.Drawing.Size(210, 81);
             this.pBoxShowFontStyle.TabIndex = 11;
             this.pBoxShowFontStyle.TabStop = false;
+            this.pBoxShowFontStyle.Paint += new System.Windows.Forms.PaintEventHandler(this.pBoxShowFontStyle_Paint);
             // 
             // cbBoxLabelField
             // 
@@ -758,7 +760,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(624, 602);
+            this.ClientSize = new System.Drawing.Size(622, 602);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.tabControl);
