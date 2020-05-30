@@ -84,6 +84,7 @@ namespace simpleGIS
                     }
                     mapOperation = value;
                     ClearEditTrack();
+                    ChangeCursor();
                     OperationTypeChanged?.Invoke(this);
                 }
             }
@@ -145,10 +146,22 @@ namespace simpleGIS
         public void SaveFile(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            // 保存数据把已选择对象去除
+            List<int>[] selectedItems = new List<int>[map.Layers.Count];
+            for (int i = 0; i < map.Layers.Count; i++)
+            {
+                selectedItems[i] = map.Layers[i].SelectedItems;
+                map.Layers[i].SelectedItems = new List<int>();
+            }
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(fs, map);
             fs.Dispose();
             needSave = false;
+            // 恢复已选择数据
+            for (int i = 0; i < map.Layers.Count; i++)
+            {
+                map.Layers[i].SelectedItems = selectedItems[i];
+            }
         }
 
         /// <summary>
@@ -711,6 +724,7 @@ namespace simpleGIS
                 }
                 if (mapOperation != OperationType.Edit) { mapOperation = OperationType.None; }
                 trackingPoints.Clear();
+                ChangeCursor();
                 OperationTypeChanged.Invoke(this);
             }
         }
@@ -766,6 +780,26 @@ namespace simpleGIS
             }
         }
 
+        // mapOperation模式改变时，更改光标
+        private void ChangeCursor()
+        {
+            switch (mapOperation)
+            {
+                case OperationType.ZoomIn:
+                    Cursor = zoomInCursor;
+                    break;
+                case OperationType.ZoomOut:
+                    Cursor = zoomOutCursor;
+                    break;
+                case OperationType.Track:
+                    Cursor = Cursors.Cross;
+                    break;
+                default:
+                    Cursor = Cursors.Arrow;
+                    break;
+            }
+        }
+
         #endregion
 
         #region 响应事件处理
@@ -814,6 +848,10 @@ namespace simpleGIS
                 {
                     case OperationType.Edit:
                         StartEditGeometry(e.X, e.Y);
+                        foreach(Geometry geo in editGeometries)
+                        {
+                            if (geo != null) { Cursor = Cursors.NoMove2D; break; }
+                        }
                         break;
                     case OperationType.Track:
                         if (e.Clicks == 1)
@@ -924,6 +962,9 @@ namespace simpleGIS
                         SelectFeature(e.X, e.Y);
                         Refresh();
                         break;
+                    case OperationType.Edit:
+                        Cursor = Cursors.Arrow;
+                        break;
                 }
             }
         }
@@ -1030,6 +1071,7 @@ namespace simpleGIS
         {
             trackingPoints.Clear();
             mapOperation = OperationType.Track;
+            ChangeCursor();
             OperationTypeChanged?.Invoke(this);
         }
 
