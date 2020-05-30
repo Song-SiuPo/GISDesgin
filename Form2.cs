@@ -13,13 +13,16 @@ namespace simpleGIS
     {
         #region 字段
 
+        // 常规
+        private string layerName;   // 真正的图层名
+
         // 三种渲染器都存着
-        SimpleRenderer simpleR = new SimpleRenderer();
-        UniqueValueRenderer uniqueR = new UniqueValueRenderer();
-        ClassBreaksRenderer classBreaksR = new ClassBreaksRenderer();
+        private SimpleRenderer simpleR = new SimpleRenderer();
+        private UniqueValueRenderer uniqueR = new UniqueValueRenderer();
+        private ClassBreaksRenderer classBreaksR = new ClassBreaksRenderer();
 
         // 注记样式
-        LabelStyle labelStyle;
+        private LabelStyle labelStyle;
 
         #endregion
 
@@ -28,7 +31,7 @@ namespace simpleGIS
         /// <summary>
         /// 获取图层的名字
         /// </summary>
-        public string LayerName { get => txtBoxLayerName.Text; }
+        public string LayerName { get => layerName; }
 
         /// <summary>
         /// 获取图层是否可见
@@ -66,8 +69,9 @@ namespace simpleGIS
 
             // 将Layer的属性值移到界面上
             // 常规
-            txtBoxLayerName.Text = layer.Name;
+            layerName = txtBoxLayerName.Text = layer.Name;
             checkBoxLabelVisible.Checked = layer.Visible;
+            checkBoxLabelVisible.Enabled = !layer.IsEdit;
 
             // 渲染
             // 从源图层读取到简单渲染
@@ -156,8 +160,7 @@ namespace simpleGIS
             labelFontName.Text = layer.LabelStyle.Font.ToString();
             pBoxBoundColor.BackColor = layer.LabelStyle.Color;
         }
-
-
+        
         #region 私有函数
 
         // 复制符号
@@ -181,6 +184,142 @@ namespace simpleGIS
                     (SolidBrush)temp.Fill.Clone());
             }
             return newSymbol;
+        }
+
+        #endregion
+
+        #region 事件处理
+
+        // 按下OK按钮
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 按下取消按钮
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 图层名输入框完成编辑
+        private void txtBoxLayerName_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        // 选择简单渲染
+        private void rbSimple_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 选择唯一值渲染
+        private void rbUniqueValue_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 选择分级渲染
+        private void rbClassBreak_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 唯一值和分级的字段改变
+        private void cbBoxColumn_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 分级断裂点数改变
+        private void numGroupNum_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 唯一值和分级的选择具体项目（符号）
+        private void cbBoxGroups_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 分级的断裂点数值编辑完毕
+        private void txtBoxMaxValue_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        // 请求改变多边形边界色
+        private void pBoxBoundColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 请求改变多边形填充色
+        private void pBoxFillColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 线形状发生改变
+        private void cbBoxLineDash_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 请求改变线颜色
+        private void pBoxLineColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 线宽度改变
+        private void numLineWidth_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 点形状改变
+        private void cbBoxPointType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 点颜色改变
+        private void pBoxPointColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 点大小改变
+        private void numPointSize_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 注记可见性改变
+        private void checkBoxLabelVisible_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 注记字段改变
+        private void cbBoxLabelField_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // 注记颜色改变
+        private void pBoxFontColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // 请求改变注记字体
+        private void buttonSetFont_Click(object sender, EventArgs e)
+        {
+
         }
 
         #endregion

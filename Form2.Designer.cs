@@ -71,18 +71,18 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pBoxShowStyle = new System.Windows.Forms.PictureBox();
             this.tabPageLabel = new System.Windows.Forms.TabPage();
+            this.panelFont = new System.Windows.Forms.Panel();
             this.pBoxShowFontStyle = new System.Windows.Forms.PictureBox();
+            this.cbBoxLabelField = new System.Windows.Forms.ComboBox();
             this.pBoxFontColor = new System.Windows.Forms.PictureBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.buttonSetFont = new System.Windows.Forms.Button();
-            this.labelFontName = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.labelFontName = new System.Windows.Forms.Label();
             this.checkBoxLabelVisible = new System.Windows.Forms.CheckBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
-            this.cbBoxLabelField = new System.Windows.Forms.ComboBox();
-            this.panelFont = new System.Windows.Forms.Panel();
             this.tabControl.SuspendLayout();
             this.tabPageNorm.SuspendLayout();
             this.tabPageRender.SuspendLayout();
@@ -103,9 +103,9 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).BeginInit();
             this.tabPageLabel.SuspendLayout();
+            this.panelFont.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).BeginInit();
-            this.panelFont.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -116,7 +116,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(603, 531);
+            this.tabControl.Size = new System.Drawing.Size(601, 531);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageNorm
@@ -127,7 +127,7 @@
             this.tabPageNorm.Location = new System.Drawing.Point(4, 33);
             this.tabPageNorm.Name = "tabPageNorm";
             this.tabPageNorm.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageNorm.Size = new System.Drawing.Size(595, 494);
+            this.tabPageNorm.Size = new System.Drawing.Size(592, 494);
             this.tabPageNorm.TabIndex = 0;
             this.tabPageNorm.Text = "常规";
             this.tabPageNorm.UseVisualStyleBackColor = true;
@@ -149,6 +149,7 @@
             this.txtBoxLayerName.Name = "txtBoxLayerName";
             this.txtBoxLayerName.Size = new System.Drawing.Size(200, 31);
             this.txtBoxLayerName.TabIndex = 1;
+            this.txtBoxLayerName.Leave += new System.EventHandler(this.txtBoxLayerName_Leave);
             // 
             // label1
             // 
@@ -166,7 +167,7 @@
             this.tabPageRender.Location = new System.Drawing.Point(4, 33);
             this.tabPageRender.Name = "tabPageRender";
             this.tabPageRender.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRender.Size = new System.Drawing.Size(595, 494);
+            this.tabPageRender.Size = new System.Drawing.Size(593, 494);
             this.tabPageRender.TabIndex = 1;
             this.tabPageRender.Text = "图层渲染";
             this.tabPageRender.UseVisualStyleBackColor = true;
@@ -184,7 +185,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(589, 488);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(587, 488);
             this.flowLayoutPanel1.TabIndex = 11;
             // 
             // groupBox1
@@ -211,6 +212,7 @@
             this.rbClassBreak.TabStop = true;
             this.rbClassBreak.Text = "分级渲染";
             this.rbClassBreak.UseVisualStyleBackColor = true;
+            this.rbClassBreak.CheckedChanged += new System.EventHandler(this.rbClassBreak_CheckedChanged);
             // 
             // rbUniqueValue
             // 
@@ -224,6 +226,7 @@
             this.rbUniqueValue.TabStop = true;
             this.rbUniqueValue.Text = "唯一值渲染";
             this.rbUniqueValue.UseVisualStyleBackColor = true;
+            this.rbUniqueValue.CheckedChanged += new System.EventHandler(this.rbUniqueValue_CheckedChanged);
             // 
             // rbSimple
             // 
@@ -236,6 +239,7 @@
             this.rbSimple.TabStop = true;
             this.rbSimple.Text = "简单渲染";
             this.rbSimple.UseVisualStyleBackColor = true;
+            this.rbSimple.CheckedChanged += new System.EventHandler(this.rbSimple_CheckedChanged);
             // 
             // panelColumns
             // 
@@ -269,6 +273,7 @@
             this.cbBoxGroups.Name = "cbBoxGroups";
             this.cbBoxGroups.Size = new System.Drawing.Size(121, 32);
             this.cbBoxGroups.TabIndex = 7;
+            this.cbBoxGroups.SelectedIndexChanged += new System.EventHandler(this.cbBoxGroups_SelectedIndexChanged);
             // 
             // cbBoxColumn
             // 
@@ -278,6 +283,7 @@
             this.cbBoxColumn.Name = "cbBoxColumn";
             this.cbBoxColumn.Size = new System.Drawing.Size(121, 32);
             this.cbBoxColumn.TabIndex = 5;
+            this.cbBoxColumn.SelectedIndexChanged += new System.EventHandler(this.cbBoxColumn_SelectedIndexChanged);
             // 
             // labelItem
             // 
@@ -307,6 +313,7 @@
             this.txtBoxMaxValue.Name = "txtBoxMaxValue";
             this.txtBoxMaxValue.Size = new System.Drawing.Size(161, 31);
             this.txtBoxMaxValue.TabIndex = 10;
+            this.txtBoxMaxValue.Leave += new System.EventHandler(this.txtBoxMaxValue_Leave);
             // 
             // label11
             // 
@@ -339,6 +346,7 @@
             0,
             0,
             0});
+            this.numGroupNum.ValueChanged += new System.EventHandler(this.numGroupNum_ValueChanged);
             // 
             // label10
             // 
@@ -372,6 +380,7 @@
             this.pBoxFillColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxFillColor.TabIndex = 9;
             this.pBoxFillColor.TabStop = false;
+            this.pBoxFillColor.Click += new System.EventHandler(this.pBoxFillColor_Click);
             // 
             // label9
             // 
@@ -392,6 +401,7 @@
             this.pBoxBoundColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxBoundColor.TabIndex = 7;
             this.pBoxBoundColor.TabStop = false;
+            this.pBoxBoundColor.Click += new System.EventHandler(this.pBoxBoundColor_Click);
             // 
             // label8
             // 
@@ -422,6 +432,11 @@
             // 
             this.numLineWidth.DecimalPlaces = 1;
             this.numLineWidth.Location = new System.Drawing.Point(167, 104);
+            this.numLineWidth.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
             this.numLineWidth.Name = "numLineWidth";
             this.numLineWidth.Size = new System.Drawing.Size(94, 31);
             this.numLineWidth.TabIndex = 7;
@@ -430,6 +445,7 @@
             0,
             0,
             0});
+            this.numLineWidth.ValueChanged += new System.EventHandler(this.numLineWidth_ValueChanged);
             // 
             // label7
             // 
@@ -450,6 +466,7 @@
             this.pBoxLineColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxLineColor.TabIndex = 5;
             this.pBoxLineColor.TabStop = false;
+            this.pBoxLineColor.Click += new System.EventHandler(this.pBoxLineColor_Click);
             // 
             // label6
             // 
@@ -475,6 +492,7 @@
             this.cbBoxLineDash.Name = "cbBoxLineDash";
             this.cbBoxLineDash.Size = new System.Drawing.Size(175, 32);
             this.cbBoxLineDash.TabIndex = 2;
+            this.cbBoxLineDash.SelectedIndexChanged += new System.EventHandler(this.cbBoxLineDash_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -505,14 +523,25 @@
             // 
             this.numPointSize.DecimalPlaces = 1;
             this.numPointSize.Location = new System.Drawing.Point(159, 101);
+            this.numPointSize.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numPointSize.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.numPointSize.Name = "numPointSize";
             this.numPointSize.Size = new System.Drawing.Size(94, 31);
             this.numPointSize.TabIndex = 5;
             this.numPointSize.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
+            this.numPointSize.ValueChanged += new System.EventHandler(this.numPointSize_ValueChanged);
             // 
             // label4
             // 
@@ -533,6 +562,7 @@
             this.pBoxPointColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxPointColor.TabIndex = 3;
             this.pBoxPointColor.TabStop = false;
+            this.pBoxPointColor.Click += new System.EventHandler(this.pBoxPointColor_Click);
             // 
             // label3
             // 
@@ -561,6 +591,7 @@
             this.cbBoxPointType.Name = "cbBoxPointType";
             this.cbBoxPointType.Size = new System.Drawing.Size(132, 32);
             this.cbBoxPointType.TabIndex = 1;
+            this.cbBoxPointType.SelectedIndexChanged += new System.EventHandler(this.cbBoxPointType_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -597,10 +628,25 @@
             this.tabPageLabel.Location = new System.Drawing.Point(4, 33);
             this.tabPageLabel.Name = "tabPageLabel";
             this.tabPageLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLabel.Size = new System.Drawing.Size(595, 494);
+            this.tabPageLabel.Size = new System.Drawing.Size(592, 494);
             this.tabPageLabel.TabIndex = 2;
             this.tabPageLabel.Text = "注记";
             this.tabPageLabel.UseVisualStyleBackColor = true;
+            // 
+            // panelFont
+            // 
+            this.panelFont.Controls.Add(this.pBoxShowFontStyle);
+            this.panelFont.Controls.Add(this.cbBoxLabelField);
+            this.panelFont.Controls.Add(this.pBoxFontColor);
+            this.panelFont.Controls.Add(this.label14);
+            this.panelFont.Controls.Add(this.label13);
+            this.panelFont.Controls.Add(this.buttonSetFont);
+            this.panelFont.Controls.Add(this.label12);
+            this.panelFont.Controls.Add(this.labelFontName);
+            this.panelFont.Location = new System.Drawing.Point(6, 63);
+            this.panelFont.Name = "panelFont";
+            this.panelFont.Size = new System.Drawing.Size(586, 267);
+            this.panelFont.TabIndex = 14;
             // 
             // pBoxShowFontStyle
             // 
@@ -612,6 +658,16 @@
             this.pBoxShowFontStyle.TabIndex = 11;
             this.pBoxShowFontStyle.TabStop = false;
             // 
+            // cbBoxLabelField
+            // 
+            this.cbBoxLabelField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBoxLabelField.FormattingEnabled = true;
+            this.cbBoxLabelField.Location = new System.Drawing.Point(148, 45);
+            this.cbBoxLabelField.Name = "cbBoxLabelField";
+            this.cbBoxLabelField.Size = new System.Drawing.Size(164, 32);
+            this.cbBoxLabelField.TabIndex = 13;
+            this.cbBoxLabelField.SelectedIndexChanged += new System.EventHandler(this.cbBoxLabelField_SelectedIndexChanged);
+            // 
             // pBoxFontColor
             // 
             this.pBoxFontColor.BackColor = System.Drawing.Color.White;
@@ -621,6 +677,16 @@
             this.pBoxFontColor.Size = new System.Drawing.Size(32, 32);
             this.pBoxFontColor.TabIndex = 8;
             this.pBoxFontColor.TabStop = false;
+            this.pBoxFontColor.Click += new System.EventHandler(this.pBoxFontColor_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(35, 48);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(107, 25);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "注记字段：";
             // 
             // label13
             // 
@@ -639,13 +705,7 @@
             this.buttonSetFont.TabIndex = 6;
             this.buttonSetFont.Text = "设置字体";
             this.buttonSetFont.UseVisualStyleBackColor = true;
-            // 
-            // labelFontName
-            // 
-            this.labelFontName.Location = new System.Drawing.Point(107, 102);
-            this.labelFontName.Name = "labelFontName";
-            this.labelFontName.Size = new System.Drawing.Size(280, 25);
-            this.labelFontName.TabIndex = 5;
+            this.buttonSetFont.Click += new System.EventHandler(this.buttonSetFont_Click);
             // 
             // label12
             // 
@@ -656,6 +716,13 @@
             this.label12.TabIndex = 4;
             this.label12.Text = "字体：";
             // 
+            // labelFontName
+            // 
+            this.labelFontName.Location = new System.Drawing.Point(107, 102);
+            this.labelFontName.Name = "labelFontName";
+            this.labelFontName.Size = new System.Drawing.Size(280, 25);
+            this.labelFontName.TabIndex = 5;
+            // 
             // checkBoxLabelVisible
             // 
             this.checkBoxLabelVisible.AutoSize = true;
@@ -665,6 +732,7 @@
             this.checkBoxLabelVisible.TabIndex = 3;
             this.checkBoxLabelVisible.Text = "显示注记";
             this.checkBoxLabelVisible.UseVisualStyleBackColor = true;
+            this.checkBoxLabelVisible.CheckedChanged += new System.EventHandler(this.checkBoxLabelVisible_CheckedChanged);
             // 
             // buttonOK
             // 
@@ -674,6 +742,7 @@
             this.buttonOK.TabIndex = 1;
             this.buttonOK.Text = "确定";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -683,45 +752,13 @@
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(35, 48);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(107, 25);
-            this.label14.TabIndex = 12;
-            this.label14.Text = "注记字段：";
-            // 
-            // cbBoxLabelField
-            // 
-            this.cbBoxLabelField.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbBoxLabelField.FormattingEnabled = true;
-            this.cbBoxLabelField.Location = new System.Drawing.Point(148, 45);
-            this.cbBoxLabelField.Name = "cbBoxLabelField";
-            this.cbBoxLabelField.Size = new System.Drawing.Size(164, 32);
-            this.cbBoxLabelField.TabIndex = 13;
-            // 
-            // panelFont
-            // 
-            this.panelFont.Controls.Add(this.pBoxShowFontStyle);
-            this.panelFont.Controls.Add(this.cbBoxLabelField);
-            this.panelFont.Controls.Add(this.pBoxFontColor);
-            this.panelFont.Controls.Add(this.label14);
-            this.panelFont.Controls.Add(this.label13);
-            this.panelFont.Controls.Add(this.buttonSetFont);
-            this.panelFont.Controls.Add(this.label12);
-            this.panelFont.Controls.Add(this.labelFontName);
-            this.panelFont.Location = new System.Drawing.Point(6, 63);
-            this.panelFont.Name = "panelFont";
-            this.panelFont.Size = new System.Drawing.Size(586, 267);
-            this.panelFont.TabIndex = 14;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(625, 602);
+            this.ClientSize = new System.Drawing.Size(624, 602);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.tabControl);
@@ -761,10 +798,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pBoxShowStyle)).EndInit();
             this.tabPageLabel.ResumeLayout(false);
             this.tabPageLabel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).EndInit();
             this.panelFont.ResumeLayout(false);
             this.panelFont.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxShowFontStyle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pBoxFontColor)).EndInit();
             this.ResumeLayout(false);
 
         }
