@@ -19,30 +19,6 @@ namespace simpleGIS
 
         #region 窗体和控件事件处理
 
-        //CTRL快捷键实现
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (ModifierKeys == Keys.Control)
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.N:
-                        tsButtonNew.PerformClick();
-                        break;
-                    case Keys.O:
-                        tsButtonOpen.PerformClick();
-                        break;
-                    case Keys.S:
-                        tsButtonSave.PerformClick();
-                        break;
-                    case Keys.P:
-                        tsButtonSavePic.PerformClick();
-                        break;
-                }
-            }
-
-        }
-
         //文件-新建空白地图
         private void menuItemNewMap_Click(object sender, EventArgs e)
         {
