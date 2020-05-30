@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using simpleGIS.Properties;
 
 namespace simpleGIS
 {
@@ -34,6 +35,10 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
+        private readonly Cursor zoomInCursor = new Cursor(Resources.ZoomIn.Handle);
+        private readonly Cursor zoomOutCursor = new Cursor(Resources.ZoomOut.Handle);
+        private readonly Cursor panCursor = new Cursor(Resources.PanUp.Handle);
+        private readonly Cursor crossCursor = new Cursor(Resources.Cross.Handle);
 
         // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
