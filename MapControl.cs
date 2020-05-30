@@ -47,12 +47,12 @@ namespace simpleGIS
 
         public MapControl()
         {
+            cache = new Bitmap(Width, Height);
             InitializeComponent();
 
             Graphics g = Graphics.FromHwnd(Handle);
             map = new Map(g);
             g.Dispose();
-            cache = new Bitmap(Width, Height);
             selectedmode = SelectedMode.New;
             mapOperation = OperationType.None;
             trackingPoints = new List<PointD>();
