@@ -200,7 +200,7 @@ namespace simpleGIS
         //选择-鼠标选择几何体
         private void menuItemSelectMouse_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Select;
         }
 
         //图层-查询语句选择
