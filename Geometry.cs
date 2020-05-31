@@ -9,9 +9,10 @@ using System.Text;
 
 namespace simpleGIS
 {
-  /// <summary>
-  /// 矩形类——外包矩形、框选矩形
-  /// </summary>
+    /// <summary>
+    /// 矩形类——外包矩形、框选矩形
+    /// </summary>
+    [Serializable]
     public class RectangleD
     {
         #region 属性
