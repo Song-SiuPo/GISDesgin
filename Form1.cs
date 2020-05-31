@@ -148,6 +148,7 @@ namespace simpleGIS
             }
             mapControl1.NewMap();
             showFeatureForm.LinkMap = mapControl1.Map;
+            clboxLayersUpdata();
             mapControl1.Refresh();
         }
 
@@ -185,6 +186,7 @@ namespace simpleGIS
                 }
             }
             openFileDialog.Dispose();
+            clboxLayersUpdata();
         }
 
         //文件-保存

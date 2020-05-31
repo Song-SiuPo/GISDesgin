@@ -49,6 +49,7 @@ namespace simpleGIS
     /// <summary>
     /// 几何类——基类
     /// </summary>
+    [Serializable]
     public abstract class Geometry
     {
         protected bool needRenewBox = true;
@@ -146,6 +147,7 @@ namespace simpleGIS
     /// <summary>
     /// 子类——点
     /// </summary>
+    [Serializable]
     public class PointD:Geometry
     {
         #region 属性
@@ -215,6 +217,7 @@ namespace simpleGIS
     /// <summary>
     /// 子类——线
     /// </summary>
+    [Serializable]
     public class Polyline:Geometry
     {
         #region 属性
@@ -334,6 +337,7 @@ namespace simpleGIS
     /// <summary>
     /// 子类——多边形
     /// </summary>
+    [Serializable]
     public class Polygon:Geometry
     {
         #region 属性
@@ -432,6 +436,7 @@ namespace simpleGIS
     /// <summary>
     /// 子类——多线
     /// </summary>
+    [Serializable]
     public class MultiPolyline:Geometry
     {
         #region 属性
@@ -547,6 +552,7 @@ namespace simpleGIS
     /// <summary>
     /// 子类——多多边形
     /// </summary>
+    [Serializable]
     public class MultiPolygon:Geometry
     {
         #region 属性
