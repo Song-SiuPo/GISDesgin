@@ -22,7 +22,6 @@ namespace simpleGIS
         //文件-新建空白地图
         private void menuItemNewMap_Click(object sender, EventArgs e)
         {
-
             if (mapControl1.NeedSave)
                 MessageBox.Show(this, "当前有未保存的更改。", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -80,22 +79,32 @@ namespace simpleGIS
             }
         }
 
+
         //编辑-编辑模式
         private void menuItemEditMode_Click(object sender, EventArgs e)
         {
-            
+            if(menuItemEdit.Checked)//checkonclick
+            {
+                menuItemEditGeo.Enabled = true;
+                menuItemNewGeo.Enabled = true;
+            }
+            else
+            {
+                menuItemEditGeo.Enabled = false;
+                menuItemNewGeo.Enabled = false;
+            }
         }
 
         //编辑-绘制新几何体
         private void menuItemNewGeo_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Track;
         }
 
         //编辑-编辑几何体
         private void menuItemEditGeo_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Edit;
         }
 
         //图层-创建新图层
@@ -113,30 +122,25 @@ namespace simpleGIS
         //图层-打开属性表
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
-            Form3 frm3 = new Form3();
-            int id = mapControl1.Map.SelectedLayer;
-            frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+
         }
 
         //图层-设置图层属性
         private void menuItemLayerAttr_Click(object sender, EventArgs e)
         {
-            int id = mapControl1.Map.SelectedLayer;
-            Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
+
         }
 
         //图层-图层上移
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
-            int id = mapControl1.Map.SelectedLayer;
-            mapControl1.Map.MoveUpLayer(id);
+
         }
 
         //图层-图层下移
         private void menuItemLayerDown_Click(object sender, EventArgs e)
         {
-            int id = mapControl1.Map.SelectedLayer;
-            mapControl1.Map.MoveDownLayer(id);
+
         }
 
         //选择-鼠标选择几何体
@@ -249,25 +253,34 @@ namespace simpleGIS
         //选择要素
         private void tsButtonSelect_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Select;
         }
 
         //编辑模式
         private void tsButtonEdit_Click(object sender, EventArgs e)
         {
-
+            if(tsButtonEdit.Checked)
+            {
+                tsButtonEditGeo.Enabled = true;
+                tsButtonNewGeo.Enabled = true;
+            }
+            else
+            {
+                tsButtonEditGeo.Enabled = false;
+                tsButtonNewGeo.Enabled = false;
+            }
         }
 
         //创建新要素
         private void tsButtonNewGeo_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Track;
         }
 
         //编辑要素几何
         private void tsButtonEditGeo_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Edit;
         }
 
         #endregion
