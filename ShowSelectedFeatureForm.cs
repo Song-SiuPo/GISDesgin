@@ -52,10 +52,6 @@ namespace simpleGIS
             {
                 listBox1.Items.Add(item);
             }
-            if (listBox1.Items.Count > 0)
-            {
-                listBox1.SelectedIndex = 0;
-            }
         }
 
 
