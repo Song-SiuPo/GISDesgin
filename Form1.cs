@@ -29,23 +29,14 @@ namespace simpleGIS
         //clboxLayers数据同步
         private void clboxLayersUpdata()
         {
-            for (int i = 0; i < mapControl1.Map.Layers.Count; i++)
-            {
-                if (i < clboxLayers.Items.Count)
-                {
-                    clboxLayers.Items[i] = mapControl1.Map.Layers[i].Name;
-                    clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
-                }
-                else
-                {
-                    clboxLayers.Items.Add(mapControl1.Map.Layers[i].Name);
-                    clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
-                }
+            int index = mapControl1.Map.SelectedLayer;
+            clboxLayers.Items.Clear();
+                for (int i = 0; i < mapControl1.Map.Layers.Count; i++)
+            { 
+                clboxLayers.Items.Add(mapControl1.Map.Layers[i].Name);
+                clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
             }
-            while (clboxLayers.Items.Count > mapControl1.Map.Layers.Count)
-            {
-                clboxLayers.Items.RemoveAt(clboxLayers.Items.Count - 1);
-            }
+            clboxLayers.SelectedIndex = index;
             clboxLayers.Refresh();
         }
 
@@ -55,7 +46,7 @@ namespace simpleGIS
             mapControl1.Map.SelectLayer(clboxLayers.SelectedIndex);
             if (clboxLayers.SelectedIndex == -1)
             {
-                menuItemEdit.Enabled = false;
+                menuItemEditMode.Enabled = false;
                 menuItemDelLayer.Enabled = false;
                 menuItemLayerTable.Enabled = false;
                 menuItemLayerAttr.Enabled = false;
@@ -74,7 +65,7 @@ namespace simpleGIS
                 menuItemLayerAttr.Enabled = true;
                 menuItemSelectStr.Enabled = true;
                 tsButtonZoomScale.Enabled = true;
-                menuItemEdit.Enabled = layer.Visible;
+                menuItemEditMode.Enabled = layer.Visible;
                 menuItemSelectMouse.Enabled = layer.Visible;
                 tsButtonEdit.Enabled = layer.Visible;
                 menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
@@ -87,6 +78,13 @@ namespace simpleGIS
         {
             if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
                 mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
+            if (e.Index == mapControl1.Map.SelectedLayer)
+            {
+                Layer layer = mapControl1.Map.Layers[e.Index];
+                menuItemEditMode.Enabled = layer.Visible;
+                menuItemSelectMouse.Enabled = layer.Visible;
+                tsButtonEdit.Enabled = layer.Visible;
+            }
         }
 
         // 弹出选择文件框并保存文件
@@ -216,6 +214,9 @@ namespace simpleGIS
                 tsButtonEditGeo.Enabled = false;
                 tsButtonNewGeo.Enabled = false;
                 clboxLayers.Enabled = true;
+                if (mapControl1.OperationType == OperationType.Edit ||
+                    mapControl1.OperationType == OperationType.Track)
+                { mapControl1.OperationType = OperationType.None; }
             }
             //Refresh();
         }
@@ -256,6 +257,7 @@ namespace simpleGIS
         //图层-打开属性表
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
+            // TODO:属性表逻辑未知
             Form3 frm3 = new Form3();
             int id = mapControl1.Map.SelectedLayer;
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
@@ -401,7 +403,7 @@ namespace simpleGIS
         //编辑模式
         private void tsButtonEdit_Click(object sender, EventArgs e)
         {
-            menuItemEdit.PerformClick();
+            menuItemEditMode.PerformClick();
         }
 
         //创建新要素
@@ -438,7 +440,65 @@ namespace simpleGIS
         {
             tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
         }
-                    
+
+        // mapControl当前工具发生变化
+        private void mapControl1_OperationTypeChanged(object sender)
+        {
+            tsButtonOperateNone.Checked = false;
+            tsButtonPan.Checked = false;
+            tsButtonZoomIn.Checked = false;
+            tsButtonZoomOut.Checked = false;
+            tsButtonSelect.Checked = false;
+            tsButtonNewGeo.Checked = false;
+            tsButtonEditGeo.Checked = false;
+            switch (mapControl1.OperationType)
+            {
+                case OperationType.None:
+                    tsButtonOperateNone.Checked = true;
+                    break;
+                case OperationType.Pan:
+                    tsButtonPan.Checked = true;
+                    break;
+                case OperationType.ZoomIn:
+                    tsButtonZoomIn.Checked = true;
+                    break;
+                case OperationType.ZoomOut:
+                    tsButtonZoomOut.Checked = true;
+                    break;
+                case OperationType.Select:
+                    tsButtonSelect.Checked = true;
+                    break;
+                case OperationType.Track:
+                    tsButtonNewGeo.Checked = true;
+                    break;
+                case OperationType.Edit:
+                    tsButtonEditGeo.Checked = true;
+                    break;
+            }
+        }
+
+        private void mapControl1_SelectedModeChanged(object sender)
+        {
+            menuItemSelectNew.Checked = false;
+            menuItemSelectDel.Checked = false;
+            menuItemSelectUnion.Checked = false;
+            menuItemSelectIntersect.Checked = false;
+            switch (mapControl1.SelectedMode)
+            {
+                case SelectedMode.New:
+                    menuItemSelectNew.Checked = true;
+                    break;
+                case SelectedMode.Add:
+                    menuItemSelectUnion.Checked = true;
+                    break;
+                case SelectedMode.Delete:
+                    menuItemSelectDel.Checked = true;
+                    break;
+                case SelectedMode.Intersect:
+                    menuItemSelectIntersect.Checked = true;
+                    break;
+            }
+        }
     }
         
 }

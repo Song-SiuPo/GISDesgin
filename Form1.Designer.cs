@@ -79,6 +79,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslScale = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslCoordinate = new System.Windows.Forms.ToolStripStatusLabel();
+            this.MenuItemShowSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.mapControl1 = new simpleGIS.MapControl();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -191,6 +192,7 @@
             // menuItemNewGeo
             // 
             this.menuItemNewGeo.Enabled = false;
+            this.menuItemNewGeo.Image = global::simpleGIS.Properties.Resources.GenericBlackAdd16;
             this.menuItemNewGeo.Name = "menuItemNewGeo";
             this.menuItemNewGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemNewGeo.Text = "绘制新几何体(&N)";
@@ -199,6 +201,7 @@
             // menuItemEditGeo
             // 
             this.menuItemEditGeo.Enabled = false;
+            this.menuItemEditGeo.Image = global::simpleGIS.Properties.Resources.EditingVertex16;
             this.menuItemEditGeo.Name = "menuItemEditGeo";
             this.menuItemEditGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemEditGeo.Text = "编辑几何体(&E)";
@@ -221,6 +224,7 @@
             // 
             // menuItemNewLayer
             // 
+            this.menuItemNewLayer.Image = global::simpleGIS.Properties.Resources.DataAdd16;
             this.menuItemNewLayer.Name = "menuItemNewLayer";
             this.menuItemNewLayer.Size = new System.Drawing.Size(230, 30);
             this.menuItemNewLayer.Text = "创建新图层(&N)";
@@ -277,6 +281,7 @@
             this.menuItemSelect.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSelectMouse,
             this.menuItemSelectStr,
+            this.MenuItemShowSelected,
             this.menuItemSelectMode});
             this.menuItemSelect.Name = "menuItemSelect";
             this.menuItemSelect.Size = new System.Drawing.Size(80, 21);
@@ -285,8 +290,9 @@
             // menuItemSelectMouse
             // 
             this.menuItemSelectMouse.Enabled = false;
+            this.menuItemSelectMouse.Image = global::simpleGIS.Properties.Resources.SelectionSelectTool16;
             this.menuItemSelectMouse.Name = "menuItemSelectMouse";
-            this.menuItemSelectMouse.Size = new System.Drawing.Size(254, 30);
+            this.menuItemSelectMouse.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectMouse.Text = "鼠标选择几何体(&M)";
             this.menuItemSelectMouse.Click += new System.EventHandler(this.menuItemSelectMouse_Click);
             // 
@@ -294,7 +300,7 @@
             // 
             this.menuItemSelectStr.Enabled = false;
             this.menuItemSelectStr.Name = "menuItemSelectStr";
-            this.menuItemSelectStr.Size = new System.Drawing.Size(254, 30);
+            this.menuItemSelectStr.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectStr.Text = "查询语句选择(&A)";
             this.menuItemSelectStr.Click += new System.EventHandler(this.menuItemSelectStr_Click);
             // 
@@ -306,11 +312,13 @@
             this.menuItemSelectDel,
             this.menuItemSelectIntersect});
             this.menuItemSelectMode.Name = "menuItemSelectMode";
-            this.menuItemSelectMode.Size = new System.Drawing.Size(254, 30);
+            this.menuItemSelectMode.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectMode.Text = "选择模式(&I)";
             // 
             // menuItemSelectNew
             // 
+            this.menuItemSelectNew.Checked = true;
+            this.menuItemSelectNew.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menuItemSelectNew.Name = "menuItemSelectNew";
             this.menuItemSelectNew.Size = new System.Drawing.Size(267, 30);
             this.menuItemSelectNew.Text = "创建新选择内容(&C)";
@@ -423,6 +431,8 @@
             // 
             // tsButtonOperateNone
             // 
+            this.tsButtonOperateNone.Checked = true;
+            this.tsButtonOperateNone.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsButtonOperateNone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsButtonOperateNone.Image = global::simpleGIS.Properties.Resources.ElementSelectTool16;
             this.tsButtonOperateNone.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -451,7 +461,7 @@
             this.tsButtonZoomIn.Name = "tsButtonZoomIn";
             this.tsButtonZoomIn.Size = new System.Drawing.Size(24, 24);
             this.tsButtonZoomIn.Text = "tsButtonOperateZoomIn";
-            this.tsButtonZoomIn.ToolTipText = "放大\r\n通过在地图上单击一次的方式放大\r\n";
+            this.tsButtonZoomIn.ToolTipText = "放大\r\n切换到放大工具\r\n";
             this.tsButtonZoomIn.Click += new System.EventHandler(this.tsButtonZoomIn_Click);
             // 
             // tsButtonZoomOut
@@ -462,7 +472,7 @@
             this.tsButtonZoomOut.Name = "tsButtonZoomOut";
             this.tsButtonZoomOut.Size = new System.Drawing.Size(24, 24);
             this.tsButtonZoomOut.Text = "tsButtonOperateZoomOut";
-            this.tsButtonZoomOut.ToolTipText = "缩小\r\n通过在地图上单击一次的方式缩小";
+            this.tsButtonZoomOut.ToolTipText = "缩小\r\n切换到缩小工具";
             this.tsButtonZoomOut.Click += new System.EventHandler(this.tsButtonZoomOut_Click);
             // 
             // tsButtonZoomScale
@@ -473,7 +483,7 @@
             this.tsButtonZoomScale.Name = "tsButtonZoomScale";
             this.tsButtonZoomScale.Size = new System.Drawing.Size(24, 24);
             this.tsButtonZoomScale.Text = "toolStripButton9";
-            this.tsButtonZoomScale.ToolTipText = "固定比例缩小\r\n在地图中心缩小";
+            this.tsButtonZoomScale.ToolTipText = "缩放至地图范围";
             this.tsButtonZoomScale.Click += new System.EventHandler(this.tsButtonZoomScale_Click);
             // 
             // toolStripSeparator4
@@ -609,6 +619,12 @@
             this.tslCoordinate.Text = "坐标：";
             this.tslCoordinate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // MenuItemShowSelected
+            // 
+            this.MenuItemShowSelected.Name = "MenuItemShowSelected";
+            this.MenuItemShowSelected.Size = new System.Drawing.Size(265, 30);
+            this.MenuItemShowSelected.Text = "显示识别要素窗口(&S)";
+            // 
             // mapControl1
             // 
             this.mapControl1.BackColor = System.Drawing.Color.White;
@@ -623,6 +639,8 @@
             this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
             this.mapControl1.Size = new System.Drawing.Size(1026, 578);
             this.mapControl1.TabIndex = 0;
+            this.mapControl1.OperationTypeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_OperationTypeChanged);
+            this.mapControl1.SelectedModeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_SelectedModeChanged);
             this.mapControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapControl1_MouseMove);
             this.mapControl1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.mapControl1_MouseWheel);
             // 
@@ -709,6 +727,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tslScale;
         private System.Windows.Forms.ToolStripStatusLabel tslCoordinate;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemShowSelected;
     }
 }
 

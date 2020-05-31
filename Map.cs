@@ -215,10 +215,7 @@ namespace simpleGIS
         //将指定下标的图层设为选定图层
         public void SelectLayer(int index)
         {
-            if(index <Layers .Count & index >= 0)
-            {
-                SelectedLayer = index;
-            }
+            SelectedLayer = index;
         }
 
 
