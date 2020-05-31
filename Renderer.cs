@@ -9,19 +9,21 @@ using System.Drawing;
 /// </summary>
 namespace simpleGIS
 {
-   /// <summary>
-   /// 渲染器基类
-   /// </summary>   
+    /// <summary>
+    /// 渲染器基类
+    /// </summary>  
+    [Serializable]
     public abstract class Renderer
     {
         public string Field { get; set; }//绑定的数据字段
     }
-   
-    
-    
+
+
+
     /// <summary>
-   /// 子类——简单渲染
-   /// </summary>
+    /// 子类——简单渲染
+    /// </summary>
+    [Serializable]
     public  class SimpleRenderer:Renderer
     {
         #region 属性
@@ -43,12 +45,13 @@ namespace simpleGIS
                     RandomSymbolFromSelf(1)[0]; }
         }
     }
-    
-    
-    
+
+
+
     /// <summary>
     /// 子类——唯一值渲染
     /// </summary>
+    [Serializable]
     public class UniqueValueRenderer:Renderer
     {
         #region 属性
@@ -91,12 +94,13 @@ namespace simpleGIS
         }
         #endregion
     }
-    
-    
-    
+
+
+
     /// <summary>
     /// 子类——分级渲染
     /// </summary>
+    [Serializable]
     public class ClassBreaksRenderer:Renderer
     {
         #region 属性
