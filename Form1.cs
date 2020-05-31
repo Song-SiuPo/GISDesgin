@@ -16,7 +16,7 @@ namespace simpleGIS
         private ShowSelectedFeatureForm showFeatureForm;
 
         //显示图层的属性表
-        private Form3 frm3 =new Form3 ();
+        private Form3 frm3;
 
         public Form1()
         {
@@ -285,7 +285,10 @@ namespace simpleGIS
         {
             // TODO:属性表逻辑未知
             int id = mapControl1.Map.SelectedLayer;
+            frm3 = new Form3();
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+            frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
+            frm3.FeatureBeenDeleted += RefreshAfterDelete;
             frm3.Show();
         }
 
@@ -535,8 +538,6 @@ namespace simpleGIS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
-            frm3.FeatureBeenDeleted += RefreshAfterDelete;
             mapControl1.SelectedFeatureChanged += RefreshSelectFeatureOfFrm3;
         }
     }
