@@ -88,8 +88,8 @@ namespace simpleGIS
         // 将Layer的属性值移到界面上
         // 常规
             layerName = txtBoxLayerName.Text = layer.Name;
-            checkBoxLabelVisible.Checked = layer.Visible;
-            checkBoxLabelVisible.Enabled = !layer.IsEdit;
+            checkBoxVisible.Checked = layer.Visible;
+            checkBoxVisible.Enabled = !layer.IsEdit;
 
             // 渲染
             // 确定图层类型，选择显示何种几何符号
@@ -193,7 +193,8 @@ namespace simpleGIS
                 { cbBoxLabelField.SelectedItem = column.ColumnName; }
             }
             SetFontString();
-            pBoxBoundColor.BackColor = layer.LabelStyle.Color;
+            pBoxFontColor.BackColor = layer.LabelStyle.Color;
+            double a = 10;
         }
         
         #region 私有函数
@@ -211,19 +212,19 @@ namespace simpleGIS
         // 根据暂存的各个当前symbol字段刷新界面
         private void ShowSymbol()
         {
-            if (pSymbol != null && groupPoint.Visible)
+            if (pSymbol != null)
             {
                 cbBoxPointType.SelectedIndex = pSymbol.PointType - 1;
                 numPointSize.Value = new decimal(pSymbol.Size);
                 pBoxPointColor.BackColor = pSymbol.Color;
             }
-            if (lineSymbol != null && groupPolyline.Visible)
+            if (lineSymbol != null)
             {
                 cbBoxLineDash.SelectedIndex = (int)lineSymbol.Style.DashStyle;
                 numLineWidth.Value = new decimal(lineSymbol.Style.Width);
                 pBoxLineColor.BackColor = lineSymbol.Style.Color;
             }
-            if (polySymbol != null && groupPolygon.Visible)
+            if (polySymbol != null)
             {
                 pBoxBoundColor.BackColor = polySymbol.OutLine.Color;
                 pBoxFillColor.BackColor = polySymbol.Fill.Color;
