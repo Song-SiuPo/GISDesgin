@@ -83,16 +83,27 @@ namespace simpleGIS
         //编辑-编辑模式
         private void menuItemEditMode_Click(object sender, EventArgs e)
         {
-            if(menuItemEdit.Checked)//checkonclick
+            //bool judge = menuItemEditMode
+            if(menuItemEditMode.Checked == true)//checkonclick
             {
                 menuItemEditGeo.Enabled = true;
                 menuItemNewGeo.Enabled = true;
+                //tsButtonEdit_Click(this, e);
+                tsButtonEdit.Checked = true;
+                tsButtonEditGeo.Enabled = true;
+                tsButtonNewGeo.Enabled = true;
+                
             }
-            else
+            else if(menuItemEditMode.Checked == false)
             {
                 menuItemEditGeo.Enabled = false;
                 menuItemNewGeo.Enabled = false;
+                tsButtonEdit.Checked = false;
+                tsButtonEditGeo.Enabled = false;
+                tsButtonNewGeo.Enabled = false;
+                
             }
+            //Refresh();
         }
 
         //编辑-绘制新几何体
@@ -122,31 +133,36 @@ namespace simpleGIS
         //图层-打开属性表
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
-
+            Form3 frm3 = new Form3();
+            int id = mapControl1.Map.SelectedLayer;
+            frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
         }
 
         //图层-设置图层属性
         private void menuItemLayerAttr_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
         }
 
         //图层-图层上移
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            mapControl1.Map.MoveUpLayer(id);
         }
 
         //图层-图层下移
         private void menuItemLayerDown_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            mapControl1.Map.MoveDownLayer(id);
         }
 
         //选择-鼠标选择几何体
         private void menuItemSelectMouse_Click(object sender, EventArgs e)
         {
-
+            mapControl1.OperationType = OperationType.Select;
         }
 
         //图层-查询语句选择
@@ -158,25 +174,25 @@ namespace simpleGIS
         //图层-选择模式-创建新选择内容
         private void menuItemSelectNew_Click(object sender, EventArgs e)
         {
-
+            mapControl1.SelectedMode = SelectedMode.New;
         }
 
         //图层-选择模式-与当前选择求并集
         private void menuItemSelectUnion_Click(object sender, EventArgs e)
         {
-
+            mapControl1.SelectedMode = SelectedMode.Add;
         }
 
         //图层-选择模式-从当前选择中去除
         private void menuItemSelectDel_Click(object sender, EventArgs e)
         {
-
+            mapControl1.SelectedMode = SelectedMode.Delete;
         }
 
         //图层-选择模式-与当前选择求交集
         private void menuItemSelectIntersect_Click(object sender, EventArgs e)
         {
-
+            mapControl1.SelectedMode = SelectedMode.Intersect;
         }
 
         //新建
@@ -263,11 +279,18 @@ namespace simpleGIS
             {
                 tsButtonEditGeo.Enabled = true;
                 tsButtonNewGeo.Enabled = true;
+                menuItemEditMode.Enabled = true;
+                menuItemEditGeo.Enabled = true;
+                menuItemNewGeo.Enabled = true;
+                
             }
             else
             {
                 tsButtonEditGeo.Enabled = false;
                 tsButtonNewGeo.Enabled = false;
+                menuItemEditMode.Enabled = false;
+                menuItemEditGeo.Enabled = false;
+                menuItemNewGeo.Enabled = false;
             }
         }
 
