@@ -270,8 +270,11 @@ namespace simpleGIS
             {
                 g.FillRectangle(Brushes.Green, screenPs[i].X - 4, screenPs[i].Y - 4, 9, 9);
             }
-            g.FillRectangle(Brushes.Red, screenPs[screenPs.Length - 2].X - 4,
+            if (screenPs.Length > 1)
+            {
+                g.FillRectangle(Brushes.Red, screenPs[screenPs.Length - 2].X - 4,
                 screenPs[screenPs.Length - 2].Y - 4, 9, 9);
+            }
             linePen.Dispose();
         }
 
