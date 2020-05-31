@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 
 namespace simpleGIS
 {
@@ -14,8 +15,37 @@ namespace simpleGIS
         public Form1()
         {
             InitializeComponent();
+            clboxLayersUpdata();
         }
 
+        #region 私有函数
+
+        //clboxLayers数据同步
+        private void clboxLayersUpdata()
+        {
+            clboxLayers.Items.Clear();
+            for (int i = 0; i < mapControl1.Map.Layers.Count; i++)
+            {
+                clboxLayers.Items.Add(mapControl1.Map.Layers[i]);
+                clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
+            }
+            clboxLayers.Refresh();
+        }
+
+        //clboxLayers_Select
+        private void clboxLayers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mapControl1.Map.SelectLayer(clboxLayers.SelectedIndex);
+        }
+
+        //clboxLayers_Check
+        private void clboxLayers_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
+                mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
+        }
+
+        #endregion
 
         #region 窗体和控件事件处理
 
@@ -84,7 +114,7 @@ namespace simpleGIS
         private void menuItemEditMode_Click(object sender, EventArgs e)
         {
             //bool judge = menuItemEditMode
-            if(menuItemEditMode.Checked == true)//checkonclick
+            if (menuItemEditMode.Checked == true)//checkonclick
             {
                 menuItemEditGeo.Enabled = true;
                 menuItemNewGeo.Enabled = true;
@@ -92,16 +122,16 @@ namespace simpleGIS
                 tsButtonEdit.Checked = true;
                 tsButtonEditGeo.Enabled = true;
                 tsButtonNewGeo.Enabled = true;
-                
+
             }
-            else if(menuItemEditMode.Checked == false)
+            else if (menuItemEditMode.Checked == false)
             {
                 menuItemEditGeo.Enabled = false;
                 menuItemNewGeo.Enabled = false;
                 tsButtonEdit.Checked = false;
                 tsButtonEditGeo.Enabled = false;
                 tsButtonNewGeo.Enabled = false;
-                
+
             }
             //Refresh();
         }
@@ -121,13 +151,17 @@ namespace simpleGIS
         //图层-创建新图层
         private void menuItemNewLayer_Click(object sender, EventArgs e)
         {
-
+            mapControl1.Map.AddLayer(new Layer());
+            clboxLayersUpdata();
+            mapControl1.Refresh();
         }
 
         //图层-删除当前图层
         private void menuItemDelLayer_Click(object sender, EventArgs e)
         {
-
+            mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
+            clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
+            mapControl1.Refresh();
         }
 
         //图层-打开属性表
@@ -136,6 +170,9 @@ namespace simpleGIS
             Form3 frm3 = new Form3();
             int id = mapControl1.Map.SelectedLayer;
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+            if (frm3.ShowDialog(this) == DialogResult.OK)
+                mapControl1.Refresh();
+            frm3.Dispose();
         }
 
         //图层-设置图层属性
@@ -143,20 +180,25 @@ namespace simpleGIS
         {
             int id = mapControl1.Map.SelectedLayer;
             Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
+            if (frm2.ShowDialog(this) == DialogResult.OK)
+                mapControl1.Refresh();
+            frm2.Dispose();
         }
 
         //图层-图层上移
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
-            int id = mapControl1.Map.SelectedLayer;
-            mapControl1.Map.MoveUpLayer(id);
+            mapControl1.Map.MoveUpLayer(mapControl1.Map.SelectedLayer);
+            clboxLayersUpdata();
+            mapControl1.Refresh();
         }
 
         //图层-图层下移
         private void menuItemLayerDown_Click(object sender, EventArgs e)
         {
-            int id = mapControl1.Map.SelectedLayer;
-            mapControl1.Map.MoveDownLayer(id);
+            mapControl1.Map.MoveDownLayer(mapControl1.Map.SelectedLayer);
+            clboxLayersUpdata();
+            mapControl1.Refresh();
         }
 
         //选择-鼠标选择几何体
@@ -168,7 +210,11 @@ namespace simpleGIS
         //图层-查询语句选择
         private void menuItemSelectStr_Click(object sender, EventArgs e)
         {
-
+            int id = mapControl1.Map.SelectedLayer;
+            Layer nowlayer = mapControl1.Map.Layers[id];
+            String SQLstr = Interaction.InputBox("请输入sql语句查询", "查询语句进行选择", "null", -1, -1);
+            //Console.WriteLine(SQLstr);
+            nowlayer.QuerySQL(SQLstr, mapControl1.SelectedMode);
         }
 
         //图层-选择模式-创建新选择内容
@@ -275,14 +321,14 @@ namespace simpleGIS
         //编辑模式
         private void tsButtonEdit_Click(object sender, EventArgs e)
         {
-            if(tsButtonEdit.Checked)
+            if (tsButtonEdit.Checked)
             {
                 tsButtonEditGeo.Enabled = true;
                 tsButtonNewGeo.Enabled = true;
                 menuItemEditMode.Checked = true;
                 menuItemEditGeo.Enabled = true;
                 menuItemNewGeo.Enabled = true;
-                
+
             }
             else
             {
@@ -306,8 +352,8 @@ namespace simpleGIS
             mapControl1.OperationType = OperationType.Edit;
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

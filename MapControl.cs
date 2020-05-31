@@ -24,6 +24,7 @@ namespace simpleGIS
         private bool needRefresh = false;       // 是否需要更新cache
         private bool needSave = false;          // 是否需要保存数据
         private Bitmap cache;   // 当前地图显示范围的缓冲图片，不包括跟踪层和已选对象层
+        private int doubleSelectedItem = -1;    // 双重选择的对象（在要素选择结果窗口内再选择）
 
         // 编辑相关
         private List<PointD> trackingPoints;    // Track模式新绘制的节点集合(地图坐标)
@@ -103,6 +104,12 @@ namespace simpleGIS
         /// 获取或设置是否需要保存标识，用于关闭前弹窗提示
         /// </summary>
         public bool NeedSave { get => needSave; set => needSave = value; }
+
+        /// <summary>
+        /// 获取或设置双重选择的对象
+        /// </summary>
+        public int DoubleSelectedItem { get => doubleSelectedItem;
+            set => doubleSelectedItem = value; }
 
         #endregion
 
@@ -275,8 +282,11 @@ namespace simpleGIS
         private void DrawSelectedGeometries(Graphics g)
         {
             Pen highLight = new Pen(Color.Cyan, 3);
+            SolidBrush brush = new SolidBrush(Color.Yellow);
+            Pen doublePen = new Pen(Color.Yellow, 5);
             Layer layer = map.Layers[map.SelectedLayer];
             List<Geometry> selecedGeo = new List<Geometry>();
+            Geometry doubleSelected = null;
             // 查找满足条件的几何体
             HashSet<int> indexSet = new HashSet<int>(layer.SelectedItems);
             foreach (Geometry geo in layer.Features)
@@ -285,6 +295,8 @@ namespace simpleGIS
                 if (indexSet.Contains(geo.ID))
                 {
                     selecedGeo.Add(geo);
+                    if (geo.ID == doubleSelectedItem)
+                    { doubleSelected = geo; }
                     indexSet.Remove(geo.ID);
                 }
             }
@@ -292,6 +304,11 @@ namespace simpleGIS
             // 点：绘制一个蓝色圈
             if (layer.FeatureType == typeof(PointD))
             {
+                if (doubleSelected != null)
+                {
+                    PointD screenP = map.FromMapPoint((PointD)doubleSelected);
+                    g.FillEllipse(brush, (float)screenP.X - 4, (float)screenP.Y - 4, 9, 9);
+                }
                 foreach (Geometry geo in selecedGeo)
                 {
                     PointD screenP = map.FromMapPoint((PointD)geo);
@@ -302,6 +319,18 @@ namespace simpleGIS
             else if (layer.FeatureType == typeof(Polyline) ||
                 layer.FeatureType == typeof(Polygon))
             {
+                if (doubleSelected != null)
+                {
+                    PointF[] points = FromMapPointArray(doubleSelected);
+                    if (layer.FeatureType == typeof(Polyline))
+                    {
+                        g.DrawLines(doublePen, points);
+                    }
+                    else
+                    {
+                        g.FillPolygon(brush, points);
+                    }
+                }
                 foreach (Geometry geo in selecedGeo)
                 {
                     PointF[] points = FromMapPointArray(geo);
@@ -318,6 +347,14 @@ namespace simpleGIS
             // 复合图形：绘制全部边界
             else if (layer.FeatureType == typeof(MultiPolyline))
             {
+                if (doubleSelected != null)
+                {
+                    foreach (Polyline line in ((MultiPolyline)doubleSelected).Data)
+                    {
+                        PointF[] points = FromMapPointArray(line);
+                        g.DrawLines(doublePen, points);
+                    }
+                }
                 foreach (Geometry geo in selecedGeo)
                 {
                     foreach (Polyline line in ((MultiPolyline)geo).Data)
@@ -329,17 +366,27 @@ namespace simpleGIS
             }
             else
             {
+                if (doubleSelected != null)
+                {
+                    foreach (Polygon polygon in ((MultiPolygon)doubleSelected).Data)
+                    {
+                        PointF[] points = FromMapPointArray(polygon);
+                        g.FillPolygon(brush, points);
+                    }
+                }
                 foreach (Geometry geo in selecedGeo)
                 {
-                    foreach (Polygon line in ((MultiPolygon)geo).Data)
+                    foreach (Polygon polygon in ((MultiPolygon)geo).Data)
                     {
-                        PointF[] points = FromMapPointArray(line);
+                        PointF[] points = FromMapPointArray(polygon);
                         g.DrawPolygon(highLight, points);
                     }
                 }
             }
 
             highLight.Dispose();
+            brush.Dispose();
+            doublePen.Dispose();
         }
 
         /// <summary>
