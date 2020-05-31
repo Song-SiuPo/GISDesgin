@@ -209,32 +209,9 @@ namespace simpleGIS
         {
             int id = mapControl1.Map.SelectedLayer;
             Layer nowlayer = mapControl1.Map.Layers[id];
-            String SQLstr = Interaction.InputBox("请输入sql语句查询\n\n语句格式: sql语句 + \";\" + 模式", "查询语句进行选择", "null", -1, -1);
+            String SQLstr = Interaction.InputBox("请输入sql语句查询", "查询语句进行选择", "null", -1, -1);
             //Console.WriteLine(SQLstr);
-            string[] sqladdmode = SQLstr.Split(';');
-            string mode = sqladdmode.Last<string>();
-            string sql = sqladdmode[0];
-            
-            if(mode.CompareTo("new")==0&&mode.CompareTo("New")==0)
-            {
-                nowlayer.QuerySQL(sql, SelectedMode.New);
-            }
-            else if(mode.CompareTo("add") == 0 && mode.CompareTo("Add") == 0)
-            {
-                nowlayer.QuerySQL(sql, SelectedMode.Add);
-            }
-            else if(mode.CompareTo("Delete") == 0 && mode.CompareTo("delete") == 0)
-            {
-                nowlayer.QuerySQL(sql, SelectedMode.Delete);
-            }
-            else if(mode.CompareTo("intersect") == 0 && mode.CompareTo("Intersect") == 0)
-            {
-                nowlayer.QuerySQL(sql, SelectedMode.Intersect);
-            }
-            else
-            {
-                MessageBox.Show("模式输入有误！");
-            }
+            nowlayer.QuerySQL(SQLstr, mapControl1.SelectedMode);
         }
 
         //图层-选择模式-创建新选择内容
