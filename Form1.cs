@@ -104,6 +104,17 @@ namespace simpleGIS
             return result;
         }
 
+        //属性表选择几何体，控件响应
+        private void RefreshSelectFeature(object sender)
+        {
+            mapControl1.Refresh();
+        }
+
+        //属性表删除集合体，控件重绘
+        private void RefreshAfterDelete(object sender)
+        {
+            mapControl1.Refresh();
+        }
         #endregion
 
         #region 窗体和控件事件处理
@@ -261,6 +272,11 @@ namespace simpleGIS
             Form3 frm3 = new Form3();
             int id = mapControl1.Map.SelectedLayer;
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+
+            //监听事件
+            frm3.SelectFeatureChanged += RefreshSelectFeature;
+            frm3.FeatureBeenDeleted += RefreshAfterDelete;
+
             if (frm3.ShowDialog(this) == DialogResult.OK)
                 mapControl1.Refresh();
             frm3.Dispose();

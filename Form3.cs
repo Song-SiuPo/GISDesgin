@@ -38,6 +38,28 @@ namespace simpleGIS
             sTable = layer.Table.Clone();
         }
 
+        /// <summary>
+        /// 主窗体选择要素后刷新属性表
+        /// </summary>
+        public void RefreshSelectFeature()
+        {
+            //datagridview清空选择
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            {
+                row.Selected = false;
+            }
+
+            //datagridview更新选择
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                //如果在选择范围
+                if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
+                {
+                    row.Selected = true;
+                }
+            }
+        }
+
         #endregion
 
         #region 事件
