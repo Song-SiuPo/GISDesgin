@@ -584,6 +584,7 @@
             this.clboxLayers.Name = "clboxLayers";
             this.clboxLayers.Size = new System.Drawing.Size(227, 578);
             this.clboxLayers.TabIndex = 0;
+            this.clboxLayers.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clboxLayers_ItemCheck);
             this.clboxLayers.SelectedIndexChanged += new System.EventHandler(this.clboxLayers_SelectedIndexChanged);
             // 
             // statusStrip1

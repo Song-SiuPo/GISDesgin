@@ -77,7 +77,11 @@ namespace simpleGIS
         private void clboxLayers_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
+            {
                 mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
+                mapControl1.SetNeedRefreshBase();
+                mapControl1.Refresh();
+            }
             if (e.Index == mapControl1.Map.SelectedLayer)
             {
                 Layer layer = mapControl1.Map.Layers[e.Index];
@@ -252,6 +256,7 @@ namespace simpleGIS
             {
                 mapControl1.Map.AddLayer(new Layer(form4.LayerName, form4.LayerType));
                 clboxLayersUpdata();
+                mapControl1.SetNeedRefreshBase();
                 mapControl1.Refresh();
             }
             form4.Dispose();
@@ -262,6 +267,7 @@ namespace simpleGIS
         {
             clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
             mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
 
@@ -288,7 +294,11 @@ namespace simpleGIS
             int id = mapControl1.Map.SelectedLayer;
             Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
             if (frm2.ShowDialog(this) == DialogResult.OK)
+            {
+                clboxLayersUpdata();
+                mapControl1.SetNeedRefreshBase();
                 mapControl1.Refresh();
+            }
             frm2.Dispose();
         }
 
@@ -297,6 +307,7 @@ namespace simpleGIS
         {
             mapControl1.Map.MoveUpLayer(mapControl1.Map.SelectedLayer);
             clboxLayersUpdata();
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
 
@@ -305,6 +316,7 @@ namespace simpleGIS
         {
             mapControl1.Map.MoveDownLayer(mapControl1.Map.SelectedLayer);
             clboxLayersUpdata();
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
 
@@ -400,6 +412,7 @@ namespace simpleGIS
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
             mapControl1.Map.FullScreen(mapControl1.Width, mapControl1.Height, mapControl1.Map.Box);
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
             tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G6");
         }
