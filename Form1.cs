@@ -281,29 +281,22 @@ namespace simpleGIS
         private void tsButtonZoomIn_Click(object sender, EventArgs e)
         {
             mapControl1.OperationType = OperationType.ZoomIn;
+            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
         }
 
         //缩小
         private void tsButtonZoomOut_Click(object sender, EventArgs e)
         {
             mapControl1.OperationType = OperationType.ZoomOut;
+            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
         }
 
         //全屏显示--弃
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
-            //PointD CenterPoint = new PointD(mapControl1.Width / 2, mapControl1.Height / 2);
-            //mapControl1.Map.ZoomByCenter(CenterPoint, 1.2f);
-
-            //mapControl1.Refresh();
-            /*
-            RectangleD box = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer].Box;
-            PointD centerPoint = new PointD();
-            centerPoint.X = (double)(box.MinX + box.MaxX) / 2;
-            centerPoint.Y = (double)(box.MinY + box.MaxY) / 2;
-            double xdis = mapControl1.Map.ToMapDistance(this.Width);
-            double ydis = mapControl1.Map.ToMapDistance(this.Height);
-            */
+            mapControl1.Map.FullScreen(mapControl1.Width, mapControl1.Height, mapControl1.Map.Box);
+            mapControl1.Refresh();
+            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
         }
 
         //创建新图层
@@ -355,5 +348,26 @@ namespace simpleGIS
 
         #endregion
 
+        private void mapControl1_MouseMove(object sender, MouseEventArgs e)
+        {
+            //屏幕坐标
+            Point point = Control.MousePosition;
+            point = mapControl1.PointToClient(point);
+
+            //地图坐标
+            PointD screenPoint = new PointD(point.X, point.Y);
+            screenPoint = mapControl1.Map.ToMapPoint(screenPoint);
+
+            //显示文本
+            PointF textPoint = new PointF((float)screenPoint.X, (float)screenPoint.Y);
+            tslCoordinate.Text = textPoint.ToString();
+        }
+
+        private void mapControl1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
+        }
+                    
     }
+        
 }
