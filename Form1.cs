@@ -16,7 +16,7 @@ namespace simpleGIS
         private ShowSelectedFeatureForm showFeatureForm;
 
         //显示图层的属性表
-        private Form3 frm3;
+        private Form3 frm3 =new Form3 ();
 
         public Form1()
         {
@@ -112,7 +112,7 @@ namespace simpleGIS
         }
 
         //属性表选择几何体，控件响应
-        private void RefreshSelectFeature(object sender)
+        private void RefreshSelectFeatureOfMap(object sender)
         {
             mapControl1.Refresh();
         }
@@ -121,6 +121,12 @@ namespace simpleGIS
         private void RefreshAfterDelete(object sender)
         {
             mapControl1.Refresh();
+        }
+
+        //控件选择几何体，属性表响应
+        private void RefreshSelectFeatureOfFrm3(object sender)
+        {
+            if(!frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
         }
         #endregion
 
@@ -280,9 +286,7 @@ namespace simpleGIS
             // TODO:属性表逻辑未知
             int id = mapControl1.Map.SelectedLayer;
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-
-            if (frm3.ShowDialog(this) == DialogResult.OK)
-                frm3 = null;
+            frm3.Show();
         }
 
         //图层-设置图层属性
@@ -333,7 +337,7 @@ namespace simpleGIS
             nowlayer.QuerySQL(SQLstr, mapControl1.SelectedMode);
 
             //属性表刷新选择的要素
-            if (frm3!=null) { frm3.RefreshSelectFeature(); }
+            if (!frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
         }
 
         //图层-选择模式-创建新选择内容
@@ -531,9 +535,9 @@ namespace simpleGIS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            frm3.SelectFeatureChanged += RefreshSelectFeature;
+            frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
             frm3.FeatureBeenDeleted += RefreshAfterDelete;
-            mapControl1.SelectedFeatureChanged += RefreshSelectFeature;
+            mapControl1.SelectedFeatureChanged += RefreshSelectFeatureOfFrm3;
         }
     }
         
