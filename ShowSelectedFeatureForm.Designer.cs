@@ -54,7 +54,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer1.Size = new System.Drawing.Size(391, 638);
+            this.splitContainer1.Size = new System.Drawing.Size(301, 638);
             this.splitContainer1.SplitterDistance = 330;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -67,8 +67,9 @@
             this.listBox1.ItemHeight = 24;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(391, 330);
+            this.listBox1.Size = new System.Drawing.Size(301, 330);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // dataGridView1
             // 
@@ -84,7 +85,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 27;
-            this.dataGridView1.Size = new System.Drawing.Size(391, 304);
+            this.dataGridView1.Size = new System.Drawing.Size(301, 304);
             this.dataGridView1.TabIndex = 0;
             // 
             // ColumnField
@@ -103,7 +104,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(391, 638);
+            this.ClientSize = new System.Drawing.Size(301, 638);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
