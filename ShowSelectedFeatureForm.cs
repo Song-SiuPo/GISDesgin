@@ -26,6 +26,8 @@ namespace simpleGIS
         /// </summary>
         public int DoubleSelectedItem { get => doubleSelectedItem; }
 
+        public Map LinkMap { set => map = value; }
+
         #endregion
 
         #region 方法

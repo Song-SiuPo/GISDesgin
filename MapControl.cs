@@ -859,7 +859,7 @@ namespace simpleGIS
                 RedrawMap();
             }
             e.Graphics.DrawImage(cache, 0, 0);
-            if (map.SelectedLayer != -1)
+            if (map.SelectedLayer != -1 && map.Layers[map.SelectedLayer].Visible)
             {
                 DrawSelectedGeometries(e.Graphics);
             }

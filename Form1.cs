@@ -12,10 +12,16 @@ namespace simpleGIS
 {
     public partial class Form1 : Form
     {
+        // 显示选择对象的窗口
+        private ShowSelectedFeatureForm showFeatureForm;
+
         public Form1()
         {
             InitializeComponent();
             clboxLayersUpdata();
+            showFeatureForm = new ShowSelectedFeatureForm(mapControl1.Map);
+
+            tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
         }
 
         #region 私有函数
@@ -23,11 +29,22 @@ namespace simpleGIS
         //clboxLayers数据同步
         private void clboxLayersUpdata()
         {
-            clboxLayers.Items.Clear();
             for (int i = 0; i < mapControl1.Map.Layers.Count; i++)
             {
-                clboxLayers.Items.Add(mapControl1.Map.Layers[i]);
-                clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
+                if (i < clboxLayers.Items.Count)
+                {
+                    clboxLayers.Items[i] = mapControl1.Map.Layers[i].Name;
+                    clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
+                }
+                else
+                {
+                    clboxLayers.Items.Add(mapControl1.Map.Layers[i].Name);
+                    clboxLayers.SetItemChecked(i, mapControl1.Map.Layers[i].Visible);
+                }
+            }
+            while (clboxLayers.Items.Count > mapControl1.Map.Layers.Count)
+            {
+                clboxLayers.Items.RemoveAt(clboxLayers.Items.Count - 1);
             }
             clboxLayers.Refresh();
         }
@@ -36,6 +53,33 @@ namespace simpleGIS
         private void clboxLayers_SelectedIndexChanged(object sender, EventArgs e)
         {
             mapControl1.Map.SelectLayer(clboxLayers.SelectedIndex);
+            if (clboxLayers.SelectedIndex == -1)
+            {
+                menuItemEdit.Enabled = false;
+                menuItemDelLayer.Enabled = false;
+                menuItemLayerTable.Enabled = false;
+                menuItemLayerAttr.Enabled = false;
+                menuItemLayerUp.Enabled = false;
+                menuItemLayerDown.Enabled = false;
+                menuItemSelectMouse.Enabled = false;
+                menuItemSelectStr.Enabled = false;
+                tsButtonZoomScale.Enabled = false;
+                tsButtonEdit.Enabled = false;
+            }
+            else
+            {
+                Layer layer = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer];
+                menuItemDelLayer.Enabled = true;
+                menuItemLayerTable.Enabled = true;
+                menuItemLayerAttr.Enabled = true;
+                menuItemSelectStr.Enabled = true;
+                tsButtonZoomScale.Enabled = true;
+                menuItemEdit.Enabled = layer.Visible;
+                menuItemSelectMouse.Enabled = layer.Visible;
+                tsButtonEdit.Enabled = layer.Visible;
+                menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
+                menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
+            }
         }
 
         //clboxLayers_Check
@@ -43,6 +87,23 @@ namespace simpleGIS
         {
             if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
                 mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
+        }
+
+        // 弹出选择文件框并保存文件
+        private bool TrySaveFile(IWin32Window window)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+            saveFileDialog.AddExtension = true;
+            bool result = false;
+            if (saveFileDialog.ShowDialog(window) == DialogResult.OK)
+            {
+                string saveFileName = saveFileDialog.FileName.ToString();
+                mapControl1.SaveFile(saveFileName);
+                result = true;
+            }
+            saveFileDialog.Dispose();
+            return result;
         }
 
         #endregion
@@ -53,47 +114,61 @@ namespace simpleGIS
         private void menuItemNewMap_Click(object sender, EventArgs e)
         {
             if (mapControl1.NeedSave)
-                MessageBox.Show(this, "当前有未保存的更改。", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
             {
-                mapControl1.NewMap();
-                menuItemSave.PerformClick();
-                mapControl1.Refresh();
+                DialogResult result = MessageBox.Show(this, "当前有未保存的更改，是否保存？", "保存地图",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
+                bool try_result = true;
+                if (result == DialogResult.Yes)
+                {
+                    try_result = TrySaveFile(this);
+                }
+                if (result == DialogResult.Cancel || try_result == false) { return; }
             }
+            mapControl1.NewMap();
+            showFeatureForm.LinkMap = mapControl1.Map;
+            mapControl1.Refresh();
         }
 
         //文件-打开
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
             if (mapControl1.NeedSave)
-                MessageBox.Show(this, "当前有未保存的更改。", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
-                openFileDialog.RestoreDirectory = true;
-                openFileDialog.Multiselect = false;
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                DialogResult result = MessageBox.Show(this, "当前有未保存的更改，是否保存？", "保存地图",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
+                bool try_result = true;
+                if (result == DialogResult.Yes)
                 {
-                    string openFileName = openFileDialog.FileName.ToString();
+                    try_result = TrySaveFile(this);
+                }
+                if (result == DialogResult.Cancel || try_result == false) { return; }
+            }
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Multiselect = false;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string openFileName = openFileDialog.FileName.ToString();
+                try
+                {
                     mapControl1.OpenFile(openFileName);
+                    showFeatureForm.LinkMap = mapControl1.Map;
                     mapControl1.Refresh();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message, "错误", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
-
+            openFileDialog.Dispose();
         }
 
         //文件-保存
         private void menuItemSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
-            saveFileDialog.AddExtension = true;
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string saveFileName = saveFileDialog.FileName.ToString();
-                mapControl1.SaveFile(saveFileName);
-            }
+            TrySaveFile(this);
         }
 
         //文件-输出为图片
@@ -107,6 +182,7 @@ namespace simpleGIS
                 string saveFileName = saveFileDialog.FileName.ToString();
                 mapControl1.SaveBitmap(saveFileName);
             }
+            saveFileDialog.Dispose();
         }
 
 
@@ -114,24 +190,32 @@ namespace simpleGIS
         private void menuItemEditMode_Click(object sender, EventArgs e)
         {
             //bool judge = menuItemEditMode
-            if (menuItemEditMode.Checked == true)//checkonclick
+            if (mapControl1.Map.SelectedLayer == -1)
+            {
+                throw new Exception("错误：没有可以编辑的图层");
+            }
+            Layer layer = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer];
+            layer.IsEdit = !layer.IsEdit;
+            if (layer.IsEdit)//checkonclick
             {
                 menuItemEditGeo.Enabled = true;
                 menuItemNewGeo.Enabled = true;
                 //tsButtonEdit_Click(this, e);
                 tsButtonEdit.Checked = true;
+                menuItemEdit.Checked = true;
                 tsButtonEditGeo.Enabled = true;
                 tsButtonNewGeo.Enabled = true;
-
+                clboxLayers.Enabled = false;
             }
-            else if (menuItemEditMode.Checked == false)
+            else
             {
                 menuItemEditGeo.Enabled = false;
                 menuItemNewGeo.Enabled = false;
                 tsButtonEdit.Checked = false;
+                menuItemEdit.Checked = false;
                 tsButtonEditGeo.Enabled = false;
                 tsButtonNewGeo.Enabled = false;
-
+                clboxLayers.Enabled = true;
             }
             //Refresh();
         }
@@ -159,8 +243,8 @@ namespace simpleGIS
         //图层-删除当前图层
         private void menuItemDelLayer_Click(object sender, EventArgs e)
         {
-            mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
             clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
+            mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
             mapControl1.Refresh();
         }
 
@@ -281,22 +365,20 @@ namespace simpleGIS
         private void tsButtonZoomIn_Click(object sender, EventArgs e)
         {
             mapControl1.OperationType = OperationType.ZoomIn;
-            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
         }
 
         //缩小
         private void tsButtonZoomOut_Click(object sender, EventArgs e)
         {
             mapControl1.OperationType = OperationType.ZoomOut;
-            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
         }
 
-        //全屏显示--弃
+        //全屏显示
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
             mapControl1.Map.FullScreen(mapControl1.Width, mapControl1.Height, mapControl1.Map.Box);
             mapControl1.Refresh();
-            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
+            tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G6");
         }
 
         //创建新图层
@@ -314,23 +396,7 @@ namespace simpleGIS
         //编辑模式
         private void tsButtonEdit_Click(object sender, EventArgs e)
         {
-            if (tsButtonEdit.Checked)
-            {
-                tsButtonEditGeo.Enabled = true;
-                tsButtonNewGeo.Enabled = true;
-                menuItemEditMode.Checked = true;
-                menuItemEditGeo.Enabled = true;
-                menuItemNewGeo.Enabled = true;
-
-            }
-            else
-            {
-                tsButtonEditGeo.Enabled = false;
-                tsButtonNewGeo.Enabled = false;
-                menuItemEditMode.Checked = false;
-                menuItemEditGeo.Enabled = false;
-                menuItemNewGeo.Enabled = false;
-            }
+            menuItemEdit.PerformClick();
         }
 
         //创建新要素
@@ -359,13 +425,13 @@ namespace simpleGIS
             screenPoint = mapControl1.Map.ToMapPoint(screenPoint);
 
             //显示文本
-            PointF textPoint = new PointF((float)screenPoint.X, (float)screenPoint.Y);
-            tslCoordinate.Text = textPoint.ToString();
+            tslCoordinate.Text = "坐标： X=" + screenPoint.X.ToString("G8")
+                + ", Y=" + screenPoint.Y.ToString("G8");
         }
 
         private void mapControl1_MouseWheel(object sender, MouseEventArgs e)
         {
-            tslScale.Text = "比例尺: 1/" + mapControl1.Map.MapScale.ToString();
+            tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
         }
                     
     }

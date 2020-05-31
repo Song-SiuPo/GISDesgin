@@ -177,6 +177,7 @@
             // menuItemEditMode
             // 
             this.menuItemEditMode.CheckOnClick = true;
+            this.menuItemEditMode.Enabled = false;
             this.menuItemEditMode.Name = "menuItemEditMode";
             this.menuItemEditMode.Size = new System.Drawing.Size(231, 30);
             this.menuItemEditMode.Text = "编辑模式(&S)";
@@ -189,6 +190,7 @@
             // 
             // menuItemNewGeo
             // 
+            this.menuItemNewGeo.Enabled = false;
             this.menuItemNewGeo.Name = "menuItemNewGeo";
             this.menuItemNewGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemNewGeo.Text = "绘制新几何体(&N)";
@@ -196,6 +198,7 @@
             // 
             // menuItemEditGeo
             // 
+            this.menuItemEditGeo.Enabled = false;
             this.menuItemEditGeo.Name = "menuItemEditGeo";
             this.menuItemEditGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemEditGeo.Text = "编辑几何体(&E)";
@@ -225,6 +228,7 @@
             // 
             // menuItemDelLayer
             // 
+            this.menuItemDelLayer.Enabled = false;
             this.menuItemDelLayer.Name = "menuItemDelLayer";
             this.menuItemDelLayer.Size = new System.Drawing.Size(230, 30);
             this.menuItemDelLayer.Text = "删除当前图层(&D)";
@@ -237,6 +241,7 @@
             // 
             // menuItemLayerTable
             // 
+            this.menuItemLayerTable.Enabled = false;
             this.menuItemLayerTable.Name = "menuItemLayerTable";
             this.menuItemLayerTable.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerTable.Text = "打开属性表(&T)";
@@ -244,6 +249,7 @@
             // 
             // menuItemLayerAttr
             // 
+            this.menuItemLayerAttr.Enabled = false;
             this.menuItemLayerAttr.Name = "menuItemLayerAttr";
             this.menuItemLayerAttr.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerAttr.Text = "设置图层属性(&I)";
@@ -251,6 +257,7 @@
             // 
             // menuItemLayerUp
             // 
+            this.menuItemLayerUp.Enabled = false;
             this.menuItemLayerUp.Name = "menuItemLayerUp";
             this.menuItemLayerUp.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerUp.Text = "图层上移(&F)";
@@ -258,6 +265,7 @@
             // 
             // menuItemLayerDown
             // 
+            this.menuItemLayerDown.Enabled = false;
             this.menuItemLayerDown.Name = "menuItemLayerDown";
             this.menuItemLayerDown.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerDown.Text = "图层下移(&B)";
@@ -276,6 +284,7 @@
             // 
             // menuItemSelectMouse
             // 
+            this.menuItemSelectMouse.Enabled = false;
             this.menuItemSelectMouse.Name = "menuItemSelectMouse";
             this.menuItemSelectMouse.Size = new System.Drawing.Size(254, 30);
             this.menuItemSelectMouse.Text = "鼠标选择几何体(&M)";
@@ -283,6 +292,7 @@
             // 
             // menuItemSelectStr
             // 
+            this.menuItemSelectStr.Enabled = false;
             this.menuItemSelectStr.Name = "menuItemSelectStr";
             this.menuItemSelectStr.Size = new System.Drawing.Size(254, 30);
             this.menuItemSelectStr.Text = "查询语句选择(&A)";
@@ -502,6 +512,7 @@
             // 
             this.tsButtonEdit.CheckOnClick = true;
             this.tsButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsButtonEdit.Enabled = false;
             this.tsButtonEdit.Image = global::simpleGIS.Properties.Resources.GenericPaintBrush16;
             this.tsButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonEdit.Name = "tsButtonEdit";
@@ -513,6 +524,7 @@
             // tsButtonNewGeo
             // 
             this.tsButtonNewGeo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsButtonNewGeo.Enabled = false;
             this.tsButtonNewGeo.Image = global::simpleGIS.Properties.Resources.GenericBlackAdd16;
             this.tsButtonNewGeo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonNewGeo.Name = "tsButtonNewGeo";
@@ -524,6 +536,7 @@
             // tsButtonEditGeo
             // 
             this.tsButtonEditGeo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsButtonEditGeo.Enabled = false;
             this.tsButtonEditGeo.Image = global::simpleGIS.Properties.Resources.EditingVertex16;
             this.tsButtonEditGeo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonEditGeo.Name = "tsButtonEditGeo";
@@ -561,6 +574,7 @@
             this.clboxLayers.Name = "clboxLayers";
             this.clboxLayers.Size = new System.Drawing.Size(227, 578);
             this.clboxLayers.TabIndex = 0;
+            this.clboxLayers.SelectedIndexChanged += new System.EventHandler(this.clboxLayers_SelectedIndexChanged);
             // 
             // statusStrip1
             // 
