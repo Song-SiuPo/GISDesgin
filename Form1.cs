@@ -77,7 +77,11 @@ namespace simpleGIS
         private void clboxLayers_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
+            {
                 mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
+                mapControl1.SetNeedRefreshBase();
+                mapControl1.Refresh();
+            }
             if (e.Index == mapControl1.Map.SelectedLayer)
             {
                 Layer layer = mapControl1.Map.Layers[e.Index];
@@ -275,6 +279,7 @@ namespace simpleGIS
             Form2 frm2 = new Form2(mapControl1.Map.Layers[id]);
             if (frm2.ShowDialog(this) == DialogResult.OK)
             {
+                clboxLayersUpdata();
                 mapControl1.SetNeedRefreshBase();
                 mapControl1.Refresh();
             }
