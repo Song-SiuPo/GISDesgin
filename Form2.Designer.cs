@@ -127,7 +127,7 @@
             this.tabPageNorm.Location = new System.Drawing.Point(4, 33);
             this.tabPageNorm.Name = "tabPageNorm";
             this.tabPageNorm.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageNorm.Size = new System.Drawing.Size(593, 494);
+            this.tabPageNorm.Size = new System.Drawing.Size(591, 494);
             this.tabPageNorm.TabIndex = 0;
             this.tabPageNorm.Text = "常规";
             this.tabPageNorm.UseVisualStyleBackColor = true;
@@ -722,7 +722,7 @@
             // 
             this.labelFontName.Location = new System.Drawing.Point(107, 102);
             this.labelFontName.Name = "labelFontName";
-            this.labelFontName.Size = new System.Drawing.Size(280, 25);
+            this.labelFontName.Size = new System.Drawing.Size(280, 30);
             this.labelFontName.TabIndex = 5;
             // 
             // checkBoxLabelVisible

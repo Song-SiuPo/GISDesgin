@@ -192,7 +192,7 @@ namespace simpleGIS
                 if (column.ColumnName == layer.LabelStyle.Field)
                 { cbBoxLabelField.SelectedItem = column.ColumnName; }
             }
-            labelFontName.Text = layer.LabelStyle.Font.ToString();
+            SetFontString();
             pBoxBoundColor.BackColor = layer.LabelStyle.Color;
         }
         
@@ -264,10 +264,11 @@ namespace simpleGIS
                 }
                 return;
             }
-            min = max = (double)_layer.Table.Rows[0][classBreaksR.Field];
+            object a = _layer.Table.Rows[0][classBreaksR.Field];
+            min = max = Convert.ToDouble(_layer.Table.Rows[0][classBreaksR.Field]);
             for (int i = 1; i < _layer.Table.Rows.Count; i++)
             {
-                double data = (double)_layer.Table.Rows[i][classBreaksR.Field];
+                double data = Convert.ToDouble(_layer.Table.Rows[i][classBreaksR.Field]);
                 if (data < min) { min = data; }
                 if (data > max) { max = data; }
             }
@@ -289,6 +290,30 @@ namespace simpleGIS
             }
             names[names.Length - 1] = "> " + classBreaksR.BreakPoints[names.Length - 2].ToString();
             return names;
+        }
+
+        // 更新字体名字
+        private void SetFontString()
+        {
+            Font font = labelStyle.Font;
+            string style = "";
+            if (font.Style == FontStyle.Regular)
+            {
+                style = ", 常规";
+            }
+            else
+            {
+                if ((font.Style & FontStyle.Bold) != 0)
+                { style += ", 粗体"; }
+                if ((font.Style & FontStyle.Italic) != 0)
+                { style += ", 斜体"; }
+                if ((font.Style & FontStyle.Underline) != 0)
+                { style += ", 下划线"; }
+                if ((font.Style & FontStyle.Strikeout) != 0)
+                { style += ", 删除线"; }
+            }
+            labelFontName.Text = font.Name + ";" + style.Substring(1) + "; " 
+                + font.Size.ToString();
         }
 
         #endregion
@@ -608,7 +633,7 @@ namespace simpleGIS
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 labelStyle.Font = dialog.Font;
-                labelFontName.Text = dialog.Font.ToString();
+                SetFontString();
                 pBoxShowFontStyle.Refresh();
             }
         }
@@ -616,22 +641,24 @@ namespace simpleGIS
         // 绘制符号样式
         private void pBoxShowStyle_Paint(object sender, PaintEventArgs e)
         {
+            float width = pBoxShowStyle.Width,
+                height = pBoxShowStyle.Height;
             if (groupPoint.Visible)
             {
-                pSymbol.DrawPoint(e.Graphics, new PointF(Width / 2, Height / 2));
+                pSymbol.DrawPoint(e.Graphics, new PointF(width / 2, height / 2));
             }
             else if (groupPolyline.Visible)
             {
                 lineSymbol.DrawLine(e.Graphics, new PointF[]
-                    { new PointF(Width/8, Height/2), new PointF(Width*7/8, Height/2) });
+                    { new PointF(width/8, height/2), new PointF(width*7/8, height/2) });
             }
             else
             {
                 polySymbol.DrawPolygon(e.Graphics, new PointF[] 
-                    { new PointF(Width/4, Height/4),
-                        new PointF(Width*3/4, Height/4),
-                        new PointF(Width*3/4, Height*3/4),
-                        new PointF(Width/4, Height*3/4)
+                    { new PointF(width/4, height/4),
+                        new PointF(width*3/4, height/4),
+                        new PointF(width*3/4, height*3/4),
+                        new PointF(width/4, height*3/4)
                     });
             }
         }
@@ -639,10 +666,12 @@ namespace simpleGIS
         // 绘制字体样式
         private void pBoxShowFontStyle_Paint(object sender, PaintEventArgs e)
         {
+            float width = pBoxShowFontStyle.Width,
+                height = pBoxShowFontStyle.Height;
             const string temp = "SimpleGIS123";
             SizeF size = e.Graphics.MeasureString(temp, labelStyle.Font);
-            RectangleF rect = new RectangleF(new PointF((Width - size.Width) / 2,
-                (Height - size.Height) / 2), size);
+            RectangleF rect = new RectangleF(new PointF((width - size.Width) / 2,
+                (height - size.Height) / 2), size);
             Brush brush = new SolidBrush(labelStyle.Color);
             e.Graphics.DrawString(temp, labelStyle.Font, brush, rect);
         }
