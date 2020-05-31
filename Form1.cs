@@ -126,7 +126,7 @@ namespace simpleGIS
         //控件选择几何体，属性表响应
         private void RefreshSelectFeatureOfFrm3(object sender)
         {
-            if(!frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
+            if(frm3 != null && !frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
         }
         #endregion
 
@@ -283,13 +283,44 @@ namespace simpleGIS
         //图层-打开属性表
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
-            // TODO:属性表逻辑未知
-            int id = mapControl1.Map.SelectedLayer;
-            frm3 = new Form3();
-            frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-            frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
-            frm3.FeatureBeenDeleted += RefreshAfterDelete;
-            frm3.Show();
+            //form3没有创建
+            if(frm3 == null)
+            {
+                //新建，并绑定事件
+                frm3 = new Form3();
+                frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
+                frm3.FeatureBeenDeleted += RefreshAfterDelete;
+
+                //传入图层，打开窗口
+                int id = mapControl1.Map.SelectedLayer;
+                frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+                frm3.Show();
+            }
+
+            //form3被创建但已关闭
+            else if (frm3!=null && frm3.IsDisposed)
+            {
+                //重建，并绑定事件
+                frm3.Dispose();
+                frm3 = new Form3();
+                frm3.SelectFeatureChanged += RefreshSelectFeatureOfMap;
+                frm3.FeatureBeenDeleted += RefreshAfterDelete;
+
+                //传入图层打开窗口
+                int id = mapControl1.Map.SelectedLayer;
+                frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+                frm3.Show();
+            }
+
+            //form3已创建并已打开
+            else if(frm3!=null && !frm3.IsDisposed)
+            {
+                //传入图层，打开窗口
+                int id = mapControl1.Map.SelectedLayer;
+                frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
+                frm3.Show();
+            }
+
         }
 
         //图层-设置图层属性
