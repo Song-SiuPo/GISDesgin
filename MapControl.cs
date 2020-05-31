@@ -795,7 +795,7 @@ namespace simpleGIS
                 { delVertexToolStripMenuItem.Visible = true; }
             }
             // 更新“删除几何”“添加部件”“删除部件”
-            if (layerType == typeof(Point))
+            if (layerType == typeof(PointD))
             {
                 delGeoToolStripMenuItem.Visible = editGeometries[0] != null;
                 addPartToolStripMenuItem.Visible = false;

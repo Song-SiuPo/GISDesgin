@@ -63,7 +63,7 @@ namespace simpleGIS
             switch (comboBox3.SelectedIndex)
             {
                 case 0:
-                    LayerType = typeof(Point);
+                    LayerType = typeof(PointD);
                     break;
                 case 1:
                     LayerType = typeof(Polyline);
