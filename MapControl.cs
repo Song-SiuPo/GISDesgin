@@ -33,6 +33,7 @@ namespace simpleGIS
         private int addVertexLoc = -1;          // 编辑模式插入节点时，插入的位置
 
         // 鼠标相关
+        private bool isLeftButtonDown = false;
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
@@ -231,6 +232,7 @@ namespace simpleGIS
             g.Clear(BackColor);
             map.Render(g);
             needRefresh = false;
+            g.Dispose();
         }
 
         /// <summary>
@@ -252,28 +254,28 @@ namespace simpleGIS
             screenPs[trackingPoints.Count] = mouseLoc;
             // 绘制轮廓
             Pen linePen = new Pen(Color.Green, 2);
-            if (layer.FeatureType == typeof(Polyline) ||
-                layer.FeatureType == typeof(MultiPolyline) &&
+            if ((layer.FeatureType == typeof(Polyline) ||
+                layer.FeatureType == typeof(MultiPolyline)) &&
                 screenPs.Length > 1)
             {
                 g.DrawLines(linePen, screenPs);
             }
-            else if (layer.FeatureType == typeof(Polyline) ||
-                layer.FeatureType == typeof(MultiPolyline))
+            else if (layer.FeatureType == typeof(Polygon) ||
+                layer.FeatureType == typeof(MultiPolygon))
             {
                 if (screenPs.Length > 2)
                 { g.DrawPolygon(linePen, screenPs); }
-                else { g.DrawLines(linePen, screenPs); }
+                else if (screenPs.Length == 2) { g.DrawLines(linePen, screenPs); }
             }
             // 绘制顶点
             for (int i = 0; i < trackingPoints.Count - 1; i++)
             {
-                g.FillRectangle(Brushes.Green, screenPs[i].X - 4, screenPs[i].Y - 4, 9, 9);
+                g.FillRectangle(Brushes.Green, screenPs[i].X - 3, screenPs[i].Y - 3, 7, 7);
             }
             if (screenPs.Length > 1)
             {
-                g.FillRectangle(Brushes.Red, screenPs[screenPs.Length - 2].X - 4,
-                screenPs[screenPs.Length - 2].Y - 4, 9, 9);
+                g.FillRectangle(Brushes.Red, screenPs[screenPs.Length - 2].X - 3,
+                screenPs[screenPs.Length - 2].Y - 3, 7, 7);
             }
             linePen.Dispose();
         }
@@ -284,9 +286,9 @@ namespace simpleGIS
         /// <param name="g">GDI绘图对象</param>
         private void DrawSelectedGeometries(Graphics g)
         {
-            Pen highLight = new Pen(Color.Cyan, 3);
+            Pen highLight = new Pen(Color.Cyan, 2);
             SolidBrush brush = new SolidBrush(Color.Yellow);
-            Pen doublePen = new Pen(Color.Yellow, 5);
+            Pen doublePen = new Pen(Color.Yellow, 3);
             Layer layer = map.Layers[map.SelectedLayer];
             List<Geometry> selecedGeo = new List<Geometry>();
             Geometry doubleSelected = null;
@@ -861,19 +863,34 @@ namespace simpleGIS
             {
                 RedrawMap();
             }
-            e.Graphics.DrawImage(cache, 0, 0);
+            Bitmap bmp = new Bitmap(cache);
+            Graphics g = Graphics.FromImage(bmp);
+            g.DrawImage(cache, 0, 0);
             if (map.SelectedLayer != -1 && map.Layers[map.SelectedLayer].Visible)
             {
-                DrawSelectedGeometries(e.Graphics);
+                DrawSelectedGeometries(g);
             }
             if (mapOperation == OperationType.Edit)
             {
-                DrawEditGeometry(e.Graphics);
+                DrawEditGeometry(g);
             }
             else if (mapOperation == OperationType.Track)
             {
-                DrawTrackingLayer(e.Graphics);
+                DrawTrackingLayer(g);
             }
+            else if (mapOperation == OperationType.Select && isLeftButtonDown)
+            {
+                Pen boxPen = new Pen(Color.DarkBlue, 1.5f);
+                float minx = Math.Min(mouseDownLoc.X, mouseLoc.X),
+                    miny = Math.Min(mouseDownLoc.Y, mouseLoc.Y),
+                    maxx = Math.Max(mouseDownLoc.X, mouseLoc.X),
+                    maxy = Math.Max(mouseDownLoc.Y, mouseLoc.Y);
+                g.DrawRectangle(boxPen, minx, miny, maxx - minx, maxy - miny);
+                boxPen.Dispose();
+            }
+            e.Graphics.DrawImage(bmp, 0, 0);
+            g.Dispose();
+            bmp.Dispose();
         }
 
         // 控件大小改变
@@ -894,6 +911,7 @@ namespace simpleGIS
             // 鼠标左键
             if (e.Button == MouseButtons.Left)
             {
+                isLeftButtonDown = true;
                 switch (mapOperation)
                 {
                     case OperationType.Edit:
@@ -902,6 +920,7 @@ namespace simpleGIS
                         {
                             if (geo != null) { Cursor = Cursors.NoMove2D; break; }
                         }
+                        Refresh();
                         break;
                     case OperationType.Track:
                         if (e.Clicks == 1)
@@ -970,6 +989,7 @@ namespace simpleGIS
                         MoveEditGeometry(e.X, e.Y);
                         needRefresh = true;
                         needSave = true;
+                        mouseLoc = e.Location;
                         Refresh();
                         break;
                     case OperationType.Pan:
@@ -978,27 +998,21 @@ namespace simpleGIS
                         map.OffsetX += prePoint.X - curPoint.X;
                         map.OffsetY += prePoint.Y - curPoint.Y;
                         needRefresh = true;
+                        mouseLoc = e.Location;
                         Refresh();
                         break;
                     case OperationType.Select:
                         // 绘制选择框
-                        Refresh();
-                        Graphics g = Graphics.FromHwnd(Handle);
-                        Pen boxPen = new Pen(Color.DarkBlue, 2);
-                        float minx = Math.Min(mouseDownLoc.X, e.X),
-                            miny = Math.Min(mouseDownLoc.Y, e.Y),
-                            maxx = Math.Max(mouseDownLoc.X, e.X),
-                            maxy = Math.Max(mouseDownLoc.Y, e.Y);
-                        g.DrawRectangle(boxPen, minx, miny, maxx - minx, maxy - miny);
-                        boxPen.Dispose();
-                        g.Dispose();
-                        break;
-                    case OperationType.Track:
+                        mouseLoc = e.Location;
                         Refresh();
                         break;
                 }
             }
             mouseLoc = e.Location;
+            if (mapOperation == OperationType.Track)
+            {
+                Refresh();
+            }
         }
 
         // 鼠标松开
@@ -1006,6 +1020,7 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
+                isLeftButtonDown = false;
                 switch (mapOperation)
                 {
                     case OperationType.Select:
@@ -1024,8 +1039,13 @@ namespace simpleGIS
         {
             if (e.Button == MouseButtons.Left)
             {
-                FinishTrack();
-                Refresh();
+                switch (mapOperation)
+                {
+                    case OperationType.Track:
+                        FinishTrack();
+                        Refresh();
+                        break;
+                }
             }
         }
 
@@ -1054,12 +1074,13 @@ namespace simpleGIS
             PointD p = map.ToMapPoint(new PointD(mouseRDownLoc.X, mouseRDownLoc.Y));
             if (editGeometries[1].GetType() == typeof(Polyline))
             {
-                ((Polyline)editGeometries[1]).Data.Add(p);
+                ((Polyline)editGeometries[1]).Data.Insert(addVertexLoc, p);
             }
             else
             {
-                ((Polygon)editGeometries[1]).Data.Add(p);
+                ((Polygon)editGeometries[1]).Data.Insert(addVertexLoc, p);
             }
+            editGeometries[0] = p;
             needRefresh = true;
             needSave = true;
             editGeometries[1].NeedRenewBox();

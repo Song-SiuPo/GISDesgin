@@ -226,21 +226,21 @@ namespace simpleGIS
         //构造函数
         public Polyline()
         {
-            this.Data = new List<PointD>();
+            this.data = new List<PointD>();
         }
         public Polyline(int id)
         {
-            this.Data = new List<PointD>();
+            this.data = new List<PointD>();
             this.ID = id;
         }
         public Polyline(List<PointD> value)
         {
-            this.Data = new List<PointD>(value);
+            this.data = new List<PointD>(value);
         }
         public Polyline(List<PointD>value,int id)
         {
             this.ID = id;
-            this.Data = new List<PointD>(value);
+            this.data = new List<PointD>(value);
         }
         public override bool IsPointOn(PointD point,double BufferDist)
         {
@@ -272,8 +272,8 @@ namespace simpleGIS
         {
             for(int i=0;i<Data.Count();i++)
             {
-                Data[i].X = Data[i].X + deltaX;
-                Data[i].Y = Data[i].Y + deltaY;
+                data[i].X = data[i].X + deltaX;
+                data[i].Y = data[i].Y + deltaY;
             }
         }
 
@@ -345,21 +345,21 @@ namespace simpleGIS
         //构造函数
         public Polygon()
         {
-            this.Data = new List<PointD>();
+            this.data = new List<PointD>();
         }
         public Polygon(int id)
         {
-            this.Data = new List<PointD>();
+            this.data = new List<PointD>();
             this.ID = id;
         }
         public Polygon(List<PointD> value)
         {
-            this.Data = new List<PointD>(value);
+            this.data = new List<PointD>(value);
         }
         public Polygon(List<PointD> value, int id)
         {
             this.ID = id;
-            this.Data = new List<PointD>(value);
+            this.data = new List<PointD>(value);
         }
 
         public override bool IsPointOn(PointD point, double BufferDist)
@@ -392,7 +392,7 @@ namespace simpleGIS
             //throw new NotImplementedException();
             PointD MaxXY = FindMaxXY(this.Data);
             PointD MinXY = FindMinXY(this.Data);
-            if (MaxXY.X <= box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X >= box.MinX && MinXY.Y >= box.MinY)
+            if (MaxXY.X <= Box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X >= box.MinX && MinXY.Y >= box.MinY)
                 return true;
             else
                 return false;
@@ -403,8 +403,8 @@ namespace simpleGIS
             //throw new NotImplementedException();
             for (int i = 0; i < Data.Count(); i++)
             {
-                Data[i].X = Data[i].X + deltaX;
-                Data[i].Y = Data[i].Y + deltaY;
+                data[i].X = data[i].X + deltaX;
+                data[i].Y = data[i].Y + deltaY;
             }
         }
 
@@ -443,31 +443,31 @@ namespace simpleGIS
         //构造函数
         public MultiPolyline()
         {
-            this.Data = new List<Polyline>();
+            this.data = new List<Polyline>();
         }
         public MultiPolyline(int id)
         {
-            this.Data = new List<Polyline>();
+            this.data = new List<Polyline>();
             this.ID = id;
         }
         public MultiPolyline(IList<Polyline> value)
         {
-            this.Data = new List<Polyline>(value);
+            this.data = new List<Polyline>(value);
         }
         public MultiPolyline(IList<Polyline> value, int id)
         {
             this.ID = id;
-            this.Data = new List<Polyline>(value);
+            this.data = new List<Polyline>(value);
         }
 
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
             bool result = false;
-            for(int i=0;i<Data.Count();i++)
+            for(int i=0;i<data.Count();i++)
             {
                 double dis;
-                dis = this.Data[i].GetDistance(point);
+                dis = this.data[i].GetDistance(point);
                 if (dis <= BufferDist)
                     result = true;
             }
@@ -504,8 +504,8 @@ namespace simpleGIS
             {
                 for(int j=0;j<this.Data[i].Data.Count();j++)
                 {
-                    this.Data[i].Data[j].X = this.Data[i].Data[j].X + deltaX;
-                    this.Data[i].Data[j].Y = this.Data[i].Data[j].Y + deltaY;
+                    this.data[i].Data[j].X = this.data[i].Data[j].X + deltaX;
+                    this.data[i].Data[j].Y = this.data[i].Data[j].Y + deltaY;
                 }
             }
         }
@@ -528,10 +528,10 @@ namespace simpleGIS
                 if (min.Y < minY)
                     minY = min.Y;
             }
-            this.Box.MinX = minX;
-            this.Box.MinY = minY;
-            this.Box.MaxX = maxX;
-            this.Box.MaxY = maxY;
+            this.box.MinX = minX;
+            this.box.MinY = minY;
+            this.box.MaxX = maxX;
+            this.box.MaxY = maxY;
         }
 
         public override double GetDistance(PointD MouseLocation)
@@ -557,21 +557,21 @@ namespace simpleGIS
         //构造函数
         public MultiPolygon()
         {
-            this.Data = new List<Polygon>();
+            this.data = new List<Polygon>();
         }
         public MultiPolygon(int id)
         {
-            this.Data = new List<Polygon>();
+            this.data = new List<Polygon>();
             this.ID = id;
         }
         public MultiPolygon(IList<Polygon> value)
         {
-            this.Data = new List<Polygon>(value);
+            this.data = new List<Polygon>(value);
         }
         public MultiPolygon(IList<Polygon> value, int id)
         {
             this.ID = id;
-            this.Data = new List<Polygon>(value);
+            this.data = new List<Polygon>(value);
         }
 
         public override bool IsPointOn(PointD point, double BufferDist)
@@ -623,8 +623,8 @@ namespace simpleGIS
             {
                 for (int j = 0; j < this.Data[i].Data.Count(); j++)
                 {
-                    this.Data[i].Data[j].X = this.Data[i].Data[j].X + deltaX;
-                    this.Data[i].Data[j].Y = this.Data[i].Data[j].Y + deltaY;
+                    this.data[i].Data[j].X = this.data[i].Data[j].X + deltaX;
+                    this.data[i].Data[j].Y = this.data[i].Data[j].Y + deltaY;
                 }
             }
         }
@@ -646,10 +646,10 @@ namespace simpleGIS
                 if (min.Y < minY)
                     minY = min.Y;
             }
-            this.Box.MinX = minX;
-            this.Box.MinY = minY;
-            this.Box.MaxX = maxX;
-            this.Box.MaxY = maxY;
+            this.box.MinX = minX;
+            this.box.MinY = minY;
+            this.box.MaxX = maxX;
+            this.box.MaxY = maxY;
         }
 
         public override double GetDistance(PointD MouseLocation)
