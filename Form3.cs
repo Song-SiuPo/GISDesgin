@@ -21,6 +21,7 @@ namespace simpleGIS
 
         private DataTable sTable; //属性表
         private Layer sLayer; //操作图层
+        private Layer OriginalLayer; //原始图层
 
         #endregion
 
@@ -33,6 +34,7 @@ namespace simpleGIS
         public void FromLayerImportTable(Layer layer)
         {
             sLayer = layer;
+            OriginalLayer = new Layer(layer);
             sTable = layer.Table.Clone();
         }
 
@@ -46,6 +48,14 @@ namespace simpleGIS
         /// 选择要素发生了改变
         /// </summary>
         public event SelectFeatureChangedHandle SelectFeatureChanged;
+
+
+        public delegate void FeatureBeenDeletedHandle(object sender);
+
+        /// <summary>
+        /// 有要素被删除
+        /// </summary>
+        public event FeatureBeenDeletedHandle FeatureBeenDeleted;
 
         #endregion
 
@@ -76,6 +86,8 @@ namespace simpleGIS
         //取消编辑
         private void tmiCancelEdit_Click(object sender, EventArgs e)
         {
+            //图层、属性表都恢复到之前的状态
+            sLayer = new Layer(OriginalLayer);
             sTable = sLayer.Table.Copy();
         }
 
@@ -112,7 +124,6 @@ namespace simpleGIS
             stpSearch.Click += btnSearch_Click;
             btnStartEdit.Click += tmiStartEdit_Click;
             btnSaveEdit.Click += tmiSaveEdit_Click;
-
         }
 
         //查询要素
@@ -146,7 +157,15 @@ namespace simpleGIS
         {
             foreach(DataGridViewRow row in dataGridView1 .SelectedRows)
             {
+                //数据表删除对应行
                 dataGridView1.Rows.Remove(row);
+
+                //图层删除对应集合体
+                int id = (int)row.Cells["ID"].Value;
+                sLayer.DelFeature(id);
+
+                //触发委托事件
+                FeatureBeenDeleted?.Invoke(this);
             }
         }
 

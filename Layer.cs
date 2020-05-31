@@ -131,7 +131,7 @@ namespace simpleGIS
         {
             try
             {
-                feature.ID = Features.Count + 1;  //给feature赋ID，默认为当前数组大小加一
+                feature.ID = Features.Count;  //给feature赋ID，从0开始
                 Features.Add(feature);     //数据添加该feature
                 Table.Rows.Add(Table.NewRow());
                 Table.Rows[feature.ID]["ID"] = feature.ID;   //更新属性表
@@ -144,7 +144,7 @@ namespace simpleGIS
 
         public void AddFeature(Geometry feature, DataTable row)
         {
-            feature.ID = Features.Count+1;  //给feature赋ID，默认为当前数组大小加一
+            feature.ID = Features.Count;  //给feature赋ID，从0开始
             try
             {
                 Features.Add(feature);     //数组添加该feature
