@@ -23,6 +23,7 @@ namespace simpleGIS
         //clboxLayers数据同步
         private void clboxLayersUpdata()
         {
+            clboxLayers.Items.Clear();
             for (int i = 0; i < mapControl1.Map.Layers.Count; i++)
             {
                 clboxLayers.Items.Add(mapControl1.Map.Layers[i]);
@@ -156,7 +157,7 @@ namespace simpleGIS
         private void menuItemDelLayer_Click(object sender, EventArgs e)
         {
             mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
-            clboxLayersUpdata();
+            clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
             mapControl1.Refresh();
         }
 
