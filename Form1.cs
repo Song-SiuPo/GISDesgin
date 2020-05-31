@@ -320,7 +320,7 @@ namespace simpleGIS
                 //传入图层，打开窗口
                 int id = mapControl1.Map.SelectedLayer;
                 frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-                frm3.Show();
+                frm3.Activate();
             }
 
         }
