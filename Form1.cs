@@ -235,9 +235,14 @@ namespace simpleGIS
         //图层-创建新图层
         private void menuItemNewLayer_Click(object sender, EventArgs e)
         {
-            mapControl1.Map.AddLayer(new Layer());
-            clboxLayersUpdata();
-            mapControl1.Refresh();
+            Form4 form4 = new Form4();
+            if (form4.ShowDialog(this) == DialogResult.OK)
+            {
+                mapControl1.Map.AddLayer(new Layer(form4.LayerName, form4.LayerType));
+                clboxLayersUpdata();
+                mapControl1.Refresh();
+            }
+            form4.Dispose();
         }
 
         //图层-删除当前图层
