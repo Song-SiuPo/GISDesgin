@@ -81,6 +81,7 @@
     <Compile Include="Form4.Designer.cs">
       <DependentUpon>Form4.cs</DependentUpon>
     </Compile>
+    <Compile Include="GeoJsonClass.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="LabelStyle.cs" />
     <Compile Include="Layer.cs" />
