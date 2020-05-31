@@ -36,6 +36,7 @@ namespace simpleGIS
             sLayer = layer;
             OriginalLayer = new Layer(layer);
             sTable = layer.Table.Clone();
+            this.Text = layer.Name.ToString()+"属性表";
         }
 
         /// <summary>

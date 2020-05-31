@@ -15,6 +15,9 @@ namespace simpleGIS
         // 显示选择对象的窗口
         private ShowSelectedFeatureForm showFeatureForm;
 
+        //显示图层的属性表
+        private Form3 frm3;
+
         public Form1()
         {
             InitializeComponent();
@@ -275,17 +278,11 @@ namespace simpleGIS
         private void menuItemLayerTable_Click(object sender, EventArgs e)
         {
             // TODO:属性表逻辑未知
-            Form3 frm3 = new Form3();
             int id = mapControl1.Map.SelectedLayer;
             frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
 
-            //监听事件
-            frm3.SelectFeatureChanged += RefreshSelectFeature;
-            frm3.FeatureBeenDeleted += RefreshAfterDelete;
-
             if (frm3.ShowDialog(this) == DialogResult.OK)
-                mapControl1.Refresh();
-            frm3.Dispose();
+                frm3 = null;
         }
 
         //图层-设置图层属性
@@ -334,6 +331,9 @@ namespace simpleGIS
             String SQLstr = Interaction.InputBox("请输入sql语句查询", "查询语句进行选择", "null", -1, -1);
             //Console.WriteLine(SQLstr);
             nowlayer.QuerySQL(SQLstr, mapControl1.SelectedMode);
+
+            //属性表刷新选择的要素
+            if (frm3!=null) { frm3.RefreshSelectFeature(); }
         }
 
         //图层-选择模式-创建新选择内容
@@ -527,6 +527,13 @@ namespace simpleGIS
                     menuItemSelectIntersect.Checked = true;
                     break;
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            frm3.SelectFeatureChanged += RefreshSelectFeature;
+            frm3.FeatureBeenDeleted += RefreshAfterDelete;
+            mapControl1.SelectedFeatureChanged += RefreshSelectFeature;
         }
     }
         
