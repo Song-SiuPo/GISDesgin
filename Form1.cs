@@ -279,7 +279,7 @@ namespace simpleGIS
             {
                 tsButtonEditGeo.Enabled = true;
                 tsButtonNewGeo.Enabled = true;
-                menuItemEditMode.Enabled = true;
+                menuItemEditMode.Checked = true;
                 menuItemEditGeo.Enabled = true;
                 menuItemNewGeo.Enabled = true;
                 
@@ -288,7 +288,7 @@ namespace simpleGIS
             {
                 tsButtonEditGeo.Enabled = false;
                 tsButtonNewGeo.Enabled = false;
-                menuItemEditMode.Enabled = false;
+                menuItemEditMode.Checked = false;
                 menuItemEditGeo.Enabled = false;
                 menuItemNewGeo.Enabled = false;
             }
