@@ -11,6 +11,13 @@ namespace simpleGIS
     [Serializable]
     public class Map
     {
+        #region 字段
+
+        private double DpiX { get; set; } //屏幕横向分辨率
+        private double DpiY { get; set; } //屏幕纵向分辨率
+
+        #endregion 
+
         #region 属性
 
         public List<Layer> Layers { get; set; }   // 地图的所有图层
@@ -19,14 +26,14 @@ namespace simpleGIS
         public double MapScale { get; set; }     // 地图的比例尺，比例尺为1:MapScale
         public RectangleD Box { get; set; }     // 全地图的外包矩形
         public int SelectedLayer { get; set; }     // 选定图层的下标
-        public double DpiX { get; set; } //屏幕横向分辨率
-        public double DpiY { get; set; } //屏幕纵向分辨率
+
 
         #endregion
 
         #region 方法
 
 
+        //构造函数
         public Map(Graphics g)
         {
             Layers = new List<Layer>();
@@ -152,6 +159,25 @@ namespace simpleGIS
             OffsetY = sOffsetY;
         }
 
+        /// <summary>
+        /// 地图全屏显示
+        /// </summary>
+        public void FullScreen(double width,double height,RectangleD box)
+        {
+            if((box .MaxX -box .MinX) >1 && (box.MaxY -box .MinY) > 1)
+            {
+                //重置offset
+                OffsetX = box.MinX;
+                OffsetY = box.MaxY;
+
+                //重置比例尺
+                double scale_x = (box.MaxX - box.MinX) * (DpiX * 39.37) / width;
+                double scale_y = (box.MaxY - box.MinY) * (DpiY * 39.37) / height;
+                MapScale = Math.Max(scale_x, scale_y);
+            }
+
+        }
+
 
         /// <summary>
         /// 将当前显示内容绘制到Graphic中
@@ -252,7 +278,7 @@ namespace simpleGIS
                 else if (renderType == typeof(ClassBreaksRenderer)) { RenderAsClassBreaksRenderer(g, layer); }
             }
 
-            //绘制注记，保证注记可见
+            //绘制注记，保证注记可见且图层有元素
             if(layer.LabelVisible && layer.Features.Count > 0)
             {
                 RenderLabel(g, layer);
