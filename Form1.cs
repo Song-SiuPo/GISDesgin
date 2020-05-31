@@ -32,14 +32,17 @@ namespace simpleGIS
             clboxLayers.Refresh();
         }
 
-        //clboxLayers
+        //clboxLayers_Select
         private void clboxLayers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Selected
             mapControl1.Map.SelectLayer(clboxLayers.SelectedIndex);
-            //Checked
-            mapControl1.Map.Layers[clboxLayers.SelectedIndex].Visible =
-                clboxLayers.GetItemChecked(clboxLayers.SelectedIndex);
+        }
+
+        //clboxLayers_Check
+        private void clboxLayers_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (mapControl1.Map.Layers[e.Index].Visible != (e.NewValue == CheckState.Checked))
+                mapControl1.Map.Layers[e.Index].Visible = (e.NewValue == CheckState.Checked);
         }
 
         #endregion
