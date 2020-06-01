@@ -55,11 +55,16 @@ namespace simpleGIS
             //datagridview更新选择
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                //如果在选择范围
-                if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
+                if(sLayer .SelectedItems .Count > 0)
                 {
-                    row.Selected = true;
+                    //如果在选择范围
+                    if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
+                    {
+                        row.Selected = true;
+                    }
+                    else { row.Selected = false; }
                 }
+
             }
         }
 
@@ -166,11 +171,16 @@ namespace simpleGIS
             //datagridview更新选择
             foreach(DataGridViewRow row in  dataGridView1.Rows)
             {
-                //如果在选择范围
-                if (sLayer.SelectedItems.Contains((int)row.Cells ["ID"].Value))
+                if(sLayer .SelectedItems .Count > 0)
                 {
-                    row.Selected = true;
+                    //如果在选择范围
+                    if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
+                    {
+                        row.Selected = true;
+                    }
+                    else { row.Selected = false; }
                 }
+
             }
 
             //触发联动事件,form1显示选择要素
@@ -182,12 +192,13 @@ namespace simpleGIS
         {
             foreach(DataGridViewRow row in dataGridView1 .SelectedRows)
             {
-                //数据表删除对应行
-                dataGridView1.Rows.Remove(row);
 
                 //图层删除对应集合体
                 int id = (int)row.Cells["ID"].Value;
                 sLayer.DelFeature(id);
+
+                //数据表删除对应行
+                dataGridView1.Rows.Remove(row);
 
                 //触发委托事件
                 FeatureBeenDeleted?.Invoke(this);
@@ -247,7 +258,8 @@ namespace simpleGIS
                 List<string> deleteitems = dcfrm.ColumnsToDelete;
                 foreach (string item in deleteitems)
                 {
-                    sTable.Columns.Remove(item);
+                    if(item == "ID") { MessageBox.Show("ID字段不可删！"); }
+                    else { sTable.Columns.Remove(item); }
                 }
             }
         }
