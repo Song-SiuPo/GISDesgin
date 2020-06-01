@@ -210,13 +210,20 @@ namespace simpleGIS
         {
             //清除之前的要素
             sLayer.SelectedItems.Clear();
-
-            //遍历，找到选择的要素
-            foreach(DataGridViewRow row in dataGridView1 .SelectedRows)
+            if(dataGridView1 .SelectedRows .Count > 0)
             {
-                int ID = (int)row.Cells["ID"].Value;
-                sLayer.SelectedItems.Add(ID);
+                //遍历，找到选择的要素
+                foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                {
+                    if(row.Cells["ID"].Value != null)  //ID不为空
+                    {
+                        int ID = (int)row.Cells["ID"].Value;
+                        sLayer.SelectedItems.Add(ID);
+                    }
+
+                }
             }
+
 
             //联动，form1显示选择的要素
             SelectFeatureChanged?.Invoke(this);
