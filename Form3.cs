@@ -170,29 +170,9 @@ namespace simpleGIS
             //查询图层对应的要素
             sLayer.QuerySQL(tbxSQL.Text, SelectedMode.New);
 
-            //datagridview清空选择
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-            {
-                row.Selected = false;
-            }
-
-            //datagridview更新选择
-            foreach(DataGridViewRow row in  dataGridView1.Rows)
-            {
-                if(sLayer .SelectedItems .Count > 0)
-                {
-                    //如果在选择范围
-                    if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
-                    {
-                        row.Selected = true;
-                    }
-                    else { row.Selected = false; }
-                }
-
-            }
-
             //触发联动事件,form1显示选择要素
             SelectFeatureChanged?.Invoke(this);
+
         }
 
         //删除行
