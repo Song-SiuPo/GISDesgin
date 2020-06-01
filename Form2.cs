@@ -82,6 +82,7 @@ namespace simpleGIS
             InitializeComponent();
 
             _layer = layer;
+            Text += " - " + layer.Name;
             simpleR = new SimpleRenderer(layer.FeatureType);
             uniqueR = new UniqueValueRenderer(layer.FeatureType);
             classBreaksR = new ClassBreaksRenderer(layer.FeatureType);
