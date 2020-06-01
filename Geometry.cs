@@ -144,7 +144,9 @@ namespace simpleGIS
         {
             double cx;
             cx = (startP.X - endP.X) / (startP.Y - endP.Y) * (point.Y - endP.Y) + endP.X;
-            if (cx >= point.X)
+            double _maxY = Math.Max(startP.Y, endP.Y);
+            double _minY = Math.Min(startP.Y, endP.Y);
+            if (cx >= point.X && point.Y > _minY && point.Y <= _maxY)
                 return true;
             else
                 return false;
