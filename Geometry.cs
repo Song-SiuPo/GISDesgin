@@ -322,7 +322,7 @@ namespace simpleGIS
                 b.X = Data[i + 1].X - Data[i].X;
                 b.Y = Data[i + 1].Y - Data[i].Y;
                 double neiji = (a.X * b.X) + (a.Y * b.Y);
-                double judge = neiji / b.X * b.X + b.Y * b.Y;
+                double judge = neiji / (b.X * b.X + b.Y * b.Y);
                 if(judge < 0)
                 {
                     distance1 = Math.Sqrt(a.X * a.X + a.Y * a.Y);
