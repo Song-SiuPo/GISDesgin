@@ -94,6 +94,7 @@
             this.MaximizeBox = false;
             this.Name = "ShowSelectedFeatureForm";
             this.Text = "选中要素";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ShowSelectedFeatureForm_FormClosed);
             this.Load += new System.EventHandler(this.ShowSelectedFeatureForm_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

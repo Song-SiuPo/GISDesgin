@@ -47,6 +47,7 @@ namespace simpleGIS
         /// </summary>
         public void RenewSelectedItem()
         {
+            listBox1.SelectedIndex = -1;
             listBox1.Items.Clear();
             table.Rows.Clear();
             if (map.SelectedLayer == -1) { return; }
@@ -111,6 +112,12 @@ namespace simpleGIS
             RenewSelectedItem();
         }
 
+        private void ShowSelectedFeatureForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // 关闭窗口
+            listBox1.SelectedIndex = -1;
+        }
+        
         #endregion
 
 

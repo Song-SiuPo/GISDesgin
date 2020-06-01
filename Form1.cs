@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using simpleGIS.Properties;
 
 namespace simpleGIS
 {
@@ -46,36 +47,7 @@ namespace simpleGIS
         private void clboxLayers_SelectedIndexChanged(object sender, EventArgs e)
         {
             mapControl1.Map.SelectLayer(clboxLayers.SelectedIndex);
-            if (clboxLayers.SelectedIndex == -1)
-            {
-                menuItemEditMode.Enabled = false;
-                menuItemDelLayer.Enabled = false;
-                menuItemLayerTable.Enabled = false;
-                menuItemLayerAttr.Enabled = false;
-                menuItemLayerUp.Enabled = false;
-                menuItemLayerDown.Enabled = false;
-                menuItemSelectMouse.Enabled = false;
-                menuItemSelectStr.Enabled = false;
-                tsButtonZoomScale.Enabled = false;
-                tsButtonEdit.Enabled = false;
-            }
-            else
-            {
-                Layer layer = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer];
-                menuItemDelLayer.Enabled = true;
-                menuItemLayerTable.Enabled = true;
-                menuItemLayerAttr.Enabled = true;
-                menuItemSelectStr.Enabled = true;
-                tsButtonZoomScale.Enabled = true;
-                menuItemEditMode.Enabled = layer.Visible;
-                menuItemSelectMouse.Enabled = layer.Visible;
-                tsButtonEdit.Enabled = layer.Visible;
-                menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
-                menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
-                mapControl1.Invalidate();
-            }
-            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
-            { showFeatureForm.RenewSelectedItem(); }
+            RefreshEnable();
         }
 
         //clboxLayers_Check
@@ -167,6 +139,41 @@ namespace simpleGIS
             mapControl1.Refresh();
         }
 
+        // 更新按钮是否可用
+        private void RefreshEnable()
+        {
+            if (mapControl1.Map.SelectedLayer == -1)
+            {
+                menuItemEditMode.Enabled = false;
+                menuItemDelLayer.Enabled = false;
+                menuItemLayerTable.Enabled = false;
+                menuItemLayerAttr.Enabled = false;
+                menuItemLayerUp.Enabled = false;
+                menuItemLayerDown.Enabled = false;
+                menuItemSelectMouse.Enabled = false;
+                menuItemSelectStr.Enabled = false;
+                tsButtonZoomScale.Enabled = false;
+                tsButtonEdit.Enabled = false;
+            }
+            else
+            {
+                Layer layer = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer];
+                menuItemDelLayer.Enabled = true;
+                menuItemLayerTable.Enabled = true;
+                menuItemLayerAttr.Enabled = true;
+                menuItemSelectStr.Enabled = true;
+                tsButtonZoomScale.Enabled = true;
+                menuItemEditMode.Enabled = layer.Visible;
+                menuItemSelectMouse.Enabled = layer.Visible;
+                tsButtonEdit.Enabled = layer.Visible;
+                menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
+                menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
+                mapControl1.Invalidate();
+            }
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            { showFeatureForm.RenewSelectedItem(); }
+        }
+
         #endregion
 
         #region 窗体和控件事件处理
@@ -185,6 +192,7 @@ namespace simpleGIS
                     showFeatureForm.Dispose();
                 }
                 clboxLayersUpdata();
+                RefreshEnable();
                 mapControl1.Refresh();
             }
         }
@@ -221,6 +229,7 @@ namespace simpleGIS
                 }
                 openFileDialog.Dispose();
                 clboxLayersUpdata();
+                RefreshEnable();
             }
         }
 

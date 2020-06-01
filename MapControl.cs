@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using simpleGIS.Properties;
+using System.Reflection;
 
 namespace simpleGIS
 {
@@ -38,10 +39,11 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
-        private readonly Cursor zoomInCursor = new Cursor(((Icon)Resources.ZoomIn.Clone()).Handle);
-        private readonly Cursor zoomOutCursor = new Cursor(((Icon)Resources.ZoomOut.Clone()).Handle);
-        private readonly Cursor panCursor = new Cursor(((Icon)Resources.PanUp.Clone()).Handle);
-        private readonly Cursor crossCursor = new Cursor(((Icon)Resources.Cross.Clone()).Handle);
+
+        private Cursor zoomInCursor = new Cursor(((Icon)Resources.ZoomIn.Clone()).Handle);
+        private Cursor zoomOutCursor = new Cursor(((Icon)Resources.ZoomOut.Clone()).Handle);
+        private Cursor panCursor = new Cursor(((Icon)Resources.PanUp.Clone()).Handle);
+        private Cursor crossCursor = new Cursor(((Icon)Resources.Cross.Clone()).Handle);
 
         // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
@@ -53,6 +55,7 @@ namespace simpleGIS
             cache = new Bitmap(Width, Height);
             InitializeComponent();
 
+            Assembly ass = Assembly.GetExecutingAssembly();
             Graphics g = Graphics.FromHwnd(Handle);
             map = new Map(g);
             g.Dispose();
@@ -865,6 +868,9 @@ namespace simpleGIS
         {
             switch (mapOperation)
             {
+                case OperationType.Pan:
+                    Cursor = panCursor;
+                    break;
                 case OperationType.ZoomIn:
                     Cursor = zoomInCursor;
                     break;
