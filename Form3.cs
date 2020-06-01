@@ -126,6 +126,9 @@ namespace simpleGIS
             sTable = sLayer.Table.Copy();
             dataGridView1.DataSource = sTable;
             dataGridView1.Refresh();
+
+            //刷新mapcontrol
+            FeatureBeenDeleted?.Invoke(this);
         }
 
 
@@ -172,7 +175,6 @@ namespace simpleGIS
 
             //触发联动事件,form1显示选择要素
             SelectFeatureChanged?.Invoke(this);
-
         }
 
         //删除行

@@ -293,20 +293,24 @@ namespace simpleGIS
         /// <param name="layer"></param>
         private void RenderSingleLayer(Graphics g, Layer layer)
         {
-            //绘制图层,保证图层可见且有元素
-            if (layer .Visible == true && layer.Features.Count > 0)
+            try
             {
-                Type renderType = layer.Renderer.GetType();  //获得渲染类型
-                if (renderType == typeof(SimpleRenderer)) { RenderAsSimpleRenderer(g, layer); }
-                else if (renderType == typeof(UniqueValueRenderer)) { RenderAsUniqueValueRenderer(g, layer); }
-                else if (renderType == typeof(ClassBreaksRenderer)) { RenderAsClassBreaksRenderer(g, layer); }
-            }
+                //绘制图层,保证图层可见且有元素
+                if (layer.Visible == true && layer.Features.Count > 0)
+                {
+                    Type renderType = layer.Renderer.GetType();  //获得渲染类型
+                    if (renderType == typeof(SimpleRenderer)) { RenderAsSimpleRenderer(g, layer); }
+                    else if (renderType == typeof(UniqueValueRenderer)) { RenderAsUniqueValueRenderer(g, layer); }
+                    else if (renderType == typeof(ClassBreaksRenderer)) { RenderAsClassBreaksRenderer(g, layer); }
+                }
 
-            //绘制注记，保证注记可见且图层有元素
-            if(layer.LabelVisible && layer.Features.Count > 0)
-            {
-                RenderLabel(g, layer);
+                //绘制注记，保证图层、注记可见且图层有元素
+                if (layer.Visible && layer.LabelVisible && layer.Features.Count > 0)
+                {
+                    RenderLabel(g, layer);
+                }
             }
+            catch { }
 
         }
 

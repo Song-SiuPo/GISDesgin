@@ -44,6 +44,7 @@ namespace simpleGIS
             Table = new DataTable();
             Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
+            Features = new List<Geometry>();
         }
 
         public Layer (Type type)
@@ -59,6 +60,7 @@ namespace simpleGIS
             Table = new DataTable();
             Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
+            Features = new List<Geometry>();
         }
         public Layer (string name ,Type type)
         {
@@ -73,6 +75,7 @@ namespace simpleGIS
             Table = new DataTable();
             Table.Columns.Add("ID", typeof(int));
             SelectedItems = new List<int>();
+            Features = new List<Geometry>();
         }
 
         public Layer (Layer layer)
@@ -87,6 +90,7 @@ namespace simpleGIS
             LabelStyle = layer .LabelStyle;
             Table = layer.Table.Copy();
             SelectedItems = new List<int>(layer.SelectedItems);
+            Features = new List<Geometry>(layer.Features);
         }
 
         /// <summary>
