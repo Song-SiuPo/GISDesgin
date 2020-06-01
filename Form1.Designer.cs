@@ -629,9 +629,11 @@
             // 
             // mapControl1
             // 
+            this.mapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mapControl1.BackColor = System.Drawing.Color.White;
             this.mapControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.mapControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapControl1.DoubleSelectedItem = -1;
             this.mapControl1.Location = new System.Drawing.Point(0, 0);
             this.mapControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -639,7 +641,7 @@
             this.mapControl1.NeedSave = false;
             this.mapControl1.OperationType = simpleGIS.OperationType.None;
             this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
-            this.mapControl1.Size = new System.Drawing.Size(1027, 578);
+            this.mapControl1.Size = new System.Drawing.Size(1027, 550);
             this.mapControl1.TabIndex = 0;
             this.mapControl1.OperationTypeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_OperationTypeChanged);
             this.mapControl1.SelectedModeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_SelectedModeChanged);

@@ -72,7 +72,10 @@ namespace simpleGIS
                 tsButtonEdit.Enabled = layer.Visible;
                 menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
                 menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
+                mapControl1.Invalidate();
             }
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            { showFeatureForm.RenewSelectedItem(); }
         }
 
         //clboxLayers_Check
@@ -127,6 +130,7 @@ namespace simpleGIS
             {
                 showFeatureForm.RenewSelectedItem();
             }
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
 
@@ -142,6 +146,7 @@ namespace simpleGIS
 
         private void ShowFeatureForm_DoubleSelectedChanged(object sender)
         {
+            mapControl1.DoubleSelectedItem = showFeatureForm.DoubleSelectedItem;
             mapControl1.Refresh();
         }
 
@@ -499,7 +504,7 @@ namespace simpleGIS
         //全屏显示
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
-            mapControl1.Map.FullScreen(mapControl1.Width, mapControl1.Height, mapControl1.Map.Box);
+            mapControl1.Map.FullScreen(mapControl1.ClientSize.Width, mapControl1.ClientSize.Height, mapControl1.Map.Box);
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
             tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G6");
