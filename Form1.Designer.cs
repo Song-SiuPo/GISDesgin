@@ -102,8 +102,8 @@
             this.帮助ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(2, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(943, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(1257, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -125,7 +125,7 @@
             this.menuItemNewMap.Name = "menuItemNewMap";
             this.menuItemNewMap.ShortcutKeyDisplayString = "Ctrl+N";
             this.menuItemNewMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.menuItemNewMap.Size = new System.Drawing.Size(183, 22);
+            this.menuItemNewMap.Size = new System.Drawing.Size(260, 30);
             this.menuItemNewMap.Text = "新建(&N)";
             this.menuItemNewMap.ToolTipText = "新建(Ctrl+N)\r\n创建新的地图文档";
             this.menuItemNewMap.Click += new System.EventHandler(this.menuItemNewMap_Click);
@@ -136,7 +136,7 @@
             this.menuItemOpen.Name = "menuItemOpen";
             this.menuItemOpen.ShortcutKeyDisplayString = "Ctrl+O";
             this.menuItemOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.menuItemOpen.Size = new System.Drawing.Size(183, 22);
+            this.menuItemOpen.Size = new System.Drawing.Size(260, 30);
             this.menuItemOpen.Text = "打开(&O)";
             this.menuItemOpen.ToolTipText = "打开(Ctrl+O)\r\n打开现有地图文档";
             this.menuItemOpen.Click += new System.EventHandler(this.menuItemOpen_Click);
@@ -147,7 +147,7 @@
             this.menuItemSave.Name = "menuItemSave";
             this.menuItemSave.ShortcutKeyDisplayString = "Ctrl+S";
             this.menuItemSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.menuItemSave.Size = new System.Drawing.Size(183, 22);
+            this.menuItemSave.Size = new System.Drawing.Size(260, 30);
             this.menuItemSave.Text = "保存(&S)";
             this.menuItemSave.ToolTipText = "保存(Ctrl+S)\r\n保存当前地图文档";
             this.menuItemSave.Click += new System.EventHandler(this.menuItemSave_Click);
@@ -158,7 +158,7 @@
             this.menuItemSavePic.Name = "menuItemSavePic";
             this.menuItemSavePic.ShortcutKeyDisplayString = "Ctrl+P";
             this.menuItemSavePic.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.menuItemSavePic.Size = new System.Drawing.Size(183, 22);
+            this.menuItemSavePic.Size = new System.Drawing.Size(260, 30);
             this.menuItemSavePic.Text = "导出地图(&P)";
             this.menuItemSavePic.ToolTipText = "导出地图(Ctrl+P)\r\n将此地图导出为BitMap文件";
             this.menuItemSavePic.Click += new System.EventHandler(this.menuItemSavePic_Click);
@@ -180,21 +180,21 @@
             this.menuItemEditMode.CheckOnClick = true;
             this.menuItemEditMode.Enabled = false;
             this.menuItemEditMode.Name = "menuItemEditMode";
-            this.menuItemEditMode.Size = new System.Drawing.Size(166, 22);
+            this.menuItemEditMode.Size = new System.Drawing.Size(231, 30);
             this.menuItemEditMode.Text = "编辑模式(&S)";
             this.menuItemEditMode.Click += new System.EventHandler(this.menuItemEditMode_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(228, 6);
             // 
             // menuItemNewGeo
             // 
             this.menuItemNewGeo.Enabled = false;
             this.menuItemNewGeo.Image = global::simpleGIS.Properties.Resources.GenericBlackAdd16;
             this.menuItemNewGeo.Name = "menuItemNewGeo";
-            this.menuItemNewGeo.Size = new System.Drawing.Size(166, 22);
+            this.menuItemNewGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemNewGeo.Text = "绘制新几何体(&N)";
             this.menuItemNewGeo.Click += new System.EventHandler(this.menuItemNewGeo_Click);
             // 
@@ -203,7 +203,7 @@
             this.menuItemEditGeo.Enabled = false;
             this.menuItemEditGeo.Image = global::simpleGIS.Properties.Resources.EditingVertex16;
             this.menuItemEditGeo.Name = "menuItemEditGeo";
-            this.menuItemEditGeo.Size = new System.Drawing.Size(166, 22);
+            this.menuItemEditGeo.Size = new System.Drawing.Size(231, 30);
             this.menuItemEditGeo.Text = "编辑几何体(&E)";
             this.menuItemEditGeo.Click += new System.EventHandler(this.menuItemEditGeo_Click);
             // 
@@ -226,7 +226,7 @@
             // 
             this.menuItemNewLayer.Image = global::simpleGIS.Properties.Resources.DataAdd16;
             this.menuItemNewLayer.Name = "menuItemNewLayer";
-            this.menuItemNewLayer.Size = new System.Drawing.Size(165, 22);
+            this.menuItemNewLayer.Size = new System.Drawing.Size(230, 30);
             this.menuItemNewLayer.Text = "创建新图层(&N)";
             this.menuItemNewLayer.Click += new System.EventHandler(this.menuItemNewLayer_Click);
             // 
@@ -234,20 +234,20 @@
             // 
             this.menuItemDelLayer.Enabled = false;
             this.menuItemDelLayer.Name = "menuItemDelLayer";
-            this.menuItemDelLayer.Size = new System.Drawing.Size(165, 22);
+            this.menuItemDelLayer.Size = new System.Drawing.Size(230, 30);
             this.menuItemDelLayer.Text = "删除当前图层(&D)";
             this.menuItemDelLayer.Click += new System.EventHandler(this.menuItemDelLayer_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(227, 6);
             // 
             // menuItemLayerTable
             // 
             this.menuItemLayerTable.Enabled = false;
             this.menuItemLayerTable.Name = "menuItemLayerTable";
-            this.menuItemLayerTable.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerTable.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerTable.Text = "打开属性表(&T)";
             this.menuItemLayerTable.Click += new System.EventHandler(this.menuItemLayerTable_Click);
             // 
@@ -255,7 +255,7 @@
             // 
             this.menuItemLayerAttr.Enabled = false;
             this.menuItemLayerAttr.Name = "menuItemLayerAttr";
-            this.menuItemLayerAttr.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerAttr.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerAttr.Text = "设置图层属性(&I)";
             this.menuItemLayerAttr.Click += new System.EventHandler(this.menuItemLayerAttr_Click);
             // 
@@ -263,7 +263,7 @@
             // 
             this.menuItemLayerUp.Enabled = false;
             this.menuItemLayerUp.Name = "menuItemLayerUp";
-            this.menuItemLayerUp.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerUp.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerUp.Text = "图层上移(&F)";
             this.menuItemLayerUp.Click += new System.EventHandler(this.menuItemLayerUp_Click);
             // 
@@ -271,7 +271,7 @@
             // 
             this.menuItemLayerDown.Enabled = false;
             this.menuItemLayerDown.Name = "menuItemLayerDown";
-            this.menuItemLayerDown.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerDown.Size = new System.Drawing.Size(230, 30);
             this.menuItemLayerDown.Text = "图层下移(&B)";
             this.menuItemLayerDown.Click += new System.EventHandler(this.menuItemLayerDown_Click);
             // 
@@ -292,7 +292,7 @@
             this.menuItemSelectMouse.Enabled = false;
             this.menuItemSelectMouse.Image = global::simpleGIS.Properties.Resources.SelectionSelectTool16;
             this.menuItemSelectMouse.Name = "menuItemSelectMouse";
-            this.menuItemSelectMouse.Size = new System.Drawing.Size(187, 22);
+            this.menuItemSelectMouse.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectMouse.Text = "鼠标选择几何体(&M)";
             this.menuItemSelectMouse.Click += new System.EventHandler(this.menuItemSelectMouse_Click);
             // 
@@ -300,15 +300,16 @@
             // 
             this.menuItemSelectStr.Enabled = false;
             this.menuItemSelectStr.Name = "menuItemSelectStr";
-            this.menuItemSelectStr.Size = new System.Drawing.Size(187, 22);
+            this.menuItemSelectStr.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectStr.Text = "查询语句选择(&A)";
             this.menuItemSelectStr.Click += new System.EventHandler(this.menuItemSelectStr_Click);
             // 
             // MenuItemShowSelected
             // 
             this.MenuItemShowSelected.Name = "MenuItemShowSelected";
-            this.MenuItemShowSelected.Size = new System.Drawing.Size(187, 22);
+            this.MenuItemShowSelected.Size = new System.Drawing.Size(265, 30);
             this.MenuItemShowSelected.Text = "显示识别要素窗口(&S)";
+            this.MenuItemShowSelected.Click += new System.EventHandler(this.MenuItemShowSelected_Click);
             // 
             // menuItemSelectMode
             // 
@@ -318,7 +319,7 @@
             this.menuItemSelectDel,
             this.menuItemSelectIntersect});
             this.menuItemSelectMode.Name = "menuItemSelectMode";
-            this.menuItemSelectMode.Size = new System.Drawing.Size(187, 22);
+            this.menuItemSelectMode.Size = new System.Drawing.Size(265, 30);
             this.menuItemSelectMode.Text = "选择模式(&I)";
             // 
             // menuItemSelectNew
@@ -326,28 +327,28 @@
             this.menuItemSelectNew.Checked = true;
             this.menuItemSelectNew.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menuItemSelectNew.Name = "menuItemSelectNew";
-            this.menuItemSelectNew.Size = new System.Drawing.Size(188, 22);
+            this.menuItemSelectNew.Size = new System.Drawing.Size(267, 30);
             this.menuItemSelectNew.Text = "创建新选择内容(&C)";
             this.menuItemSelectNew.Click += new System.EventHandler(this.menuItemSelectNew_Click);
             // 
             // menuItemSelectUnion
             // 
             this.menuItemSelectUnion.Name = "menuItemSelectUnion";
-            this.menuItemSelectUnion.Size = new System.Drawing.Size(188, 22);
+            this.menuItemSelectUnion.Size = new System.Drawing.Size(267, 30);
             this.menuItemSelectUnion.Text = "与当前选择求并集(&A)";
             this.menuItemSelectUnion.Click += new System.EventHandler(this.menuItemSelectUnion_Click);
             // 
             // menuItemSelectDel
             // 
             this.menuItemSelectDel.Name = "menuItemSelectDel";
-            this.menuItemSelectDel.Size = new System.Drawing.Size(188, 22);
+            this.menuItemSelectDel.Size = new System.Drawing.Size(267, 30);
             this.menuItemSelectDel.Text = "从当前选择中去除(&R)";
             this.menuItemSelectDel.Click += new System.EventHandler(this.menuItemSelectDel_Click);
             // 
             // menuItemSelectIntersect
             // 
             this.menuItemSelectIntersect.Name = "menuItemSelectIntersect";
-            this.menuItemSelectIntersect.Size = new System.Drawing.Size(188, 22);
+            this.menuItemSelectIntersect.Size = new System.Drawing.Size(267, 30);
             this.menuItemSelectIntersect.Text = "与当前选择求交集(&S)";
             this.menuItemSelectIntersect.Click += new System.EventHandler(this.menuItemSelectIntersect_Click);
             // 
@@ -381,8 +382,8 @@
             this.tsButtonEditGeo});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(943, 27);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(1257, 27);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -565,7 +566,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 51);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -576,9 +577,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.statusStrip1);
             this.splitContainer1.Panel2.Controls.Add(this.mapControl1);
-            this.splitContainer1.Size = new System.Drawing.Size(943, 452);
-            this.splitContainer1.SplitterDistance = 170;
-            this.splitContainer1.SplitterWidth = 3;
+            this.splitContainer1.Size = new System.Drawing.Size(1257, 578);
+            this.splitContainer1.SplitterDistance = 226;
             this.splitContainer1.TabIndex = 2;
             // 
             // clboxLayers
@@ -587,9 +587,9 @@
             this.clboxLayers.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.clboxLayers.FormattingEnabled = true;
             this.clboxLayers.Location = new System.Drawing.Point(0, 0);
-            this.clboxLayers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clboxLayers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.clboxLayers.Name = "clboxLayers";
-            this.clboxLayers.Size = new System.Drawing.Size(170, 452);
+            this.clboxLayers.Size = new System.Drawing.Size(226, 578);
             this.clboxLayers.TabIndex = 0;
             this.clboxLayers.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clboxLayers_ItemCheck);
             this.clboxLayers.SelectedIndexChanged += new System.EventHandler(this.clboxLayers_SelectedIndexChanged);
@@ -600,10 +600,11 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslScale,
             this.tslCoordinate});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 422);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 548);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(19, 0, 1, 0);
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.statusStrip1.Size = new System.Drawing.Size(770, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(1027, 30);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -633,12 +634,12 @@
             this.mapControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapControl1.DoubleSelectedItem = -1;
             this.mapControl1.Location = new System.Drawing.Point(0, 0);
-            this.mapControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mapControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.mapControl1.Name = "mapControl1";
             this.mapControl1.NeedSave = false;
             this.mapControl1.OperationType = simpleGIS.OperationType.None;
             this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
-            this.mapControl1.Size = new System.Drawing.Size(770, 452);
+            this.mapControl1.Size = new System.Drawing.Size(1027, 578);
             this.mapControl1.TabIndex = 0;
             this.mapControl1.OperationTypeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_OperationTypeChanged);
             this.mapControl1.SelectedModeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_SelectedModeChanged);
@@ -647,15 +648,15 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(943, 503);
+            this.ClientSize = new System.Drawing.Size(1257, 629);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "SimpleGIS";
             this.Load += new System.EventHandler(this.Form1_Load);

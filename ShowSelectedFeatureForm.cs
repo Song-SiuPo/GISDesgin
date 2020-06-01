@@ -88,7 +88,7 @@ namespace simpleGIS
                 // 找到对应要素
                 foreach (DataRow dataRow in map.Layers[map.SelectedLayer].Table.Rows)
                 {
-                    if ((int)row[0] == doubleSelectedItem)
+                    if ((int)dataRow[0] == doubleSelectedItem)
                     { row = dataRow; break; }
                 }
                 // 更新显示的Table
@@ -106,6 +106,13 @@ namespace simpleGIS
             DoubleSelectedChanged?.Invoke(this);
         }
 
+        private void ShowSelectedFeatureForm_Load(object sender, EventArgs e)
+        {
+            RenewSelectedItem();
+        }
+
         #endregion
+
+
     }
 }
