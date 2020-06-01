@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using simpleGIS.Properties;
+using System.Reflection;
 
 namespace simpleGIS
 {
@@ -38,10 +39,12 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
-        private readonly Cursor zoomInCursor = new Cursor(((Icon)Resources.ZoomIn.Clone()).Handle);
-        private readonly Cursor zoomOutCursor = new Cursor(((Icon)Resources.ZoomOut.Clone()).Handle);
-        private readonly Cursor panCursor = new Cursor(((Icon)Resources.PanUp.Clone()).Handle);
-        private readonly Cursor crossCursor = new Cursor(((Icon)Resources.Cross.Clone()).Handle);
+        private Icon zoomInIcon = (Icon)Resources.ZoomIn.Clone();
+        private Icon zoomOutIcon = (Icon)Resources.ZoomOut.Clone();
+        private Icon panIcon = (Icon)Resources.PanUp.Clone();
+        private Cursor zoomInCursor;
+        private Cursor zoomOutCursor;
+        private Cursor panCursor;
 
         // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
@@ -53,6 +56,9 @@ namespace simpleGIS
             cache = new Bitmap(Width, Height);
             InitializeComponent();
 
+            zoomInCursor = new Cursor(zoomInIcon.Handle);
+            zoomOutCursor = new Cursor(zoomOutIcon.Handle);
+            panCursor = new Cursor(panIcon.Handle);
             Graphics g = Graphics.FromHwnd(Handle);
             map = new Map(g);
             g.Dispose();
@@ -659,11 +665,7 @@ namespace simpleGIS
         {
             PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
             PointD curPoint = map.ToMapPoint(new PointD(x, y));
-            int topGeo;     // 记录该图层的顶层的几何体
             if (map.SelectedLayer == -1) { return false; }
-            if (map.Layers[map.SelectedLayer].FeatureType != typeof(PointD))
-            { topGeo = 1; }
-            else { topGeo = 0; }
             bool moved = false;
             for (int i = 0; i < 2; i++)
             {
@@ -869,6 +871,9 @@ namespace simpleGIS
         {
             switch (mapOperation)
             {
+                case OperationType.Pan:
+                    Cursor = panCursor;
+                    break;
                 case OperationType.ZoomIn:
                     Cursor = zoomInCursor;
                     break;
@@ -895,9 +900,9 @@ namespace simpleGIS
             {
                 RedrawMap();
             }
+            e.Graphics.DrawImage(cache, 0, 0);
             Bitmap bmp = new Bitmap(cache);
             Graphics g = Graphics.FromImage(bmp);
-            g.DrawImage(cache, 0, 0);
             if (map.SelectedLayer != -1 && map.Layers[map.SelectedLayer].Visible)
             {
                 DrawSelectedGeometries(g);

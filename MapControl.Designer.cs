@@ -102,7 +102,7 @@
             this.trackNewPartToolStripMenuItem});
             this.trackContexStrip.Name = "trackContexStrip";
             this.trackContexStrip.ShowImageMargin = false;
-            this.trackContexStrip.Size = new System.Drawing.Size(231, 152);
+            this.trackContexStrip.Size = new System.Drawing.Size(231, 124);
             // 
             // delLastVertexToolStripMenuItem
             // 
@@ -138,6 +138,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.DoubleBuffered = true;
             this.Name = "MapControl";
             this.Size = new System.Drawing.Size(146, 146);
             this.SizeChanged += new System.EventHandler(this.MapControl_SizeChanged);
