@@ -183,6 +183,8 @@ namespace simpleGIS
         /// 将当前显示内容绘制到Graphic中
         /// </summary>
         /// <param name="g"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public void Render(Graphics g,int width,int height)
         {
             //获得地图显示的box

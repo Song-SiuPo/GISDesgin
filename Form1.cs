@@ -306,10 +306,12 @@ namespace simpleGIS
         //图层-删除当前图层
         private void menuItemDelLayer_Click(object sender, EventArgs e)
         {
-            clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
-            mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
+            int index = mapControl1.Map.SelectedLayer;
+            clboxLayers.Items.RemoveAt(index);
+            mapControl1.Map.DelLayer(index);
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
+
         }
 
         //图层-打开属性表

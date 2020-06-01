@@ -235,7 +235,7 @@ namespace simpleGIS
         {
             Graphics g = Graphics.FromImage(cache);
             g.Clear(BackColor);
-            map.Render(g);
+            map.Render(g, Width, Height);
             needRefresh = false;
             g.Dispose();
         }
