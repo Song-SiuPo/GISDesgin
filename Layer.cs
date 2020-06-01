@@ -85,7 +85,7 @@ namespace simpleGIS
             Renderer = layer .Renderer;
             LabelVisible = layer .LabelVisible;
             LabelStyle = layer .LabelStyle;
-            Table = layer.Table.Clone();
+            Table = layer.Table.Copy();
             SelectedItems = new List<int>(layer.SelectedItems);
         }
 
@@ -185,51 +185,56 @@ namespace simpleGIS
         public void QuerySQL(string sql, SelectedMode mode)
         {
             //获得满足条件的feature
-            DataRow[] selectedRows = Table.Select(sql);
-
-            //获得满足条件feature的id
-            List<int> selectedID = new List<int>();
-            for (int i=0;i<selectedRows.Length; i++)
+            try
             {
-                selectedID.Add((int)selectedRows[i]["ID"]);
+                DataRow[] selectedRows = Table.Select(sql);
+
+
+                //获得满足条件feature的id
+                List<int> selectedID = new List<int>();
+                for (int i = 0; i < selectedRows.Length; i++)
+                {
+                    selectedID.Add((int)selectedRows[i]["ID"]);
+                }
+
+
+                //按照selectmode，更新选择表
+
+                //选取新的对象
+                if (mode == SelectedMode.New)
+                {
+                    SelectedItems.Clear();
+                    SelectedItems = new List<int>(selectedID);
+                }
+
+                //在原基础上添加新选择的对象
+                else if (mode == SelectedMode.Add)
+                {
+                    HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                    HashSet<int> hash2 = new HashSet<int>(selectedID);
+                    hash1.Union(hash2);
+                    SelectedItems = new List<int>(hash1);
+                }
+
+                //在原基础上删除新选择的对象
+                else if (mode == SelectedMode.Delete)
+                {
+                    HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                    HashSet<int> hash2 = new HashSet<int>(selectedID);
+                    hash1.ExceptWith(hash2);
+                    SelectedItems = new List<int>(hash1);
+                }
+
+                //在原基础上选择对象和新对象的交集
+                else if (mode == SelectedMode.Intersect)
+                {
+                    HashSet<int> hash1 = new HashSet<int>(SelectedItems);
+                    HashSet<int> hash2 = new HashSet<int>(selectedID);
+                    hash1.IntersectWith(hash2);
+                    SelectedItems = new List<int>(hash1);
+                }
             }
-
-
-            //按照selectmode，更新选择表
-
-            //选取新的对象
-            if (mode == SelectedMode.New)
-            {
-                SelectedItems.Clear();
-                SelectedItems = new List<int>(selectedID);
-            }
-
-            //在原基础上添加新选择的对象
-            else if (mode == SelectedMode.Add)
-            {
-                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
-                HashSet<int> hash2 = new HashSet<int>(selectedID);
-                hash1.Union(hash2);
-                SelectedItems = new List<int>(hash1); 
-            }
-
-            //在原基础上删除新选择的对象
-            else if (mode == SelectedMode.Delete)
-            {
-                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
-                HashSet<int> hash2 = new HashSet<int>(selectedID);
-                hash1.ExceptWith(hash2);
-                SelectedItems = new List<int>(hash1);
-            }
-
-            //在原基础上选择对象和新对象的交集
-            else if (mode == SelectedMode.Intersect)
-            {
-                HashSet<int> hash1 = new HashSet<int>(SelectedItems);
-                HashSet<int> hash2 = new HashSet<int>(selectedID);
-                hash1.IntersectWith(hash2);
-                SelectedItems = new List<int>(hash1);
-            }
+            catch { MessageBox.Show("未能检索，请检查您的查询语句后重试。"); }
         }
         #endregion
     }

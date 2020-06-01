@@ -119,6 +119,8 @@ namespace simpleGIS
             //图层、属性表都恢复到之前的状态
             sLayer = new Layer(OriginalLayer);
             sTable = sLayer.Table.Copy();
+            dataGridView1.DataSource = sTable;
+            dataGridView1.Refresh();
         }
 
 

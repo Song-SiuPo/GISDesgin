@@ -183,11 +183,33 @@ namespace simpleGIS
         /// 将当前显示内容绘制到Graphic中
         /// </summary>
         /// <param name="g"></param>
-        public void Render(Graphics g)
+        public void Render(Graphics g,int width,int height)
         {
+            //获得地图显示的box
+            double mapWidth = ToMapDistance((double)width);
+            double mapHeight = ToMapDistance((double)height);
+            RectangleD DrawBox = new RectangleD();
+            DrawBox.MinX = OffsetX;
+            DrawBox.MaxX = OffsetX + mapWidth;
+            DrawBox.MinY = OffsetY - mapHeight;
+            DrawBox.MaxY = OffsetY;
+
+
             if (Layers.Count > 0)
             {
-                for (int i = Layers.Count - 1; i >= 0; i--) { RenderSingleLayer(g, Layers[i]); }
+                for (int i = Layers.Count - 1; i >= 0; i--)
+                {
+                    //判断绘制的图层与绘制图框是否相交
+                    RectangleD box = Layers[i].Box;
+                    if(DrawBox.IsPointOn(new PointD (box.MinX,box.MinY))  |
+                        DrawBox.IsPointOn(new PointD(box.MinX, box.MaxY)) |
+                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MinY)) |
+                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MaxY)))
+                    {
+                        RenderSingleLayer(g, Layers[i]);
+                    }
+
+                }
             }
         }
 
@@ -291,6 +313,7 @@ namespace simpleGIS
         /// <param name="layer"></param>
         private void RenderAsSimpleRenderer(Graphics g, Layer layer)
         {
+            
             SimpleRenderer sRenderer = layer.Renderer as SimpleRenderer; // 强转，使图层渲染器为唯一值渲染器
 
             //图层类型为点
