@@ -380,7 +380,7 @@ namespace simpleGIS
                         NumOfPointIntersection = NumOfPointIntersection + 1;
 
                 }
-                if (NumOfPointIntersection / 2 == 0)
+                if (NumOfPointIntersection % 2 == 0)
                     return false;
                 else
                     return true;
