@@ -142,12 +142,14 @@ namespace simpleGIS
         }
         public bool IfHasPoint(PointD point,PointD startP,PointD endP)
         {
-            double cx;
-            cx = (startP.X - endP.X) / (startP.Y - endP.Y) * (point.Y - endP.Y) + endP.X;
             double _maxY = Math.Max(startP.Y, endP.Y);
             double _minY = Math.Min(startP.Y, endP.Y);
-            if (cx >= point.X && point.Y > _minY && point.Y <= _maxY)
-                return true;
+            if (point.Y > _minY && point.Y <= _maxY)
+            {
+                double cx;
+                cx = (startP.X - endP.X) / (startP.Y - endP.Y) * (point.Y - endP.Y) + endP.X;
+                return cx >= point.X;
+            }
             else
                 return false;
         }
