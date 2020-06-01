@@ -113,6 +113,23 @@ namespace simpleGIS
             return result;
         }
 
+        // 检查是否需要保存，若需要则询问。返回值：若要接下来的操作则返回true
+        private bool TryAskSave()
+        {
+            if (mapControl1.NeedSave)
+            {
+                DialogResult result = MessageBox.Show(this, "当前有未保存的更改，是否保存？", "保存地图",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
+                bool try_result = true;
+                if (result == DialogResult.Yes)
+                {
+                    try_result = TrySaveFile(this);
+                }
+                if (result == DialogResult.Cancel || try_result == false) { return false; }
+            }
+            return true;
+        }
+
         //属性表选择几何体，控件响应
         private void RefreshSelectFeatureOfMap(object sender)
         {
@@ -157,66 +174,54 @@ namespace simpleGIS
         //文件-新建空白地图
         private void menuItemNewMap_Click(object sender, EventArgs e)
         {
-            if (mapControl1.NeedSave)
+            bool result = TryAskSave();
+            if (result)
             {
-                DialogResult result = MessageBox.Show(this, "当前有未保存的更改，是否保存？", "保存地图",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
-                bool try_result = true;
-                if (result == DialogResult.Yes)
+                mapControl1.NewMap();
+                tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
+                if (showFeatureForm != null && !showFeatureForm.IsDisposed)
                 {
-                    try_result = TrySaveFile(this);
+                    showFeatureForm.Close();
+                    showFeatureForm.Dispose();
                 }
-                if (result == DialogResult.Cancel || try_result == false) { return; }
+                clboxLayersUpdata();
+                mapControl1.Refresh();
             }
-            mapControl1.NewMap();
-            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
-            {
-                showFeatureForm.Close();
-                showFeatureForm.Dispose();
-            }
-            clboxLayersUpdata();
-            mapControl1.Refresh();
         }
 
         //文件-打开
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
-            if (mapControl1.NeedSave)
+            bool result = TryAskSave();
+            if (result)
             {
-                DialogResult result = MessageBox.Show(this, "当前有未保存的更改，是否保存？", "保存地图",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
-                bool try_result = true;
-                if (result == DialogResult.Yes)
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = false;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    try_result = TrySaveFile(this);
-                }
-                if (result == DialogResult.Cancel || try_result == false) { return; }
-            }
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
-            openFileDialog.Multiselect = false;
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string openFileName = openFileDialog.FileName.ToString();
-                try
-                {
-                    mapControl1.OpenFile(openFileName);
-                    if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+                    string openFileName = openFileDialog.FileName.ToString();
+                    try
                     {
-                        showFeatureForm.Close();
-                        showFeatureForm.Dispose();
+                        mapControl1.OpenFile(openFileName);
+                        tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
+                        if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+                        {
+                            showFeatureForm.Close();
+                            showFeatureForm.Dispose();
+                        }
+                        mapControl1.Refresh();
                     }
-                    mapControl1.Refresh();
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, ex.Message, "错误", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, ex.Message, "错误", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
+                openFileDialog.Dispose();
+                clboxLayersUpdata();
             }
-            openFileDialog.Dispose();
-            clboxLayersUpdata();
         }
 
         //文件-保存
@@ -296,6 +301,7 @@ namespace simpleGIS
             if (form4.ShowDialog(this) == DialogResult.OK)
             {
                 mapControl1.Map.AddLayer(new Layer(form4.LayerName, form4.LayerType));
+                mapControl1.NeedSave = true;
                 clboxLayersUpdata();
                 mapControl1.SetNeedRefreshBase();
                 mapControl1.Refresh();
@@ -308,6 +314,7 @@ namespace simpleGIS
         {
             clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
             mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
+            mapControl1.NeedSave = true;
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
@@ -366,6 +373,7 @@ namespace simpleGIS
             if (frm2.ShowDialog(this) == DialogResult.OK)
             {
                 clboxLayersUpdata();
+                mapControl1.NeedSave = true;
                 mapControl1.SetNeedRefreshBase();
                 mapControl1.Refresh();
             }
@@ -376,6 +384,7 @@ namespace simpleGIS
         private void menuItemLayerUp_Click(object sender, EventArgs e)
         {
             mapControl1.Map.MoveUpLayer(mapControl1.Map.SelectedLayer);
+            mapControl1.NeedSave = true;
             clboxLayersUpdata();
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
@@ -385,6 +394,7 @@ namespace simpleGIS
         private void menuItemLayerDown_Click(object sender, EventArgs e)
         {
             mapControl1.Map.MoveDownLayer(mapControl1.Map.SelectedLayer);
+            mapControl1.NeedSave = true;
             clboxLayersUpdata();
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
@@ -628,6 +638,13 @@ namespace simpleGIS
         private void Form1_Load(object sender, EventArgs e)
         {
             mapControl1.SelectedFeatureChanged += RefreshSelectedFromMapControl;
+        }
+
+        // 关闭前询问
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            bool result = TryAskSave();
+            if (!result) { e.Cancel = true; }
         }
     }
         

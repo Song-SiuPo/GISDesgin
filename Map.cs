@@ -83,7 +83,6 @@ namespace simpleGIS
         public PointD FromMapPoint(PointD point)
         {
             PointD sPoint = new PointD();
-            Graphics g;
             sPoint.X = (point.X - OffsetX) * DpiX * 39.37 / MapScale;
             sPoint.Y = (OffsetY - point.Y) * DpiY * 39.37 / MapScale;
             return sPoint;
@@ -201,14 +200,10 @@ namespace simpleGIS
                 {
                     //判断绘制的图层与绘制图框是否相交
                     RectangleD box = Layers[i].Box;
-                    if(DrawBox.IsPointOn(new PointD (box.MinX,box.MinY))  |
-                        DrawBox.IsPointOn(new PointD(box.MinX, box.MaxY)) |
-                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MinY)) |
-                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MaxY)))
-                    {
-                        RenderSingleLayer(g, Layers[i]);
-                    }
-
+                    if (DrawBox.MaxX < box.MinX || DrawBox.MinX > box.MaxX ||
+                        DrawBox.MaxY < box.MinY || DrawBox.MinY > box.MaxY)
+                    { continue; }
+                    RenderSingleLayer(g, Layers[i]);
                 }
             }
         }

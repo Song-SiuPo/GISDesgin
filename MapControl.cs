@@ -235,7 +235,7 @@ namespace simpleGIS
         {
             Graphics g = Graphics.FromImage(cache);
             g.Clear(BackColor);
-            map.Render(g);
+            map.Render(g, Width, Height);
             needRefresh = false;
             g.Dispose();
         }
@@ -659,11 +659,7 @@ namespace simpleGIS
         {
             PointD prePoint = map.ToMapPoint(new PointD(mouseLoc.X, mouseLoc.Y));
             PointD curPoint = map.ToMapPoint(new PointD(x, y));
-            int topGeo;     // 记录该图层的顶层的几何体
             if (map.SelectedLayer == -1) { return false; }
-            if (map.Layers[map.SelectedLayer].FeatureType != typeof(PointD))
-            { topGeo = 1; }
-            else { topGeo = 0; }
             bool moved = false;
             for (int i = 0; i < 2; i++)
             {
@@ -895,9 +891,9 @@ namespace simpleGIS
             {
                 RedrawMap();
             }
+            e.Graphics.DrawImage(cache, 0, 0);
             Bitmap bmp = new Bitmap(cache);
             Graphics g = Graphics.FromImage(bmp);
-            g.DrawImage(cache, 0, 0);
             if (map.SelectedLayer != -1 && map.Layers[map.SelectedLayer].Visible)
             {
                 DrawSelectedGeometries(g);

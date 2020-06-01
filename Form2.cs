@@ -195,7 +195,6 @@ namespace simpleGIS
             }
             SetFontString();
             pBoxFontColor.BackColor = layer.LabelStyle.Color;
-            double a = 10;
         }
         
         #region 私有函数
