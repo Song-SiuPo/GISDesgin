@@ -537,8 +537,14 @@ namespace simpleGIS
         protected override void RenewBox()
         {
             //throw new NotImplementedException();
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
-            for (int i = 0; i < this.Data.Count(); i++)
+            if (data.Count == 0)
+            {
+                box = new RectangleD();
+                return;
+            }
+            double maxX = data[0].Box.MaxX, maxY = data[0].Box.MaxY,
+                minX = data[0].Box.MinX, minY = data[0].Box.MinY;
+            for (int i = 1; i < this.Data.Count(); i++)
             {
                 if (data[i].Box.MaxX > maxX)
                     maxX = data[i].Box.MaxX;
@@ -642,7 +648,13 @@ namespace simpleGIS
 
         protected override void RenewBox()
         {
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
+            if (data.Count == 0)
+            {
+                box = new RectangleD();
+                return;
+            }
+            double maxX = data[0].Box.MaxX, maxY = data[0].Box.MaxY,
+                minX = data[0].Box.MinX, minY = data[0].Box.MinY;
             for (int i = 0; i < this.Data.Count(); i++)
             {
                 if (data[i].Box.MaxX > maxX)
