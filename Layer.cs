@@ -135,6 +135,7 @@ namespace simpleGIS
                 Features.Add(feature);     //数据添加该feature
                 Table.Rows.Add(Table.NewRow());
                 Table.Rows[feature.ID]["ID"] = feature.ID;   //更新属性表
+                RefreshBox(); //更新外包矩形
             }
             catch
             {
@@ -150,6 +151,7 @@ namespace simpleGIS
                 Features.Add(feature);     //数组添加该feature
                 Table.Rows.Add(row);
                 Table.Rows[feature.ID]["ID"] = feature.ID;  //更新属性表
+                RefreshBox(); //更新外包矩形
             }
             catch
             {
@@ -179,6 +181,9 @@ namespace simpleGIS
                 Features[i].ID = i;
                 Table.Rows[i]["ID"] = i;
             }
+
+            //更新外包矩形
+            RefreshBox();
         }
 
         //通过属性查询语句查询（SelectedMode是枚举类），并按照SelectedMode更新选中的要素SelectedItems

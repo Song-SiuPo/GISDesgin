@@ -116,8 +116,13 @@ namespace simpleGIS
         //取消编辑
         private void tmiCancelEdit_Click(object sender, EventArgs e)
         {
-            //图层、属性表都恢复到之前的状态
-            sLayer = new Layer(OriginalLayer);
+            //图层恢复
+            sLayer.Features = new List<Geometry>(OriginalLayer.Features);
+            sLayer.Table = OriginalLayer.Table.Copy();
+            sLayer.SelectedItems = new List<int>(OriginalLayer.SelectedItems);
+            sLayer.RefreshBox();
+
+            //属性表恢复
             sTable = sLayer.Table.Copy();
             dataGridView1.DataSource = sTable;
             dataGridView1.Refresh();
@@ -147,6 +152,7 @@ namespace simpleGIS
         private void Form3_Load(object sender, EventArgs e)
         {
             sLayer = new Layer();
+
             //创建临时表，设置datagridview数据源为临时表
             sTable = new DataTable();
             dataGridView1.Columns.Clear();
@@ -272,6 +278,35 @@ namespace simpleGIS
                 }
             }
         }
+
+        //关闭窗口时保存
+        private void Form3_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            if (tmiEdit.Enabled == true)
+            {
+                SaveRequestForm savefrm = new SaveRequestForm();
+                if (savefrm.ShowDialog(this) == DialogResult.OK)
+                {
+                    sLayer.Table = sTable.Copy();
+                }
+                else
+                {
+                    //图层恢复
+                    sLayer.Features = new List<Geometry>(OriginalLayer.Features);
+                    sLayer.Table = OriginalLayer.Table.Copy();
+                    sLayer.SelectedItems = new List<int>(OriginalLayer.SelectedItems);
+                    sLayer.RefreshBox();
+
+                    //属性表恢复
+                    sTable = sLayer.Table.Copy();
+                    dataGridView1.DataSource = sTable;
+                    dataGridView1.Refresh();
+                }
+            }
+        }
         #endregion
+
+
     }
 }

@@ -179,43 +179,6 @@ namespace simpleGIS
         }
 
 
-        /// <summary>
-        /// 将当前显示内容绘制到Graphic中
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public void Render(Graphics g,int width,int height)
-        {
-            //获得地图显示的box
-            double mapWidth = ToMapDistance((double)width);
-            double mapHeight = ToMapDistance((double)height);
-            RectangleD DrawBox = new RectangleD();
-            DrawBox.MinX = OffsetX;
-            DrawBox.MaxX = OffsetX + mapWidth;
-            DrawBox.MinY = OffsetY - mapHeight;
-            DrawBox.MaxY = OffsetY;
-
-
-            if (Layers.Count > 0)
-            {
-                for (int i = Layers.Count - 1; i >= 0; i--)
-                {
-                    //判断绘制的图层与绘制图框是否相交
-                    RectangleD box = Layers[i].Box;
-                    if(DrawBox.IsPointOn(new PointD (box.MinX,box.MinY))  |
-                        DrawBox.IsPointOn(new PointD(box.MinX, box.MaxY)) |
-                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MinY)) |
-                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MaxY)))
-                    {
-                        RenderSingleLayer(g, Layers[i]);
-                    }
-
-                }
-            }
-        }
-
-
         //添加一个图层
         public void AddLayer(Layer layer) { Layers.Insert(0, layer); }
 
@@ -279,6 +242,46 @@ namespace simpleGIS
             else { MessageBox.Show("已至最底层"); }
         }
 
+
+
+        /// <summary>
+        /// 将当前显示内容绘制到Graphic中
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public void Render(Graphics g, int width, int height)
+        {
+            //获得地图显示的box
+            double mapWidth = ToMapDistance((double)width);
+            double mapHeight = ToMapDistance((double)height);
+            RectangleD DrawBox = new RectangleD();
+            DrawBox.MinX = OffsetX;
+            DrawBox.MaxX = OffsetX + mapWidth;
+            DrawBox.MinY = OffsetY - mapHeight;
+            DrawBox.MaxY = OffsetY;
+
+
+            if (Layers.Count > 0)
+            {
+                for (int i = Layers.Count - 1; i >= 0; i--)
+                {
+                    //判断绘制的图层与绘制图框是否相交
+                    RectangleD box = Layers[i].Box;
+                    if (DrawBox.IsPointOn(new PointD(box.MinX, box.MinY)) |
+                        DrawBox.IsPointOn(new PointD(box.MinX, box.MaxY)) |
+                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MinY)) |
+                        DrawBox.IsPointOn(new PointD(box.MaxX, box.MaxY)))
+                    { RenderSingleLayer(g, Layers[i]); }
+                    else if(box.IsPointOn(new PointD(DrawBox.MinX, DrawBox.MinY)) |
+                        box.IsPointOn(new PointD(DrawBox.MinX, DrawBox.MaxY)) |
+                        box.IsPointOn(new PointD(DrawBox.MaxX, DrawBox.MinY)) |
+                        box.IsPointOn(new PointD(DrawBox.MaxX, DrawBox.MaxY)))
+                    { RenderSingleLayer(g, Layers[i]); }
+
+                }
+            }
+        }
         #endregion
 
         #region 私有函数
@@ -656,8 +659,8 @@ namespace simpleGIS
                 {
                     //获取注记位置
                     PointD LabelLocation = new PointD();
-                    LabelLocation.X = (float)(layer.Box.MinX + layer.Box.MaxX) / 2;
-                    LabelLocation.Y = (float)(layer.Box.MinY + layer.Box.MaxY) / 2;
+                    LabelLocation.X = (float)(layer.Features[i].Box.MinX + layer.Features[i].Box.MaxX) / 2;
+                    LabelLocation.Y = (float)(layer.Features[i].Box.MinY + layer.Features[i].Box.MaxY) / 2;
                     LabelLocation = FromMapPoint(LabelLocation);
                     PointF screenLocation = new PointF();
                     screenLocation.X = (float)LabelLocation.X;
