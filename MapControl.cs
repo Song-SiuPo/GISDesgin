@@ -39,11 +39,12 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
-
-        private Cursor zoomInCursor = new Cursor(((Icon)Resources.ZoomIn.Clone()).Handle);
-        private Cursor zoomOutCursor = new Cursor(((Icon)Resources.ZoomOut.Clone()).Handle);
-        private Cursor panCursor = new Cursor(((Icon)Resources.PanUp.Clone()).Handle);
-        private Cursor crossCursor = new Cursor(((Icon)Resources.Cross.Clone()).Handle);
+        private Icon zoomInIcon = (Icon)Resources.ZoomIn.Clone();
+        private Icon zoomOutIcon = (Icon)Resources.ZoomOut.Clone();
+        private Icon panIcon = (Icon)Resources.PanUp.Clone();
+        private Cursor zoomInCursor;
+        private Cursor zoomOutCursor;
+        private Cursor panCursor;
 
         // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
@@ -55,7 +56,9 @@ namespace simpleGIS
             cache = new Bitmap(Width, Height);
             InitializeComponent();
 
-            Assembly ass = Assembly.GetExecutingAssembly();
+            zoomInCursor = new Cursor(zoomInIcon.Handle);
+            zoomOutCursor = new Cursor(zoomOutIcon.Handle);
+            panCursor = new Cursor(panIcon.Handle);
             Graphics g = Graphics.FromHwnd(Handle);
             map = new Map(g);
             g.Dispose();
