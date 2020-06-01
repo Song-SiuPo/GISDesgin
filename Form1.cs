@@ -22,7 +22,6 @@ namespace simpleGIS
         {
             InitializeComponent();
             clboxLayersUpdata();
-            showFeatureForm = new ShowSelectedFeatureForm(mapControl1.Map);
 
             tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G8");
         }
@@ -73,7 +72,10 @@ namespace simpleGIS
                 tsButtonEdit.Enabled = layer.Visible;
                 menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
                 menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
+                mapControl1.Invalidate();
             }
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            { showFeatureForm.RenewSelectedItem(); }
         }
 
         //clboxLayers_Check
@@ -114,20 +116,40 @@ namespace simpleGIS
         //属性表选择几何体，控件响应
         private void RefreshSelectFeatureOfMap(object sender)
         {
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            {
+                showFeatureForm.RenewSelectedItem();
+            }
             mapControl1.Refresh();
         }
 
         //属性表删除集合体，控件重绘
         private void RefreshAfterDelete(object sender)
         {
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            {
+                showFeatureForm.RenewSelectedItem();
+            }
+            mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
         }
 
         //控件选择几何体，属性表响应
-        private void RefreshSelectFeatureOfFrm3(object sender)
+        private void RefreshSelectedFromMapControl(object sender)
         {
             if(frm3 != null && !frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            {
+                showFeatureForm.RenewSelectedItem();
+            }
         }
+
+        private void ShowFeatureForm_DoubleSelectedChanged(object sender)
+        {
+            mapControl1.DoubleSelectedItem = showFeatureForm.DoubleSelectedItem;
+            mapControl1.Refresh();
+        }
+
         #endregion
 
         #region 窗体和控件事件处理
@@ -147,7 +169,11 @@ namespace simpleGIS
                 if (result == DialogResult.Cancel || try_result == false) { return; }
             }
             mapControl1.NewMap();
-            showFeatureForm.LinkMap = mapControl1.Map;
+            if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+            {
+                showFeatureForm.Close();
+                showFeatureForm.Dispose();
+            }
             clboxLayersUpdata();
             mapControl1.Refresh();
         }
@@ -176,7 +202,11 @@ namespace simpleGIS
                 try
                 {
                     mapControl1.OpenFile(openFileName);
-                    showFeatureForm.LinkMap = mapControl1.Map;
+                    if (showFeatureForm != null && !showFeatureForm.IsDisposed)
+                    {
+                        showFeatureForm.Close();
+                        showFeatureForm.Dispose();
+                    }
                     mapControl1.Refresh();
                 }
                 catch (Exception ex)
@@ -366,7 +396,7 @@ namespace simpleGIS
             mapControl1.OperationType = OperationType.Select;
         }
 
-        //图层-查询语句选择
+        //选择-查询语句选择
         private void menuItemSelectStr_Click(object sender, EventArgs e)
         {
             int id = mapControl1.Map.SelectedLayer;
@@ -379,25 +409,48 @@ namespace simpleGIS
             if (!frm3.IsDisposed) { frm3.RefreshSelectFeature(); }
         }
 
-        //图层-选择模式-创建新选择内容
+        // 选择-显示查询结果
+        private void MenuItemShowSelected_Click(object sender, EventArgs e)
+        {
+            if (showFeatureForm == null)
+            {
+                showFeatureForm = new ShowSelectedFeatureForm(mapControl1.Map);
+                showFeatureForm.DoubleSelectedChanged += ShowFeatureForm_DoubleSelectedChanged;
+                showFeatureForm.Show(this);
+            }
+            else if (showFeatureForm.IsDisposed)
+            {
+                showFeatureForm.Dispose();
+                showFeatureForm = new ShowSelectedFeatureForm(mapControl1.Map);
+                showFeatureForm.DoubleSelectedChanged += ShowFeatureForm_DoubleSelectedChanged;
+                showFeatureForm.Show(this);
+            }
+            else
+            {
+                showFeatureForm.RenewSelectedItem();
+                showFeatureForm.Activate();
+            }
+        }
+
+        //选择-选择模式-创建新选择内容
         private void menuItemSelectNew_Click(object sender, EventArgs e)
         {
             mapControl1.SelectedMode = SelectedMode.New;
         }
 
-        //图层-选择模式-与当前选择求并集
+        //选择-选择模式-与当前选择求并集
         private void menuItemSelectUnion_Click(object sender, EventArgs e)
         {
             mapControl1.SelectedMode = SelectedMode.Add;
         }
 
-        //图层-选择模式-从当前选择中去除
+        //选择-选择模式-从当前选择中去除
         private void menuItemSelectDel_Click(object sender, EventArgs e)
         {
             mapControl1.SelectedMode = SelectedMode.Delete;
         }
 
-        //图层-选择模式-与当前选择求交集
+        //选择-选择模式-与当前选择求交集
         private void menuItemSelectIntersect_Click(object sender, EventArgs e)
         {
             mapControl1.SelectedMode = SelectedMode.Intersect;
@@ -454,7 +507,7 @@ namespace simpleGIS
         //全屏显示
         private void tsButtonZoomScale_Click(object sender, EventArgs e)
         {
-            mapControl1.Map.FullScreen(mapControl1.Width, mapControl1.Height, mapControl1.Map.Box);
+            mapControl1.Map.FullScreen(mapControl1.ClientSize.Width, mapControl1.ClientSize.Height, mapControl1.Map.Box);
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
             tslScale.Text = "比例尺:  1:" + mapControl1.Map.MapScale.ToString("G6");
@@ -574,7 +627,7 @@ namespace simpleGIS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            mapControl1.SelectedFeatureChanged += RefreshSelectFeatureOfFrm3;
+            mapControl1.SelectedFeatureChanged += RefreshSelectedFromMapControl;
         }
     }
         

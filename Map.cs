@@ -164,7 +164,7 @@ namespace simpleGIS
         /// </summary>
         public void FullScreen(double width,double height,RectangleD box)
         {
-            if((box .MaxX -box .MinX) >1 && (box.MaxY -box .MinY) > 1)
+            if((box .MaxX -box .MinX) >1e-6 && (box.MaxY -box .MinY) > 1e-6)
             {
                 //重置offset
                 OffsetX = box.MinX;

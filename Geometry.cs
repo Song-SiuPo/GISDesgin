@@ -43,6 +43,16 @@ namespace simpleGIS
             this.MaxY = maxy;
         }
 
+        /// <summary>
+        /// 判断点是否在矩形内
+        /// </summary>
+        /// <param name="point">地图点</param>
+        /// <returns>在矩形内返回true</returns>
+        public bool IsPointOn(PointD point)
+        {
+            return point.X >= MinX && point.Y >= MinY &&
+                point.X <= MaxX && point.Y <= MaxY;
+        }
     }
 
 
@@ -132,10 +142,14 @@ namespace simpleGIS
         }
         public bool IfHasPoint(PointD point,PointD startP,PointD endP)
         {
-            double cx;
-            cx = (startP.X - endP.X) / (startP.Y - endP.Y) * (point.Y - endP.Y) + endP.X;
-            if (cx >= point.X)
-                return true;
+            double _maxY = Math.Max(startP.Y, endP.Y);
+            double _minY = Math.Min(startP.Y, endP.Y);
+            if (point.Y > _minY && point.Y <= _maxY)
+            {
+                double cx;
+                cx = (startP.X - endP.X) / (startP.Y - endP.Y) * (point.Y - endP.Y) + endP.X;
+                return cx >= point.X;
+            }
             else
                 return false;
         }
@@ -183,9 +197,9 @@ namespace simpleGIS
                 return false;
         }
 
-        public override bool IsWithinBox(RectangleD box)
+        public override bool IsWithinBox(RectangleD _box)
         {
-            if (X < Box.MaxX && X > box.MinX && Y < box.MaxY && Y > box.MinY)
+            if (_box.IsPointOn(this))
                 return true;
             else
                 return false;
@@ -248,7 +262,7 @@ namespace simpleGIS
         }
         public override bool IsPointOn(PointD point,double BufferDist)
         {
-            if (point.X <= this.Box.MaxX && point.X >= this.box.MinX && point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
+            if (Box.IsPointOn(point))//先用box判断
             {
                 double point_dis = GetDistance(point);
                 if (point_dis <= BufferDist)
@@ -261,15 +275,16 @@ namespace simpleGIS
                 
         }
 
-        public override bool IsWithinBox(RectangleD box)
+        public override bool IsWithinBox(RectangleD _box)
         {
-            PointD MaxXY = FindMaxXY(this.Data);
-            PointD MinXY = FindMinXY(this.Data);
-            if (MaxXY.X <= Box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X > box.MinX && MinXY.Y > box.MinY)
+            if (Box.MaxX <= _box.MaxX && box.MaxY <= _box.MaxY && box.MinX > _box.MinX && box.MinY > _box.MinY)
                 return true;
-            else
-                return false;
-
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].IsWithinBox(_box))
+                { return true; }
+            }
+            return false;
         }
 
         public override void Move(double deltaX, double deltaY)
@@ -311,7 +326,7 @@ namespace simpleGIS
                 b.X = Data[i + 1].X - Data[i].X;
                 b.Y = Data[i + 1].Y - Data[i].Y;
                 double neiji = (a.X * b.X) + (a.Y * b.Y);
-                double judge = neiji / b.X * b.X + b.Y * b.Y;
+                double judge = neiji / (b.X * b.X + b.Y * b.Y);
                 if(judge < 0)
                 {
                     distance1 = Math.Sqrt(a.X * a.X + a.Y * a.Y);
@@ -370,7 +385,7 @@ namespace simpleGIS
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
-            if(point.X<=this.Box.MaxX&&point.X>=this.box.MinX&& point.Y <= this.box.MaxY && point.Y >= this.box.MinY)//先用box判断
+            if(Box.IsPointOn(point))//先用box判断
             {
                 int NumOfPointIntersection = 0;
                 for (int i = 0; i < this.Data.Count() - 1; i++)
@@ -378,8 +393,10 @@ namespace simpleGIS
                     //Data[i]和data[i+1]组成一个线段
                     if (IfHasPoint(point, this.Data[i], this.Data[i + 1]))
                         NumOfPointIntersection = NumOfPointIntersection + 1;
-
                 }
+                // 首尾连接线的交点判断
+                if (IfHasPoint(point, this.Data[0], this.Data[Data.Count() - 1]))
+                    NumOfPointIntersection = NumOfPointIntersection + 1;
                 if (NumOfPointIntersection % 2 == 0)
                     return false;
                 else
@@ -392,15 +409,24 @@ namespace simpleGIS
             
         }
 
-        public override bool IsWithinBox(RectangleD box)
+        public override bool IsWithinBox(RectangleD _box)
         {
             //throw new NotImplementedException();
-            PointD MaxXY = FindMaxXY(this.Data);
-            PointD MinXY = FindMinXY(this.Data);
-            if (MaxXY.X <= Box.MaxX && MaxXY.Y <= box.MaxY && MinXY.X >= box.MinX && MinXY.Y >= box.MinY)
+            if (Box.MaxX <= _box.MaxX && box.MaxY <= _box.MaxY && box.MinX >= _box.MinX && box.MinY >= _box.MinY)
                 return true;
-            else
-                return false;
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].IsWithinBox(_box))
+                { return true; }
+            }
+            PointD[] boxP = new PointD[4] {new PointD(_box.MinX, _box.MinY),
+                new PointD(_box.MinX, _box.MaxY), new PointD(_box.MaxX, _box.MinY),
+                new PointD(_box.MaxX, _box.MaxY)};
+            for (int i = 0; i < 4; i++)
+            {
+                if (IsPointOn(boxP[i], 0)) { return true; }
+            }
+            return false;
         }
 
         public override void Move(double deltaX, double deltaY)
@@ -470,38 +496,34 @@ namespace simpleGIS
         {
             //throw new NotImplementedException();
             bool result = false;
+            if (!Box.IsPointOn(point))
+            { return false; }
             for(int i=0;i<data.Count();i++)
             {
                 double dis;
                 dis = this.data[i].GetDistance(point);
                 if (dis <= BufferDist)
+                {
                     result = true;
+                    break;
+                }
             }
             return result;
         }
 
-        public override bool IsWithinBox(RectangleD box)
+        public override bool IsWithinBox(RectangleD _box)
         {
             //throw new NotImplementedException();
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
-            PointD max, min;
-            for(int i=0;i<this.Data.Count();i++)
-            {
-                max = FindMaxXY(this.Data[i].Data);
-                min = FindMinXY(this.Data[i].Data);
-                if (max.X > maxX)
-                    maxX = max.X;
-                if (max.Y > maxY)
-                    maxY = max.Y;
-                if (min.X < minX)
-                    minX = min.X;
-                if (min.Y < minY)
-                    minY = min.Y;
-            }
-            if (minX >= Box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
+            if (Box.MaxX <= _box.MaxX && box.MaxY <= _box.MaxY && box.MinX >= _box.MinX && box.MinY >= _box.MinY)
                 return true;
-            else
-                return false;
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].IsWithinBox(_box))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override void Move(double deltaX, double deltaY)
@@ -519,20 +541,23 @@ namespace simpleGIS
         protected override void RenewBox()
         {
             //throw new NotImplementedException();
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
-            PointD max, min;
-            for (int i = 0; i < this.Data.Count(); i++)
+            if (data.Count == 0)
             {
-                max = FindMaxXY(this.Data[i].Data);
-                min = FindMinXY(this.Data[i].Data);
-                if (max.X > maxX)
-                    maxX = max.X;
-                if (max.Y > maxY)
-                    maxY = max.Y;
-                if (min.X < minX)
-                    minX = min.X;
-                if (min.Y < minY)
-                    minY = min.Y;
+                box = new RectangleD();
+                return;
+            }
+            double maxX = data[0].Box.MaxX, maxY = data[0].Box.MaxY,
+                minX = data[0].Box.MinX, minY = data[0].Box.MinY;
+            for (int i = 1; i < this.Data.Count(); i++)
+            {
+                if (data[i].Box.MaxX > maxX)
+                    maxX = data[i].Box.MaxX;
+                if (data[i].Box.MaxY > maxY)
+                    maxY = data[i].Box.MaxY;
+                if (data[i].Box.MinX < minX)
+                    minX = data[i].Box.MinX;
+                if (data[i].Box.MinY < minY)
+                    minY = data[i].Box.MinY;
             }
             this.box.MinX = minX;
             this.box.MinY = minY;
@@ -584,44 +609,33 @@ namespace simpleGIS
         public override bool IsPointOn(PointD point, double BufferDist)
         {
             //throw new NotImplementedException();
-            int NumOfPointIntersection = 0;
-            for (int i = 0; i < this.Data.Count(); i++)
+            bool result = false;
+            if (!Box.IsPointOn(point))
+            { return false; }
+            for (int i = 0; i < data.Count(); i++)
             {
-                for(int j=0;j<this.Data[i].Data.Count-1;j++)
+                if (data[i].IsPointOn(point, BufferDist))
                 {
-                    if (IfHasPoint(point, this.Data[i].Data[j], this.Data[i].Data[j + 1]))
-                        NumOfPointIntersection = NumOfPointIntersection + 1;
+                    result = true;
+                    break;
                 }
-                //Data[i]和data[i+1]组成一个线段
-
             }
-            if (NumOfPointIntersection / 2 == 0)
-                return false;
-            else
-                return true;
+            return result;
         }
 
-        public override bool IsWithinBox(RectangleD box)
+        public override bool IsWithinBox(RectangleD _box)
         {
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
-            PointD max, min;
-            for (int i = 0; i < this.Data.Count(); i++)
-            {
-                max = FindMaxXY(this.Data[i].Data);
-                min = FindMinXY(this.Data[i].Data);
-                if (max.X > maxX)
-                    maxX = max.X;
-                if (max.Y > maxY)
-                    maxY = max.Y;
-                if (min.X < minX)
-                    minX = min.X;
-                if (min.Y < minY)
-                    minY = min.Y;
-            }
-            if (minX >= Box.MinX && minY >= box.MinY && maxX <= box.MaxX && maxY <= box.MaxY)
+            //throw new NotImplementedException();
+            if (Box.MaxX <= _box.MaxX && box.MaxY <= _box.MaxY && box.MinX >= _box.MinX && box.MinY >= _box.MinY)
                 return true;
-            else
-                return false;
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data[i].IsWithinBox(_box))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override void Move(double deltaX, double deltaY)
@@ -638,20 +652,23 @@ namespace simpleGIS
 
         protected override void RenewBox()
         {
-            double maxX = 0, maxY = 0, minX = 0, minY = 0;
-            PointD max, min;
+            if (data.Count == 0)
+            {
+                box = new RectangleD();
+                return;
+            }
+            double maxX = data[0].Box.MaxX, maxY = data[0].Box.MaxY,
+                minX = data[0].Box.MinX, minY = data[0].Box.MinY;
             for (int i = 0; i < this.Data.Count(); i++)
             {
-                max = FindMaxXY(this.Data[i].Data);
-                min = FindMinXY(this.Data[i].Data);
-                if (max.X > maxX)
-                    maxX = max.X;
-                if (max.Y > maxY)
-                    maxY = max.Y;
-                if (min.X < minX)
-                    minX = min.X;
-                if (min.Y < minY)
-                    minY = min.Y;
+                if (data[i].Box.MaxX > maxX)
+                    maxX = data[i].Box.MaxX;
+                if (data[i].Box.MaxY > maxY)
+                    maxY = data[i].Box.MaxY;
+                if (data[i].Box.MinX < minX)
+                    minX = data[i].Box.MinX;
+                if (data[i].Box.MinY < minY)
+                    minY = data[i].Box.MinY;
             }
             this.box.MinX = minX;
             this.box.MinY = minY;

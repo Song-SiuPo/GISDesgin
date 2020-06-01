@@ -38,10 +38,10 @@ namespace simpleGIS
         private PointF mouseLoc = new PointF();         // 记录鼠标当前位置
         private PointF mouseDownLoc = new PointF();     // 鼠标左键按下时的位置
         private PointF mouseRDownLoc = new PointF();    // 鼠标右键按下位置
-        private readonly Cursor zoomInCursor = new Cursor(Resources.ZoomIn.Handle);
-        private readonly Cursor zoomOutCursor = new Cursor(Resources.ZoomOut.Handle);
-        private readonly Cursor panCursor = new Cursor(Resources.PanUp.Handle);
-        private readonly Cursor crossCursor = new Cursor(Resources.Cross.Handle);
+        private readonly Cursor zoomInCursor = new Cursor(((Icon)Resources.ZoomIn.Clone()).Handle);
+        private readonly Cursor zoomOutCursor = new Cursor(((Icon)Resources.ZoomOut.Clone()).Handle);
+        private readonly Cursor panCursor = new Cursor(((Icon)Resources.PanUp.Clone()).Handle);
+        private readonly Cursor crossCursor = new Cursor(((Icon)Resources.Cross.Clone()).Handle);
 
         // 常量
         private const double ZoomRatio = 1.2;   // 缩放系数
@@ -618,6 +618,8 @@ namespace simpleGIS
                     if (geo.IsPointOn(mouseMapP, buffer))
                     {
                         editGeometries[i] = geo;
+                        if (i == 0 && layer.FeatureType != typeof(PointD))
+                        { firstClick = false; }
                         break;
                     }
                 }
@@ -625,7 +627,7 @@ namespace simpleGIS
                 if (editGeometries[i] != null) { break; }
             }
             // 复合几何体要精确到Polyline或Polygon
-            if (editGeometries[2] != null)
+            if (editGeometries[0] == null && editGeometries[2] != null)
             {
                 if (editGeometries[2].GetType() == typeof(MultiPolyline))
                 {
@@ -645,7 +647,7 @@ namespace simpleGIS
                     }
                 }
             }
-            else { editGeometries[1] = null; }
+            else if (editGeometries[2] == null) { editGeometries[1] = null; }
         }
 
         /// <summary>
@@ -858,6 +860,7 @@ namespace simpleGIS
                            ((MultiPolygon)editGeometries[2]).Data.Count > 1;
                     }
                 }
+                else { delPartToolStripMenuItem.Visible = false; }
             }
         }
 
@@ -903,7 +906,7 @@ namespace simpleGIS
             {
                 DrawEditGeometry(g);
             }
-            else if (mapOperation == OperationType.Track)
+            if (mapOperation == OperationType.Track)
             {
                 DrawTrackingLayer(g);
             }
