@@ -273,11 +273,10 @@ namespace simpleGIS
                         DrawBox.IsPointOn(new PointD(box.MaxX, box.MinY)) |
                         DrawBox.IsPointOn(new PointD(box.MaxX, box.MaxY)))
                     { RenderSingleLayer(g, Layers[i]); }
-                    else if(box.IsPointOn(new PointD(DrawBox.MinX, DrawBox.MinY)) |
-                        box.IsPointOn(new PointD(DrawBox.MinX, DrawBox.MaxY)) |
-                        box.IsPointOn(new PointD(DrawBox.MaxX, DrawBox.MinY)) |
-                        box.IsPointOn(new PointD(DrawBox.MaxX, DrawBox.MaxY)))
-                    { RenderSingleLayer(g, Layers[i]); }
+                    if (DrawBox.MaxX < box.MinX || DrawBox.MinX > box.MaxX ||
+                        DrawBox.MaxY < box.MinY || DrawBox.MinY > box.MaxY)
+                    { continue; }
+                    RenderSingleLayer(g, Layers[i]);
 
                 }
             }
