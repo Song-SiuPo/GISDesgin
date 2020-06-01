@@ -294,9 +294,10 @@ namespace simpleGIS
                 frm3.FeatureBeenDeleted += RefreshAfterDelete;
 
                 //传入图层，打开窗口
+                frm3.Show();
                 int id = mapControl1.Map.SelectedLayer;
                 frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-                frm3.Show();
+                
             }
 
             //form3被创建但已关闭
@@ -309,18 +310,20 @@ namespace simpleGIS
                 frm3.FeatureBeenDeleted += RefreshAfterDelete;
 
                 //传入图层打开窗口
+                frm3.Show();
                 int id = mapControl1.Map.SelectedLayer;
                 frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-                frm3.Show();
+                
             }
 
             //form3已创建并已打开
             else if(frm3!=null && !frm3.IsDisposed)
             {
                 //传入图层，打开窗口
+                frm3.Activate();
                 int id = mapControl1.Map.SelectedLayer;
                 frm3.FromLayerImportTable(mapControl1.Map.Layers[id]);
-                frm3.Activate();
+                
             }
 
         }

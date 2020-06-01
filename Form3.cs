@@ -35,8 +35,10 @@ namespace simpleGIS
         {
             sLayer = layer;
             OriginalLayer = new Layer(layer);
-            sTable = layer.Table.Clone();
+            sTable = layer.Table.Copy();
             this.Text = layer.Name.ToString()+"属性表";
+            dataGridView1.DataSource = sTable;
+            dataGridView1.Refresh();
         }
 
         /// <summary>
