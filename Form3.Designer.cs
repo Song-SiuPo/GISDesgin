@@ -117,7 +117,7 @@
             this.btnSaveEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSaveEdit.Name = "btnSaveEdit";
             this.btnSaveEdit.Size = new System.Drawing.Size(23, 22);
-            this.btnSaveEdit.Text = "toolStripButton1";
+            this.btnSaveEdit.Text = "保存编辑";
             // 
             // btnStartEdit
             // 
@@ -126,7 +126,7 @@
             this.btnStartEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnStartEdit.Name = "btnStartEdit";
             this.btnStartEdit.Size = new System.Drawing.Size(23, 22);
-            this.btnStartEdit.Text = "toolStripButton2";
+            this.btnStartEdit.Text = "开始编辑";
             // 
             // stpSearch
             // 
@@ -135,7 +135,7 @@
             this.stpSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.stpSearch.Name = "stpSearch";
             this.stpSearch.Size = new System.Drawing.Size(23, 22);
-            this.stpSearch.Text = "toolStripButton3";
+            this.stpSearch.Text = "查询";
             // 
             // label1
             // 

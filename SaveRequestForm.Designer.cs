@@ -72,7 +72,7 @@
             this.Controls.Add(this.label1);
             this.Name = "SaveRequestForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "SaveRequestForm";
+            this.Text = "提示";
             this.ResumeLayout(false);
             this.PerformLayout();
 

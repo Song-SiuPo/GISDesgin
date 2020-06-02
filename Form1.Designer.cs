@@ -226,7 +226,7 @@
             // 
             this.menuItemNewLayer.Image = global::simpleGIS.Properties.Resources.DataAdd16;
             this.menuItemNewLayer.Name = "menuItemNewLayer";
-            this.menuItemNewLayer.Size = new System.Drawing.Size(184, 26);
+            this.menuItemNewLayer.Size = new System.Drawing.Size(165, 22);
             this.menuItemNewLayer.Text = "创建新图层(&N)";
             this.menuItemNewLayer.Click += new System.EventHandler(this.menuItemNewLayer_Click);
             // 
@@ -234,20 +234,20 @@
             // 
             this.menuItemDelLayer.Enabled = false;
             this.menuItemDelLayer.Name = "menuItemDelLayer";
-            this.menuItemDelLayer.Size = new System.Drawing.Size(184, 26);
+            this.menuItemDelLayer.Size = new System.Drawing.Size(165, 22);
             this.menuItemDelLayer.Text = "删除当前图层(&D)";
             this.menuItemDelLayer.Click += new System.EventHandler(this.menuItemDelLayer_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(162, 6);
             // 
             // menuItemLayerTable
             // 
             this.menuItemLayerTable.Enabled = false;
             this.menuItemLayerTable.Name = "menuItemLayerTable";
-            this.menuItemLayerTable.Size = new System.Drawing.Size(184, 26);
+            this.menuItemLayerTable.Size = new System.Drawing.Size(165, 22);
             this.menuItemLayerTable.Text = "打开属性表(&T)";
             this.menuItemLayerTable.Click += new System.EventHandler(this.menuItemLayerTable_Click);
             // 
@@ -255,7 +255,7 @@
             // 
             this.menuItemLayerAttr.Enabled = false;
             this.menuItemLayerAttr.Name = "menuItemLayerAttr";
-            this.menuItemLayerAttr.Size = new System.Drawing.Size(184, 26);
+            this.menuItemLayerAttr.Size = new System.Drawing.Size(165, 22);
             this.menuItemLayerAttr.Text = "设置图层属性(&I)";
             this.menuItemLayerAttr.Click += new System.EventHandler(this.menuItemLayerAttr_Click);
             // 
@@ -263,7 +263,7 @@
             // 
             this.menuItemLayerUp.Enabled = false;
             this.menuItemLayerUp.Name = "menuItemLayerUp";
-            this.menuItemLayerUp.Size = new System.Drawing.Size(184, 26);
+            this.menuItemLayerUp.Size = new System.Drawing.Size(165, 22);
             this.menuItemLayerUp.Text = "图层上移(&F)";
             this.menuItemLayerUp.Click += new System.EventHandler(this.menuItemLayerUp_Click);
             // 
@@ -271,7 +271,7 @@
             // 
             this.menuItemLayerDown.Enabled = false;
             this.menuItemLayerDown.Name = "menuItemLayerDown";
-            this.menuItemLayerDown.Size = new System.Drawing.Size(184, 26);
+            this.menuItemLayerDown.Size = new System.Drawing.Size(165, 22);
             this.menuItemLayerDown.Text = "图层下移(&B)";
             this.menuItemLayerDown.Click += new System.EventHandler(this.menuItemLayerDown_Click);
             // 
@@ -394,7 +394,7 @@
             this.tsButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonNew.Name = "tsButtonNew";
             this.tsButtonNew.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonNew.Text = "toolStripButton1";
+            this.tsButtonNew.Text = "新建";
             this.tsButtonNew.ToolTipText = "新建(Ctrl+N)\r\n创建新的地图文档";
             this.tsButtonNew.Click += new System.EventHandler(this.tsButtonNew_Click);
             // 
@@ -405,7 +405,7 @@
             this.tsButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonOpen.Name = "tsButtonOpen";
             this.tsButtonOpen.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonOpen.Text = "toolStripButton2";
+            this.tsButtonOpen.Text = "打开";
             this.tsButtonOpen.ToolTipText = "打开(Ctrl+O)\r\n打开现有地图文档";
             this.tsButtonOpen.Click += new System.EventHandler(this.tsButtonOpen_Click);
             // 
@@ -416,7 +416,7 @@
             this.tsButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonSave.Name = "tsButtonSave";
             this.tsButtonSave.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonSave.Text = "toolStripButton3";
+            this.tsButtonSave.Text = "保存";
             this.tsButtonSave.ToolTipText = "保存(Ctrl+S)\r\n保存当前地图文档";
             this.tsButtonSave.Click += new System.EventHandler(this.tsButtonSave_Click);
             // 
@@ -427,7 +427,7 @@
             this.tsButtonSavePic.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonSavePic.Name = "tsButtonSavePic";
             this.tsButtonSavePic.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonSavePic.Text = "toolStripButton4";
+            this.tsButtonSavePic.Text = "另存为";
             this.tsButtonSavePic.ToolTipText = "导出地图(Ctrl+P)\r\n将此地图导出为BitMap文件";
             this.tsButtonSavePic.Click += new System.EventHandler(this.tsButtonSavePic_Click);
             // 
@@ -445,7 +445,7 @@
             this.tsButtonOperateNone.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonOperateNone.Name = "tsButtonOperateNone";
             this.tsButtonOperateNone.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonOperateNone.Text = "tsButtonOperateNone";
+            this.tsButtonOperateNone.Text = "不操作模式";
             this.tsButtonOperateNone.ToolTipText = "选择元素\r\n选择、调整和移动放置到地图上的文本、图形或其他元素";
             this.tsButtonOperateNone.Click += new System.EventHandler(this.tsButtonOperateNone_Click);
             // 
@@ -456,7 +456,7 @@
             this.tsButtonPan.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonPan.Name = "tsButtonPan";
             this.tsButtonPan.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonPan.Text = "tsButtonOperatePan";
+            this.tsButtonPan.Text = "漫游";
             this.tsButtonPan.ToolTipText = "平移\r\n通过拖动来平移地图";
             this.tsButtonPan.Click += new System.EventHandler(this.tsButtonPan_Click);
             // 
@@ -467,7 +467,7 @@
             this.tsButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonZoomIn.Name = "tsButtonZoomIn";
             this.tsButtonZoomIn.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonZoomIn.Text = "tsButtonOperateZoomIn";
+            this.tsButtonZoomIn.Text = "放大";
             this.tsButtonZoomIn.ToolTipText = "放大\r\n切换到放大工具\r\n";
             this.tsButtonZoomIn.Click += new System.EventHandler(this.tsButtonZoomIn_Click);
             // 
@@ -478,7 +478,7 @@
             this.tsButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonZoomOut.Name = "tsButtonZoomOut";
             this.tsButtonZoomOut.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonZoomOut.Text = "tsButtonOperateZoomOut";
+            this.tsButtonZoomOut.Text = "缩小";
             this.tsButtonZoomOut.ToolTipText = "缩小\r\n切换到缩小工具";
             this.tsButtonZoomOut.Click += new System.EventHandler(this.tsButtonZoomOut_Click);
             // 
@@ -489,7 +489,7 @@
             this.tsButtonZoomScale.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonZoomScale.Name = "tsButtonZoomScale";
             this.tsButtonZoomScale.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonZoomScale.Text = "toolStripButton9";
+            this.tsButtonZoomScale.Text = "全屏";
             this.tsButtonZoomScale.ToolTipText = "缩放至地图范围";
             this.tsButtonZoomScale.Click += new System.EventHandler(this.tsButtonZoomScale_Click);
             // 
@@ -505,7 +505,7 @@
             this.tsButtonNewLayer.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonNewLayer.Name = "tsButtonNewLayer";
             this.tsButtonNewLayer.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonNewLayer.Text = "tsButtonAddLayer";
+            this.tsButtonNewLayer.Text = "新建图层";
             this.tsButtonNewLayer.ToolTipText = "创建新图层";
             this.tsButtonNewLayer.Click += new System.EventHandler(this.tsButtonNewLayer_Click);
             // 
@@ -516,7 +516,7 @@
             this.tsButtonSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonSelect.Name = "tsButtonSelect";
             this.tsButtonSelect.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonSelect.Text = "toolStripButton7";
+            this.tsButtonSelect.Text = "选择要素";
             this.tsButtonSelect.ToolTipText = "选择要素\r\n通过在上方单击或拖拽方框的方式从可选图层选择要素";
             this.tsButtonSelect.Click += new System.EventHandler(this.tsButtonSelect_Click);
             // 
@@ -534,7 +534,7 @@
             this.tsButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonEdit.Name = "tsButtonEdit";
             this.tsButtonEdit.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonEdit.Text = "toolStripButton2";
+            this.tsButtonEdit.Text = "编辑模式";
             this.tsButtonEdit.ToolTipText = "编辑模式";
             this.tsButtonEdit.Click += new System.EventHandler(this.tsButtonEdit_Click);
             // 
@@ -546,7 +546,7 @@
             this.tsButtonNewGeo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonNewGeo.Name = "tsButtonNewGeo";
             this.tsButtonNewGeo.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonNewGeo.Text = "toolStripButton3";
+            this.tsButtonNewGeo.Text = "新建几何体";
             this.tsButtonNewGeo.ToolTipText = "绘制新要素";
             this.tsButtonNewGeo.Click += new System.EventHandler(this.tsButtonNewGeo_Click);
             // 
@@ -558,7 +558,7 @@
             this.tsButtonEditGeo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsButtonEditGeo.Name = "tsButtonEditGeo";
             this.tsButtonEditGeo.Size = new System.Drawing.Size(24, 24);
-            this.tsButtonEditGeo.Text = "toolStripButton4";
+            this.tsButtonEditGeo.Text = "编辑几何体";
             this.tsButtonEditGeo.ToolTipText = "编辑要素几何";
             this.tsButtonEditGeo.Click += new System.EventHandler(this.tsButtonEditGeo_Click);
             // 
@@ -566,7 +566,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 51);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -588,7 +588,7 @@
             this.clboxLayers.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.clboxLayers.FormattingEnabled = true;
             this.clboxLayers.Location = new System.Drawing.Point(0, 0);
-            this.clboxLayers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.clboxLayers.Margin = new System.Windows.Forms.Padding(2);
             this.clboxLayers.Name = "clboxLayers";
             this.clboxLayers.Size = new System.Drawing.Size(169, 452);
             this.clboxLayers.TabIndex = 0;
@@ -641,7 +641,7 @@
             this.mapControl1.NeedSave = false;
             this.mapControl1.OperationType = simpleGIS.OperationType.None;
             this.mapControl1.SelectedMode = simpleGIS.SelectedMode.New;
-            this.mapControl1.Size = new System.Drawing.Size(772, 431);
+            this.mapControl1.Size = new System.Drawing.Size(773, 431);
             this.mapControl1.TabIndex = 0;
             this.mapControl1.OperationTypeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_OperationTypeChanged);
             this.mapControl1.SelectedModeChanged += new simpleGIS.MapControl.SimpleHandler(this.mapControl1_SelectedModeChanged);
@@ -658,7 +658,7 @@
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SimpleGIS";
