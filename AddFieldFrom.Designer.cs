@@ -39,46 +39,52 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 30);
+            this.label1.Location = new System.Drawing.Point(45, 38);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.Size = new System.Drawing.Size(82, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "字段名称：";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(34, 61);
+            this.label2.Location = new System.Drawing.Point(45, 76);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 12);
+            this.label2.Size = new System.Drawing.Size(82, 15);
             this.label2.TabIndex = 1;
             this.label2.Text = "字段类型：";
             // 
             // tbxField
             // 
-            this.tbxField.Location = new System.Drawing.Point(94, 27);
+            this.tbxField.Location = new System.Drawing.Point(125, 34);
+            this.tbxField.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxField.Name = "tbxField";
-            this.tbxField.Size = new System.Drawing.Size(100, 21);
+            this.tbxField.Size = new System.Drawing.Size(132, 25);
             this.tbxField.TabIndex = 2;
             // 
             // cbxType
             // 
+            this.cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxType.FormattingEnabled = true;
             this.cbxType.Items.AddRange(new object[] {
             "int",
             "float",
             "double",
             "string"});
-            this.cbxType.Location = new System.Drawing.Point(94, 61);
+            this.cbxType.Location = new System.Drawing.Point(125, 76);
+            this.cbxType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxType.Name = "cbxType";
-            this.cbxType.Size = new System.Drawing.Size(100, 20);
+            this.cbxType.Size = new System.Drawing.Size(132, 23);
             this.cbxType.TabIndex = 3;
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(36, 103);
+            this.btnOK.Location = new System.Drawing.Point(48, 129);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(100, 29);
             this.btnOK.TabIndex = 4;
             this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -86,9 +92,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(117, 103);
+            this.btnCancel.Location = new System.Drawing.Point(156, 129);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(100, 29);
             this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -96,15 +103,16 @@
             // 
             // AddFieldFrom
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(235, 144);
+            this.ClientSize = new System.Drawing.Size(313, 180);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.cbxType);
             this.Controls.Add(this.tbxField);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AddFieldFrom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "添加字段";

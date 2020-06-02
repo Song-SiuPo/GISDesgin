@@ -153,7 +153,6 @@ namespace simpleGIS
                 menuItemLayerDown.Enabled = false;
                 menuItemSelectMouse.Enabled = false;
                 menuItemSelectStr.Enabled = false;
-                tsButtonZoomScale.Enabled = false;
                 tsButtonEdit.Enabled = false;
                 cmsDelLayer.Enabled = false;
                 cmsLayerTable.Enabled = false;
@@ -169,7 +168,6 @@ namespace simpleGIS
                 menuItemLayerTable.Enabled = true;
                 menuItemLayerAttr.Enabled = true;
                 menuItemSelectStr.Enabled = true;
-                tsButtonZoomScale.Enabled = true;
                 menuItemEditMode.Enabled = layer.Visible;
                 menuItemSelectMouse.Enabled = layer.Visible;
                 tsButtonEdit.Enabled = layer.Visible;
@@ -182,6 +180,7 @@ namespace simpleGIS
                 cmsLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
                 mapControl1.Invalidate();
             }
+            tsButtonZoomScale.Enabled = mapControl1.Map.Layers.Count() != 0;
             if (showFeatureForm != null && !showFeatureForm.IsDisposed)
             { showFeatureForm.RenewSelectedItem(); }
         }
@@ -260,7 +259,7 @@ namespace simpleGIS
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string saveFileName = saveFileDialog.FileName.ToString();
-                mapControl1.SaveMap(saveFileName);
+                mapControl1.SaveLayer(saveFileName);
             }
             saveFileDialog.Dispose();
         }

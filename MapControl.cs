@@ -213,7 +213,7 @@ namespace simpleGIS
             List<int> selectedItems = layer.SelectedItems;
             layer.SelectedItems = new List<int>();
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(fs, map);
+            bf.Serialize(fs, layer);
             fs.Dispose();
             // 恢复已选择数据
             layer.SelectedItems = selectedItems;
