@@ -146,7 +146,21 @@ namespace simpleGIS
             try
             {
                 BinaryFormatter bf = new BinaryFormatter();
-                map = (Map)bf.Deserialize(fs);
+                object obj = bf.Deserialize(fs);
+                if (obj.GetType() == typeof(Map))
+                {
+                    map = (Map)obj;
+                }
+                else if (obj.GetType() == typeof(Layer))
+                {
+                    map.AddLayer((Layer)obj);
+                    map.RefreshBox();
+                    needSave = true;
+                }
+                else
+                {
+                    throw new Exception();
+                }
             }
             catch (Exception e)
             {
@@ -161,7 +175,7 @@ namespace simpleGIS
         /// 将map对象保存至指定路径
         /// </summary>
         /// <param name="path">文件保存路径</param>
-        public void SaveFile(string path)
+        public void SaveMap(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
             // 保存数据把已选择对象去除
@@ -180,6 +194,29 @@ namespace simpleGIS
             {
                 map.Layers[i].SelectedItems = selectedItems[i];
             }
+        }
+
+        /// <summary>
+        /// 将当前选择的图层保存至指定路径
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        public void SaveLayer(string path)
+        {
+            if (map.SelectedLayer == -1)
+            {
+                throw new IndexOutOfRangeException("当前选择图层为空，不能输出图层");
+            }
+            Layer layer = map.Layers[map.SelectedLayer];
+
+            FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            // 保存数据把已选择对象去除
+            List<int> selectedItems = layer.SelectedItems;
+            layer.SelectedItems = new List<int>();
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(fs, map);
+            fs.Dispose();
+            // 恢复已选择数据
+            layer.SelectedItems = selectedItems;
         }
 
         /// <summary>
