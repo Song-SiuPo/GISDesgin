@@ -106,6 +106,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "AddFieldFrom";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "添加字段";
             this.ResumeLayout(false);
             this.PerformLayout();

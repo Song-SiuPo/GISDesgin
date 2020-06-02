@@ -321,8 +321,9 @@ namespace simpleGIS
         //图层-删除当前图层
         private void menuItemDelLayer_Click(object sender, EventArgs e)
         {
-            clboxLayers.Items.RemoveAt(mapControl1.Map.SelectedLayer);
-            mapControl1.Map.DelLayer(mapControl1.Map.SelectedLayer);
+            int index = mapControl1.Map.SelectedLayer;
+            clboxLayers.Items.RemoveAt(index);
+            mapControl1.Map.DelLayer(index);
             mapControl1.NeedSave = true;
             mapControl1.SetNeedRefreshBase();
             mapControl1.Refresh();
@@ -644,9 +645,15 @@ namespace simpleGIS
             }
         }
 
+        //窗体加载事件，绑定部分事件
         private void Form1_Load(object sender, EventArgs e)
         {
             mapControl1.SelectedFeatureChanged += RefreshSelectedFromMapControl;
+            cmsDelLayer.Click += menuItemDelLayer_Click;
+            cmsLayerAttr.Click += menuItemLayerAttr_Click;
+            cmsLayerTable.Click += menuItemLayerTable_Click;
+            cmsLayerUp.Click += menuItemLayerUp_Click;
+            cmsLayerDown.Click += menuItemLayerDown_Click;
         }
 
         // 关闭前询问

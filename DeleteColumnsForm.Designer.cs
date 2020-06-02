@@ -84,6 +84,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DeleteColumnsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "删除字段";
             this.Load += new System.EventHandler(this.DeleteColumns_Load);
             this.ResumeLayout(false);

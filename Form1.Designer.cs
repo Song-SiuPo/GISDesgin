@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemNewMap = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +82,13 @@
             this.tslScale = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslCoordinate = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapControl1 = new simpleGIS.MapControl();
+            this.cmsOfListBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsDelLayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsLayerTable = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsLayerAttr = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsLayerUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsLayerDown = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -88,6 +96,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.cmsOfListBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -226,7 +235,7 @@
             // 
             this.menuItemNewLayer.Image = global::simpleGIS.Properties.Resources.DataAdd16;
             this.menuItemNewLayer.Name = "menuItemNewLayer";
-            this.menuItemNewLayer.Size = new System.Drawing.Size(165, 22);
+            this.menuItemNewLayer.Size = new System.Drawing.Size(184, 26);
             this.menuItemNewLayer.Text = "创建新图层(&N)";
             this.menuItemNewLayer.Click += new System.EventHandler(this.menuItemNewLayer_Click);
             // 
@@ -234,20 +243,20 @@
             // 
             this.menuItemDelLayer.Enabled = false;
             this.menuItemDelLayer.Name = "menuItemDelLayer";
-            this.menuItemDelLayer.Size = new System.Drawing.Size(165, 22);
+            this.menuItemDelLayer.Size = new System.Drawing.Size(184, 26);
             this.menuItemDelLayer.Text = "删除当前图层(&D)";
             this.menuItemDelLayer.Click += new System.EventHandler(this.menuItemDelLayer_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(162, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
             // 
             // menuItemLayerTable
             // 
             this.menuItemLayerTable.Enabled = false;
             this.menuItemLayerTable.Name = "menuItemLayerTable";
-            this.menuItemLayerTable.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerTable.Size = new System.Drawing.Size(184, 26);
             this.menuItemLayerTable.Text = "打开属性表(&T)";
             this.menuItemLayerTable.Click += new System.EventHandler(this.menuItemLayerTable_Click);
             // 
@@ -255,7 +264,7 @@
             // 
             this.menuItemLayerAttr.Enabled = false;
             this.menuItemLayerAttr.Name = "menuItemLayerAttr";
-            this.menuItemLayerAttr.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerAttr.Size = new System.Drawing.Size(184, 26);
             this.menuItemLayerAttr.Text = "设置图层属性(&I)";
             this.menuItemLayerAttr.Click += new System.EventHandler(this.menuItemLayerAttr_Click);
             // 
@@ -263,7 +272,7 @@
             // 
             this.menuItemLayerUp.Enabled = false;
             this.menuItemLayerUp.Name = "menuItemLayerUp";
-            this.menuItemLayerUp.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerUp.Size = new System.Drawing.Size(184, 26);
             this.menuItemLayerUp.Text = "图层上移(&F)";
             this.menuItemLayerUp.Click += new System.EventHandler(this.menuItemLayerUp_Click);
             // 
@@ -271,7 +280,7 @@
             // 
             this.menuItemLayerDown.Enabled = false;
             this.menuItemLayerDown.Name = "menuItemLayerDown";
-            this.menuItemLayerDown.Size = new System.Drawing.Size(165, 22);
+            this.menuItemLayerDown.Size = new System.Drawing.Size(184, 26);
             this.menuItemLayerDown.Text = "图层下移(&B)";
             this.menuItemLayerDown.Click += new System.EventHandler(this.menuItemLayerDown_Click);
             // 
@@ -584,6 +593,7 @@
             // 
             // clboxLayers
             // 
+            this.clboxLayers.ContextMenuStrip = this.cmsOfListBox;
             this.clboxLayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.clboxLayers.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.clboxLayers.FormattingEnabled = true;
@@ -648,6 +658,53 @@
             this.mapControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapControl1_MouseMove);
             this.mapControl1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.mapControl1_MouseWheel);
             // 
+            // cmsOfListBox
+            // 
+            this.cmsOfListBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsLayerTable,
+            this.cmsLayerAttr,
+            this.toolStripSeparator6,
+            this.cmsDelLayer,
+            this.cmsLayerUp,
+            this.cmsLayerDown});
+            this.cmsOfListBox.Name = "cmsOfListBox";
+            this.cmsOfListBox.Size = new System.Drawing.Size(149, 120);
+            // 
+            // cmsDelLayer
+            // 
+            this.cmsDelLayer.Name = "cmsDelLayer";
+            this.cmsDelLayer.Size = new System.Drawing.Size(148, 22);
+            this.cmsDelLayer.Text = "删除当前图层";
+            // 
+            // cmsLayerTable
+            // 
+            this.cmsLayerTable.Name = "cmsLayerTable";
+            this.cmsLayerTable.Size = new System.Drawing.Size(148, 22);
+            this.cmsLayerTable.Text = "打开属性表";
+            // 
+            // cmsLayerAttr
+            // 
+            this.cmsLayerAttr.Name = "cmsLayerAttr";
+            this.cmsLayerAttr.Size = new System.Drawing.Size(148, 22);
+            this.cmsLayerAttr.Text = "设置图层属性";
+            // 
+            // cmsLayerUp
+            // 
+            this.cmsLayerUp.Name = "cmsLayerUp";
+            this.cmsLayerUp.Size = new System.Drawing.Size(148, 22);
+            this.cmsLayerUp.Text = "图层上移";
+            // 
+            // cmsLayerDown
+            // 
+            this.cmsLayerDown.Name = "cmsLayerDown";
+            this.cmsLayerDown.Size = new System.Drawing.Size(148, 22);
+            this.cmsLayerDown.Text = "图层下移";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(145, 6);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -675,6 +732,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.cmsOfListBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -735,6 +793,13 @@
         private System.Windows.Forms.ToolStripStatusLabel tslScale;
         private System.Windows.Forms.ToolStripStatusLabel tslCoordinate;
         private System.Windows.Forms.ToolStripMenuItem MenuItemShowSelected;
+        private System.Windows.Forms.ContextMenuStrip cmsOfListBox;
+        private System.Windows.Forms.ToolStripMenuItem cmsLayerTable;
+        private System.Windows.Forms.ToolStripMenuItem cmsLayerAttr;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem cmsDelLayer;
+        private System.Windows.Forms.ToolStripMenuItem cmsLayerUp;
+        private System.Windows.Forms.ToolStripMenuItem cmsLayerDown;
     }
 }
 
