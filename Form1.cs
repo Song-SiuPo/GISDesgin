@@ -69,16 +69,16 @@ namespace simpleGIS
         }
 
         // 弹出选择文件框并保存文件
-        private bool TrySaveFile(IWin32Window window)
+        private bool TrySaveMap(IWin32Window window)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+            saveFileDialog.Filter = "SimpleGIS地图文件(*.spgis)|*.spgis|所有文件(*.*)|*.*";
             saveFileDialog.AddExtension = true;
             bool result = false;
             if (saveFileDialog.ShowDialog(window) == DialogResult.OK)
             {
                 string saveFileName = saveFileDialog.FileName.ToString();
-                mapControl1.SaveFile(saveFileName);
+                mapControl1.SaveMap(saveFileName);
                 result = true;
             }
             saveFileDialog.Dispose();
@@ -95,7 +95,7 @@ namespace simpleGIS
                 bool try_result = true;
                 if (result == DialogResult.Yes)
                 {
-                    try_result = TrySaveFile(this);
+                    try_result = TrySaveMap(this);
                 }
                 if (result == DialogResult.Cancel || try_result == false) { return false; }
             }
@@ -144,6 +144,7 @@ namespace simpleGIS
         {
             if (mapControl1.Map.SelectedLayer == -1)
             {
+                menuItemSaveLayer.Enabled = false;
                 menuItemEditMode.Enabled = false;
                 menuItemDelLayer.Enabled = false;
                 menuItemLayerTable.Enabled = false;
@@ -152,24 +153,34 @@ namespace simpleGIS
                 menuItemLayerDown.Enabled = false;
                 menuItemSelectMouse.Enabled = false;
                 menuItemSelectStr.Enabled = false;
-                tsButtonZoomScale.Enabled = false;
                 tsButtonEdit.Enabled = false;
+                cmsDelLayer.Enabled = false;
+                cmsLayerTable.Enabled = false;
+                cmsLayerAttr.Enabled = false;
+                cmsLayerUp.Enabled = false;
+                cmsLayerDown.Enabled = false;
             }
             else
             {
                 Layer layer = mapControl1.Map.Layers[mapControl1.Map.SelectedLayer];
+                menuItemSaveLayer.Enabled = true;
                 menuItemDelLayer.Enabled = true;
                 menuItemLayerTable.Enabled = true;
                 menuItemLayerAttr.Enabled = true;
                 menuItemSelectStr.Enabled = true;
-                tsButtonZoomScale.Enabled = true;
                 menuItemEditMode.Enabled = layer.Visible;
                 menuItemSelectMouse.Enabled = layer.Visible;
                 tsButtonEdit.Enabled = layer.Visible;
                 menuItemLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
                 menuItemLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
+                cmsDelLayer.Enabled = true;
+                cmsLayerTable.Enabled = true;
+                cmsLayerAttr.Enabled = true;
+                cmsLayerUp.Enabled = mapControl1.Map.SelectedLayer != 0;
+                cmsLayerDown.Enabled = mapControl1.Map.SelectedLayer != mapControl1.Map.Layers.Count - 1;
                 mapControl1.Invalidate();
             }
+            tsButtonZoomScale.Enabled = mapControl1.Map.Layers.Count() != 0;
             if (showFeatureForm != null && !showFeatureForm.IsDisposed)
             { showFeatureForm.RenewSelectedItem(); }
         }
@@ -197,14 +208,14 @@ namespace simpleGIS
             }
         }
 
-        //文件-打开
+        //文件-打开地图
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
             bool result = TryAskSave();
             if (result)
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "SimpleGIS文件(*.spgis*)|*.spgis|所有文件(*.*)|*.*";
+                openFileDialog.Filter = "SimpleGIS文件(*.spgis)|*.spgis|SimpleGIS图层文件(*.splyr)|*.splyr|所有文件(*.*)|*.*";
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.Multiselect = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -236,14 +247,28 @@ namespace simpleGIS
         //文件-保存
         private void menuItemSave_Click(object sender, EventArgs e)
         {
-            TrySaveFile(this);
+            TrySaveMap(this);
+        }
+
+        // 文件-保存图层
+        private void MenuItemSaveLayer_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "SimpleGIS图层文件(*.splyr)|*.splyr|所有文件(*.*)|*.*";
+            saveFileDialog.AddExtension = true;
+            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                string saveFileName = saveFileDialog.FileName.ToString();
+                mapControl1.SaveLayer(saveFileName);
+            }
+            saveFileDialog.Dispose();
         }
 
         //文件-输出为图片
         private void menuItemSavePic_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "BMP文件(*.BMP*)|*.BMP|JPG文件(*.jpg*)|*.jpg|PNG文件(*.png*)|*.png|所有文件(*.*)|*.*";
+            saveFileDialog.Filter = "BMP文件(*.BMP)|*.BMP|JPG文件(*.jpg)|*.jpg|PNG文件(*.png)|*.png|所有文件(*.*)|*.*";
             saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
