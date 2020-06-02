@@ -22,6 +22,8 @@ namespace simpleGIS
         private DataTable sTable; //属性表
         private Layer sLayer; //操作图层
         private Layer OriginalLayer; //原始图层
+        private bool SelectionIsImput;  //选择模式，true代表传入选择，false代表传出选择
+        private bool BeenEdit;
 
         #endregion
 
@@ -55,7 +57,7 @@ namespace simpleGIS
             //datagridview更新选择
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
-                if(sLayer .SelectedItems .Count > 0)
+                if (sLayer.SelectedItems.Count > 0)
                 {
                     //如果在选择范围
                     if (sLayer.SelectedItems.Contains((int)row.Cells["ID"].Value))
@@ -64,7 +66,6 @@ namespace simpleGIS
                     }
                     else { row.Selected = false; }
                 }
-
             }
         }
 
@@ -97,6 +98,10 @@ namespace simpleGIS
             tmiEdit.Enabled = true;
             dataGridView1.ReadOnly =false;  //表开始编辑
             sLayer.IsEdit = true;   //图层开始编辑
+
+            //ID字段不允许编辑
+            if(dataGridView1 .Columns .Contains("ID"))
+            { dataGridView1.Columns["ID"].ReadOnly = true; }
         }
 
         //结束编辑
@@ -105,12 +110,38 @@ namespace simpleGIS
             tmiEdit.Enabled = false;
             dataGridView1.ReadOnly = true;
             sLayer.IsEdit = false;
+
+            //用户做了编辑
+            if(BeenEdit)
+            {
+                SaveRequestForm savefrm = new SaveRequestForm();
+                if (savefrm.ShowDialog(this) == DialogResult.OK)
+                {
+                    sLayer.Table = sTable.Copy();
+                }
+                else
+                {
+                    //图层恢复
+                    sLayer.Features = new List<Geometry>(OriginalLayer.Features);
+                    sLayer.Table = OriginalLayer.Table.Copy();
+                    sLayer.SelectedItems = new List<int>(OriginalLayer.SelectedItems);
+                    sLayer.RefreshBox();
+
+                    //属性表恢复
+                    sTable = sLayer.Table.Copy();
+                    dataGridView1.DataSource = sTable;
+                    dataGridView1.Refresh();
+                }
+
+                BeenEdit = false;
+            }
         }
 
         //保存编辑
         private void tmiSaveEdit_Click(object sender, EventArgs e)
         {
             sLayer.Table = sTable.Copy();
+            if (BeenEdit) { BeenEdit = false; }
         }
 
         //取消编辑
@@ -129,6 +160,8 @@ namespace simpleGIS
 
             //刷新mapcontrol
             FeatureBeenDeleted?.Invoke(this);
+
+            if (BeenEdit) { BeenEdit = false; }
         }
 
 
@@ -149,6 +182,9 @@ namespace simpleGIS
                 dataGridView1.DataSource = sTable;
                 dataGridView1.Refresh();
             }
+
+            //用户进行了编辑
+            if (!BeenEdit) { BeenEdit = true; }
         }
 
         //窗体加载
@@ -165,6 +201,10 @@ namespace simpleGIS
             stpSearch.Click += btnSearch_Click;
             btnStartEdit.Click += tmiStartEdit_Click;
             btnSaveEdit.Click += tmiSaveEdit_Click;
+
+            //选择模式，默认为向外广播选择
+            SelectionIsImput = false;
+            BeenEdit = false;
         }
 
         //查询要素
@@ -172,6 +212,11 @@ namespace simpleGIS
         {
             //查询图层对应的要素
             sLayer.QuerySQL(tbxSQL.Text, SelectedMode.New);
+
+            //查询的模式，更新结果
+            SelectionIsImput = true;
+            RefreshSelectFeature();
+            SelectionIsImput = false;
 
             //触发联动事件,form1显示选择要素
             SelectFeatureChanged?.Invoke(this);
@@ -193,24 +238,28 @@ namespace simpleGIS
                 //触发委托事件
                 FeatureBeenDeleted?.Invoke(this);
             }
+            if (!BeenEdit) { BeenEdit = true; }
         }
 
         //选择要素改变
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            //清除之前的要素
-            sLayer.SelectedItems.Clear();
-            if(dataGridView1 .SelectedRows .Count > 0)
+            if (!SelectionIsImput)
             {
-                //遍历，找到选择的要素
-                foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                //清除之前的要素
+                sLayer.SelectedItems.Clear();
+                if (dataGridView1.SelectedRows.Count > 0)
                 {
-                    if(row.Cells["ID"].Value != null)  //ID不为空
+                    //遍历，找到选择的要素
+                    foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                     {
-                        int ID = (int)row.Cells["ID"].Value;
-                        sLayer.SelectedItems.Add(ID);
-                    }
+                        if (row.Cells["ID"].Value != null)  //ID不为空
+                        {
+                            int ID = (int)row.Cells["ID"].Value;
+                            sLayer.SelectedItems.Add(ID);
+                        }
 
+                    }
                 }
             }
 
@@ -259,6 +308,7 @@ namespace simpleGIS
                     else { sTable.Columns.Remove(item); }
                 }
             }
+            if (!BeenEdit) { BeenEdit = true; }
         }
 
         //关闭窗口时保存
@@ -285,10 +335,27 @@ namespace simpleGIS
                     dataGridView1.DataSource = sTable;
                     dataGridView1.Refresh();
                 }
+                if (BeenEdit) { BeenEdit = false; }
             }
         }
-        #endregion
 
+        //保护性设计
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = dataGridView1.CurrentCell.ColumnIndex;
+            if (dataGridView1.Columns[index].Name == "ID")
+            {
+                MessageBox.Show("ID字段是结构字段，不允许被更改。");
+            }
+        }
+
+        //表元素被更改
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!BeenEdit) { BeenEdit = true; }
+        }
+
+        #endregion
 
     }
 }
