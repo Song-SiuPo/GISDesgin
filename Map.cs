@@ -658,25 +658,110 @@ namespace simpleGIS
 
             try
             {
-                for (int i = 0; i < layer.Features.Count; i++)
+                //点绘制注记
+                if (layer.FeatureType == typeof(PointD))
                 {
-                    //获取注记位置
-                    PointD LabelLocation = new PointD();
-                    LabelLocation.X = (float)(layer.Features[i].Box.MinX + layer.Features[i].Box.MaxX) / 2;
-                    LabelLocation.Y = (float)(layer.Features[i].Box.MinY + layer.Features[i].Box.MaxY) / 2;
-                    LabelLocation = FromMapPoint(LabelLocation);
-                    PointF screenLocation = new PointF();
-                    screenLocation.X = (float)LabelLocation.X;
-                    screenLocation.Y = (float)LabelLocation.Y;
+                    for (int i = 0; i < layer.Features.Count; i++)
+                    {
+                        //获取注记位置
+                        PointD LabelLocation = new PointD();
+                        LabelLocation.X = (layer.Features[i].Box.MinX + layer.Features[i].Box.MaxX) / 2;
+                        LabelLocation.Y = (layer.Features[i].Box.MinY + layer.Features[i].Box.MaxY) / 2;
+                        LabelLocation = FromMapPoint(LabelLocation);
+                        PointF screenLocation = new PointF();
+                        screenLocation.X = (float)LabelLocation.X;
+                        screenLocation.Y = (float)LabelLocation.Y;
 
-                    //获取注记文本大小，调整注记中心
-                    string labelStr = layer.Table.Rows[i][sField].ToString();
-                    SizeF labelSize = g.MeasureString(labelStr, sFont);
-                    screenLocation.X -= labelSize.Width / 2;
-                    screenLocation.Y -= labelSize.Height / 2;
+                        //获取注记文本大小，调整注记中心
+                        string labelStr = layer.Table.Rows[i][sField].ToString();
+                        SizeF labelSize = g.MeasureString(labelStr, sFont);
+                        screenLocation.X -= labelSize.Width / 2;
+                        screenLocation.Y -= labelSize.Height / 2;
+                        screenLocation.Y -= 8;
 
-                    //绘图
-                    g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                        //绘图
+                        g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                    }
+                }
+
+                //折线绘制注记
+                else if(layer .FeatureType == typeof (Polyline))
+                {
+                    for(int i=0;i<layer .Features.Count; i++)
+                    {
+                        Polyline polyline = layer.Features[i] as Polyline;
+                        int midindex = (int)(polyline.Data.Count/2);
+
+                        //获取注记位置,为下标中点对应点
+                        PointD LabelLocation = new PointD();
+                        LabelLocation.X = polyline.Data[midindex].X;
+                        LabelLocation.Y = polyline.Data[midindex].Y;
+                        LabelLocation = FromMapPoint(LabelLocation);
+                        PointF screenLocation = new PointF();
+                        screenLocation.X = (float)LabelLocation.X;
+                        screenLocation.Y = (float)LabelLocation.Y;
+
+                        //获取注记文本大小，调整注记中心
+                        string labelStr = layer.Table.Rows[i][sField].ToString();
+                        SizeF labelSize = g.MeasureString(labelStr, sFont);
+                        screenLocation.X -= labelSize.Width / 2;
+                        screenLocation.Y -= labelSize.Height / 2;
+
+                        //绘图
+                        g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                    }
+                }
+
+                //复合折线绘制注记
+                else if(layer.FeatureType == typeof(MultiPolyline))
+                {
+                    for (int i = 0; i < layer.Features.Count; i++)
+                    {
+                        MultiPolyline multiline = layer.Features[i] as MultiPolyline;
+                        int midindex = (int)(multiline.Data[0].Data.Count/2);
+                        //获取注记位置
+                        PointD LabelLocation = new PointD();
+                        LabelLocation.X = multiline.Data[0].Data[midindex].X;
+                        LabelLocation.Y = multiline.Data[0].Data[midindex].Y;
+                        LabelLocation = FromMapPoint(LabelLocation);
+                        PointF screenLocation = new PointF();
+                        screenLocation.X = (float)LabelLocation.X;
+                        screenLocation.Y = (float)LabelLocation.Y;
+
+                        //获取注记文本大小，调整注记中心
+                        string labelStr = layer.Table.Rows[i][sField].ToString();
+                        SizeF labelSize = g.MeasureString(labelStr, sFont);
+                        screenLocation.X -= labelSize.Width / 2;
+                        screenLocation.Y -= labelSize.Height / 2;
+
+                        //绘图
+                        g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                    }
+                }
+
+                //面、多面的绘制注记
+                else
+                {
+                    for (int i = 0; i < layer.Features.Count; i++)
+                    {
+                        //获取注记位置
+                        PointD LabelLocation = new PointD();
+                        LabelLocation.X = (layer.Features[i].Box.MinX + layer.Features[i].Box.MaxX) / 2;
+                        LabelLocation.Y = (layer.Features[i].Box.MinY + layer.Features[i].Box.MaxY) / 2;
+                        LabelLocation = FromMapPoint(LabelLocation);
+                        PointF screenLocation = new PointF();
+                        screenLocation.X = (float)LabelLocation.X;
+                        screenLocation.Y = (float)LabelLocation.Y;
+
+                        //获取注记文本大小，调整注记中心
+                        string labelStr = layer.Table.Rows[i][sField].ToString();
+                        SizeF labelSize = g.MeasureString(labelStr, sFont);
+                        screenLocation.X -= labelSize.Width / 2;
+                        screenLocation.Y -= labelSize.Height / 2;
+
+                        //绘图
+                        g.DrawString(labelStr, sFont, sBrush, screenLocation);
+                    }
                 }
             }
             catch { throw new Exception(); }
